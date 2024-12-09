@@ -1,24 +1,20 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import ExerciseBtn from "../components/ExerciseBtn";
 import Button from "../components/Button";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+// import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Underline from "../components/Underline";
 
-export default function ExercicesChoicesScreen({ navigation }) {
-  const handleWorkoutNavigation = () => {
+export default function ExercicesChoicesScreen({ navigation, route }) {
+  const { name } = route.params;
+
+  const handleFinish = () => {
     navigation.navigate("workoutSummary", { backTo: "exercicesChoices" });
   };
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <View style={styles.topContainer}>
         <FontAwesome
           name={"chevron-left"}
           size={30}
@@ -26,9 +22,11 @@ export default function ExercicesChoicesScreen({ navigation }) {
           onPress={() => navigation.navigate("muscleGroup")}
         />
         <View style={{ marginVertical: 20 }}>
-          <Text style={styles.text}>Dos</Text>
+          <Text style={styles.title}>{name}</Text>
           <Underline width={40} />
         </View>
+      </View>
+      <View style={styles.btnContainer}>
         <ScrollView
           contentContainerStyle={{
             justifyContent: "center",
@@ -69,26 +67,21 @@ export default function ExercicesChoicesScreen({ navigation }) {
             image={require("../assets/Dos/rowingbarre.gif")}
           />
         </ScrollView>
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            // marginTop: 20,
-          }}
-        >
-          <Button
-            background="#A3FD01"
-            borderColor="none"
-            textButton="Terminer"
-            textColor="black"
-            width="40%"
-            height={50}
-            onPress={handleWorkoutNavigation}
-            isLinearGradiant={false}
-          />
-        </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+      </View>
+
+      <View style={styles.bottomContainer}>
+        <Button
+          background="#A3FD01"
+          borderColor="none"
+          textButton="Terminer"
+          textColor="black"
+          width={150}
+          height={50}
+          onPress={handleFinish}
+          isLinearGradiant={false}
+        />
+      </View>
+    </View>
   );
 }
 
@@ -96,11 +89,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0D0D36",
-    padding: 20,
+    paddingVertical: 50,
+    paddingHorizontal: 10,
   },
-  text: {
+  title: {
     fontSize: 32,
     color: "white",
     fontWeight: 600,
+  },
+  topContainer: {
+    flex: 1,
+    justifyContent: "space-between",
+    marginBottom: 20,
+  },
+  btnContainer: {
+    flex: 5,
+  },
+  bottomContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
   },
 });
