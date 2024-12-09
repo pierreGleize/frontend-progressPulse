@@ -58,7 +58,7 @@ export default function SignupScreen({ navigation }) {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <Image source={require("../assets/Illustrations/imageSigninSignup.webp")}style={styles.image} ></Image>
+      <Image source={require("../assets/illustrations/imageSigninSignup.webp")}style={styles.image} ></Image>
       <Text style={styles.mainTitle}>Commence ton aventure avec</Text>
       <Text style={styles.subTitle}>Progress Pulse</Text>
       <TextInput style={styles.input} placeholder="Nom d'utilisateur" onChangeText={(value) => setUsername(value)} value={username}></TextInput>
