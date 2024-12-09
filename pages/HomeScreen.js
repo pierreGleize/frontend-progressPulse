@@ -15,7 +15,7 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <Text style={styles.title}>Hello Pierre,</Text>
-        <Text style={styles.span}>prêt pour un nouvel entrainement ? </Text>
+        <Text style={styles.span}>prêt pour un nouvel entrainement ?</Text>
         <View style={styles.infoContainer}>
           <FontAwesome
             name={"info-circle"}
@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
   },
   span: {
     color: "#A3FD01",
-    marginLeft: 5,
   },
   infoIcon: {
     marginRight: 10,
