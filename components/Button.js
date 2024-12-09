@@ -59,7 +59,7 @@ const Button = ({
           borderRadius: 10,
           justifyContent: "center",
           alignItems: "center",
-          marginBottom: 20,
+          margin: 20,
         }}
       >
         <Text
