@@ -20,6 +20,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           size={30}
           color={"#3BC95F"}
           onPress={() => navigation.navigate("muscleGroup")}
+          style={{ marginLeft: 10, marginTop: 5 }}
         />
         <View style={{ marginVertical: 20 }}>
           <Text style={styles.title}>{name}</Text>

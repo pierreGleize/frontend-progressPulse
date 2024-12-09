@@ -11,7 +11,7 @@ export default function WorkoutTypeScreen({ navigation }) {
           size={30}
           color={"#3BC95F"}
           onPress={() => navigation.navigate("Home")}
-          style={{ marginLeft: 10 }}
+          style={{ marginLeft: 10, marginTop: 5 }}
         />
         <View style={styles.infoContainer}>
           <FontAwesome
