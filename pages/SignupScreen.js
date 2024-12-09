@@ -36,7 +36,7 @@ export default function SignupScreen({ navigation }) {
           email: email,
           password: password
         }
-        fetch('http://192.168.1.100:3000/users/signup',{
+        fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/signup`,{
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newUser),
