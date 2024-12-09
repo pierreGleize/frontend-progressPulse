@@ -36,35 +36,35 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
         >
           <ExerciseBtn
             textButton="Tirage hozizontale à la poulie"
-            image={require("../assets/rowing.png")}
+            image={require('../assets/Dos/rowingbarre.gif')}
           />
           <ExerciseBtn
             textButton="Traction"
-            image={require("../assets/rowing.png")}
+            image={require("../assets/Dos/traction.gif")}
           />
           <ExerciseBtn
             textButton="Tirage hozizontale à la poulie"
-            image={require("../assets/rowing.png")}
+            image={require("../assets/Dos/rowingbarre.gif")}
           />
           <ExerciseBtn
             textButton="Tirage hozizontale à la poulie"
-            image={require("../assets/rowing.png")}
+            image={require("../assets/Dos/rowingbarre.gif")}
           />
           <ExerciseBtn
             textButton="Tirage hozizontale à la poulie"
-            image={require("../assets/rowing.png")}
+            image={require("../assets/Dos/rowingbarre.gif")}
           />
           <ExerciseBtn
             textButton="Tirage hozizontale à la poulie"
-            image={require("../assets/rowing.png")}
+            image={require("../assets/Dos/rowingbarre.gif")}
           />
           <ExerciseBtn
             textButton="Tirage hozizontale à la poulie"
-            image={require("../assets/rowing.png")}
+            image={require("../assets/Dos/rowingbarre.gif")}
           />
           <ExerciseBtn
             textButton="Tirage hozizontale à la poulie"
-            image={require("../assets/rowing.png")}
+            image={require("../assets/Dos/rowingbarre.gif")}
           />
         </ScrollView>
       </View>
