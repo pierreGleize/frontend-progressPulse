@@ -3,6 +3,9 @@
     "name": "frontend",
     "slug": "frontend",
     "version": "1.0.0",
+    "extra": {
+      "SERVER_IP": "http://192.168.1.18:3000"
+    },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
