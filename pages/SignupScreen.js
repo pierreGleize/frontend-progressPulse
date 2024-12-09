@@ -3,6 +3,7 @@ import Button from "../components/Button";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/user";
+import { SERVER_IP } from '@env';
 
 export default function SignupScreen({ navigation }) {
 
@@ -36,7 +37,7 @@ export default function SignupScreen({ navigation }) {
           email: email,
           password: password
         }
-        fetch('http://192.168.1.100:3000/users/signup',{
+        fetch(`${process.env.SERVER_IP}/users/signup`,{
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newUser),

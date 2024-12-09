@@ -6,6 +6,7 @@ import { login } from "../reducers/user";
 
 export default function SigninScreen({ navigation }) {
 
+  console.log(process.env.EXPO_PUBLIC_SERVER_IP)
   const dispatch = useDispatch()
 
   const valeurDuReducer = useSelector((state) => state.user.value);
@@ -34,7 +35,7 @@ export default function SigninScreen({ navigation }) {
           email: email,
           password: password
         }
-        fetch('http://192.168.1.100:3000/users/signin',{
+        fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/signin`,{
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(user),
