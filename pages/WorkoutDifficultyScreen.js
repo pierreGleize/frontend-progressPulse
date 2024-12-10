@@ -1,9 +1,16 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image, FlatList} from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Button from "../components/Button";
 import Underline from "../components/Underline";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function WorkoutDifficultyScreen({ navigation }) {
+
+  const difficulty = ["Debutant", "Intermediaire", "Confirme"]
+  const handleNavigateToWorkout = (name) => {
+    navigation.navigate('workoutChoice', {name : name})
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -28,76 +35,41 @@ export default function WorkoutDifficultyScreen({ navigation }) {
           <Text style={styles.textInfo}>Indique ton niveau pour commencer</Text>
         </View>
       </View>
+      <View style={styles.infoContainer}>
+          <FontAwesome
+            name={"info-circle"}
+            size={30}
+            color={"#A3FD01"}
+            style={styles.infoIcon}
+          />
+          <Text style={styles.textInfo}>
+            Indique ton niveau pour commencer !
+          </Text>
+        </View>
       <View style={styles.btnContainer}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.btn}
-          onPress={() =>
-            navigation.navigate("workoutChoice", { categorie: "Débutant" })
-          }
-        >
-          <LinearGradient
-            colors={["#3BC95F", "#1D632F"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.gradiant}
-          >
-            <Image
-              source={require("../assets/illustrations/debutant.webp")}
-              style={styles.image}
+      <FlatList
+          data={difficulty}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={1}
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: "center",
+            alignItems: 'center'
+          }}
+          renderItem={({ item }) => (
+            <Button
+              background="#A3FD01"
+              borderColor="none"
+              textButton={item}
+              textColor="white"
+              width={350}
+              height={150}
+              onPress={() => handleNavigateToWorkout(item)}
+              isLinearGradiant={true}
+              colorsGradiant={["#3BC95F", "#1D632F"]}
             />
-            <View style={styles.textBtnContainer}>
-              {/* <Text style={styles.btnText}>Séance</Text> */}
-              <Text style={styles.btnText}>Débutant</Text>
-            </View>
-          </LinearGradient>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.btn}
-          onPress={() =>
-            navigation.navigate("workoutChoice", { categorie: "Intermédiaire" })
-          }
-        >
-          <LinearGradient
-            colors={["#3BC95F", "#1D632F"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.gradiant}
-          >
-            <Image
-              source={require("../assets/illustrations/intermediaire.webp")}
-              style={styles.smallImage}
-            />
-            <View style={styles.textBtnContainer}>
-              {/* <Text style={styles.btnText}>Séance</Text> */}
-              <Text style={styles.btnText}>Intermédiaire</Text>
-            </View>
-          </LinearGradient>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.btn}
-          onPress={() =>
-            navigation.navigate("workoutChoice", { categorie: "Confirmé" })
-          }
-        >
-          <LinearGradient
-            colors={["#3BC95F", "#1D632F"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.gradiant}
-          >
-            <Image
-              source={require("../assets/illustrations/confirme.webp")}
-              style={styles.smallImage}
-            />
-            <View style={styles.textBtnContainer}>
-              {/* <Text style={styles.btnText}>Séance</Text> */}
-              <Text style={styles.btnText}>Confirmé</Text>
-            </View>
-          </LinearGradient>
-        </TouchableOpacity>
+          )}
+        />
       </View>
     </View>
   );
@@ -110,64 +82,70 @@ const styles = StyleSheet.create({
     paddingVertical: 50,
     paddingHorizontal: 10,
   },
-  topContainer: {
-    flex: 1,
-    justifyContent: "space-between",
-  },
   title: {
-    fontSize: 32,
+    marginTop: 20,
+    fontSize: 28,
     color: "white",
     fontWeight: 600,
   },
-  btnContainer: {
-    flex: 3,
-    alignItems: "center",
-    justifyContent: "space-around",
-  },
+
   infoContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginTop: 10,
   },
+
   infoIcon: {
     marginRight: 10,
   },
+
   textInfo: {
     color: "white",
   },
-  btn: {
-    borderRadius: 20,
-    overflow: "hidden",
-    maxWidth: 350,
-    width: "80%",
-  },
-  gradiant: {
-    height: 150,
-    width: "100%",
-    maxWidth: 500,
+
+  btnContainer: {
+    flex: 1,
+    gap: 20,
     justifyContent: "center",
-    alignItems: "flex-start",
   },
+
+  text: {
+    fontSize: 50,
+    padding: 50,
+    textAlign: "center",
+    color: "white",
+  },
+
+  btn: {
+    fontSize: 40,
+    borderRadius: 10,
+    backgroundColor: "#3BC95F",
+    margin: 20,
+    borderRadius: 20,
+  },
+
+  btnText: {
+    fontSize: 30,
+    fontWeight: 600,
+    top: 40,
+    right: 10,
+    position: 'absolute',
+    color: "white",
+    textAlign: 'right'
+  },
+
   image: {
-    width: "40%",
-    height: "90%",
-    resizeMode: "cover",
-    marginLeft: 10,
-  },
-  smallImage: {
-    width: "40%",
+    width: "35%",
     height: "100%",
     resizeMode: "cover",
     marginLeft: 10,
   },
-  textBtnContainer: {
-    position: "absolute",
-    bottom: 30,
-    right: 10,
-  },
-  btnText: {
-    color: "white",
-    fontSize: 30,
-    fontWeight: 600,
-    textAlign: "right",
+
+  gradiant: {
+    height: 120,
+    width: "100%",
+    maxWidth: 500,
+    borderRadius: 20,
+    justifyContent: "flex-start",
   },
 });
