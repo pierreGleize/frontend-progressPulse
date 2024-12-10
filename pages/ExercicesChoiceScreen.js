@@ -4,9 +4,14 @@ import ExerciseBtn from "../components/ExerciseBtn";
 import Button from "../components/Button";
 // import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Underline from "../components/Underline";
+import { useEffect } from "react";
 
 export default function ExercicesChoicesScreen({ navigation, route }) {
   const { name } = route.params;
+
+  useEffect(() => {
+    console.log("dans le useeffect")
+  },[])
 
   const handleFinish = () => {
     navigation.navigate("workoutSummary", { backTo: "exercicesChoices" });
