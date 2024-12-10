@@ -4,7 +4,7 @@ import ExerciseBtn from "../components/ExerciseBtn";
 import Button from "../components/Button";
 // import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Underline from "../components/Underline";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import images from '../utils/images'
 import { useDispatch, useSelector } from "react-redux";
 import { addExercise } from "../reducers/workoutCreation";
@@ -66,7 +66,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
       setEmptyFields(false)
       let customSets = []
       for (let i=0; i< parseInt(nbSets); i++){
-        customSets.push({weight: charge, reps: nbReps})
+        customSets.push({weight: parseInt(charge), reps: parseInt(nbReps)})
       }
       const restConverted = (parseInt(restMinutes) * 60) + parseInt(restSeconds)
       const exerciseToAdd = {
