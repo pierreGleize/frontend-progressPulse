@@ -1,27 +1,34 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useEffect, useState } from "react";
 
 export default function WorkoutSummaryScreen({ navigation, route }) {
-  const { backTo } = route.params;
+  const {name, backTo} = route.params;
+  const [workout, setWorkout] = useState([])
+
+  useEffect(() => {
+    fetch (`${process.env.EXPO_PUBLIC_SERVER_IP}/workouts/byName/${name}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      setWorkout(data.data)
+    })
+  }, [])
+
+/*   const workout = workout.map((data,i) => {
+    return (
+
+    )
+  }) */
   return (
     <View style={styles.container}>
       <FontAwesome
         name={"chevron-left"}
         size={30}
         color={"#3BC95F"}
-        onPress={() => navigation.navigate(backTo)}
+        onPress={() => navigation.navigate('workoutChoice')}
       />
-      <Text style={styles.text}>WorkoutSummary Screen</Text>
-      <Text>Je viens de la page {backTo}</Text>
-      <View style={styles.cards}>
-        <Text style={styles.cardsTitle}>Squat</Text>
-      </View>
-      <View style={styles.cards}>
-        <Text style={styles.cardsTitle}>Bench</Text>
-      </View>
-      <View style={styles.cards}>
-        <Text style={styles.cardsTitle}>Curl</Text>
-      </View>
+
       <TouchableOpacity
         style={styles.btn}
         onPress={() => navigation.navigate("Home")}

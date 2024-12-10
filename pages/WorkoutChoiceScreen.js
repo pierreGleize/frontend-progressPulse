@@ -1,53 +1,102 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Underline from "../components/Underline";
+import Button from "../components/Button";
+import { useEffect, useState } from "react";
 
-export default function WorkoutChoiceScreen({ navigation }) {
+
+export default function WorkoutChoiceScreen({ navigation, route }) {
+
+  const {name} = route.params
+  const handleNavigateToSummary = (name) => {
+    navigation.navigate('workoutSummary', {name : name})
+  }
+  const [added, setAdded] = useState([])
+
+  useEffect(() => {
+    fetch (`${process.env.EXPO_PUBLIC_SERVER_IP}/workouts/byDifficulty/${name}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      setAdded(data.data)
+    })
+  }, [])
+
+  const nameWorkout = added.map((data, i) => {
+    return (
+      <Button key={i}
+        background="#A3FD01"
+        borderColor="none"
+        textButton={data.name}
+        textColor="white"
+        width={350}
+        height={60}
+        onPress={() => handleNavigateToSummary(name)}
+        isLinearGradiant={true}
+        colorsGradiant={["#3BC95F", "#1D632F"]}
+      />
+    )
+  }) 
+  
   return (
     <View style={styles.container}>
-      <FontAwesome
-        name={"chevron-left"}
-        size={30}
-        color={"#3BC95F"}
-        onPress={() =>
-          navigation.navigate("WorkoutDifficulty", { backTo: "workoutChoice" })
-        }
-      />
-      <Text style={styles.text}>WorkoutChoice Screen</Text>
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() =>
-          navigation.navigate("workoutSummary", { backTo: "workoutChoice" })
-        }
-      >
-        <Text style={styles.btnText}>Full-body</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() =>
-          navigation.navigate("workoutSummary", { backTo: "workoutChoice" })
-        }
-      >
-        <Text style={styles.btnText}>Haut du corps</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() =>
-          navigation.navigate("workoutSummary", { backTo: "workoutChoice" })
-        }
-      >
-        <Text style={styles.btnText}>Bas du corps</Text>
-      </TouchableOpacity>
-    </View>
+      <View style={styles.topContainer}>
+        <FontAwesome
+          name={"chevron-left"}
+          size={30}
+          color={"#3BC95F"}
+          onPress={() => navigation.navigate("WorkoutDifficulty")}
+        />
+        <Text style={styles.title}>{name}</Text>
+        <Underline width={80} />
+      </View>
+      <View style={styles.infoContainer}>
+          <FontAwesome
+            name={"info-circle"}
+            size={30}
+            color={"#A3FD01"}
+            style={styles.infoIcon}
+          />
+          <Text style={styles.textInfo}>
+            Choisis ta séance !
+          </Text>
+        </View>
+        <View style={styles.btn}>
+          {nameWorkout}
+        </View>
+      </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rebeccapurple",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#0D0D36",
+    paddingVertical: 50,
+    paddingHorizontal: 10,
   },
+
+  title: {
+    marginTop: 20,
+    fontSize: 28,
+    color: "white",
+    fontWeight: 600,
+  },
+
+  infoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10
+  },
+
+  infoIcon: {
+    marginRight: 10,
+  },
+
+  textInfo: {
+    color: "white",
+  },
+
   text: {
     fontSize: 50,
     padding: 50,
@@ -57,7 +106,8 @@ const styles = StyleSheet.create({
   btn: {
     fontSize: 40,
     borderRadius: 10,
-    backgroundColor: "#3BC95F",
+    justifyContent: 'center',
+    alignItems: 'center',
     margin: 20,
   },
   btnText: {

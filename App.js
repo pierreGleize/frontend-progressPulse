@@ -7,7 +7,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import user from './reducers/user'
+import user from './reducers/user';
 
 import SigninScreen from "./pages/SigninScreen";
 import SignupScreen from "./pages/SignupScreen";
