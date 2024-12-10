@@ -10,9 +10,7 @@ const ExerciseCard = ({
   numberOfReps,
   weight,
   restTime,
-  //   isCompleted,
-  isEditable,
-  handleFinishExercice,
+  isEditable = true,
 }) => {
   const [isCompleted, setIsCompleted] = useState(false);
   return (
