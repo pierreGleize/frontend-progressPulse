@@ -2,15 +2,38 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { removeExercise } from "../reducers/workoutCreation";
 
-const ExerciseBtn = ({ textButton, image }) => {
+const ExerciseBtn = ({ exerciseID, textButton, image, openModal }) => {
+
+  const dispatch = useDispatch()
+
   const [isAdded, setIsAdded] = useState(false);
+
+  const workoutCreationExercises = useSelector((state) => state.workoutCreation.value.exercises)
+
+  useEffect(() => {
+    const exerciseAlreadyAdded = workoutCreationExercises.some(exercise => exercise.exercise === exerciseID)
+    setIsAdded(exerciseAlreadyAdded)
+  },[workoutCreationExercises])
+
+
+
+  const handlePress = () => {
+    if (!isAdded){
+      openModal(textButton, exerciseID)
+    } else {
+      dispatch(removeExercise(exerciseID))
+    }
+    
+  }
 
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      onPress={() => setIsAdded(!isAdded)}
+      onPress={handlePress}
       style={styles.container}
     >
       <LinearGradient

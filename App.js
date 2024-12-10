@@ -8,6 +8,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user'
+import workoutCreation from './reducers/workoutCreation'
 
 import SigninScreen from "./pages/SigninScreen";
 import SignupScreen from "./pages/SignupScreen";
@@ -25,7 +26,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: {user},
+  reducer: {user, workoutCreation},
  });
 
 const TabNavigator = () => {
