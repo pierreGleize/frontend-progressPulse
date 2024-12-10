@@ -1,42 +1,67 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useEffect, useState } from "react";
+import Underline from "../components/Underline";
+import Button from "../components/Button";
+import ExerciseCard from "../components/ExerciseCard";
 
 export default function WorkoutSummaryScreen({ navigation, route }) {
-  const {name, backTo} = route.params;
-  const [workout, setWorkout] = useState([])
-
-  useEffect(() => {
-    fetch (`${process.env.EXPO_PUBLIC_SERVER_IP}/workouts/byName/${name}`)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-      setWorkout(data.data)
-    })
-  }, [])
-
-/*   const workout = workout.map((data,i) => {
-    return (
-
-    )
-  }) */
+  const { backTo, categorie = {} } = route.params || {};
+  console.log(backTo);
   return (
     <View style={styles.container}>
-      <FontAwesome
-        name={"chevron-left"}
-        size={30}
-        color={"#3BC95F"}
-        onPress={() => navigation.navigate('workoutChoice')}
-      />
+      <View>
+        <FontAwesome
+          name={"chevron-left"}
+          size={24}
+          color={"#3BC95F"}
+          style={{ marginLeft: 15, marginTop: 5 }}
+          onPress={() => navigation.navigate(backTo, { categorie: categorie })}
+        />
+      </View>
+      <View style={styles.mainContainer}>
+        <ScrollView>
+          <ExerciseCard
+            exerciseName="Squat"
+            numberOfSets={4}
+            numberOfReps={12}
+            weight={80}
+            restTime={120}
+          />
+          <ExerciseCard
+            exerciseName="Bench"
+            numberOfSets={1}
+            numberOfReps={1}
+            weight={80}
+            restTime={120}
+          />
+          <ExerciseCard
+            exerciseName="Bench"
+            numberOfSets={1}
+            numberOfReps={1}
+            weight={80}
+            restTime={120}
+          />
+        </ScrollView>
+      </View>
 
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() => navigation.navigate("Home")}
-      >
-        <Text style={styles.btnText}>
-          {backTo === "Home" ? "Commencer ma séance" : "Valider ma séance"}
-        </Text>
-      </TouchableOpacity>
+      <View style={styles.bottomContainer}>
+        <Button
+          background="#A3FD01"
+          borderColor="none"
+          textButton={"Valider ma séance"}
+          textColor="black"
+          width={300}
+          height={50}
+          onPress={() => navigation.navigate("Home")}
+          isLinearGradiant={false}
+        />
+      </View>
     </View>
   );
 }
@@ -44,37 +69,18 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "brown",
+    backgroundColor: "#0D0D36",
+    paddingVertical: 50,
+    paddingHorizontal: 10,
+  },
+  bottomContainer: {
+    flex: 0.5,
     alignItems: "center",
     justifyContent: "center",
   },
-  text: {
-    fontSize: 40,
-    padding: 50,
-    textAlign: "center",
-    color: "white",
-  },
-  btn: {
-    fontSize: 40,
-    borderRadius: 10,
-    backgroundColor: "black",
-  },
-  btnText: {
-    fontSize: 30,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    textAlign: "center",
-    color: "white",
-  },
-  cards: {
-    width: 300,
-    height: 100,
-    backgroundColor: "#4645AB",
-    margin: 10,
+  mainContainer: {
+    flex: 4,
+    justifyContent: "center",
     alignItems: "center",
-  },
-  cardsTitle: {
-    color: "white",
-    margin: -10,
   },
 });

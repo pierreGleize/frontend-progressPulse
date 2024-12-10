@@ -8,17 +8,16 @@ export default function WorkoutTypeScreen({ navigation }) {
       <View style={styles.topContainer}>
         <FontAwesome
           name={"chevron-left"}
-          size={30}
+          size={24}
           color={"#3BC95F"}
           onPress={() => navigation.navigate("Home")}
-          style={{ marginLeft: 10, marginTop: 5 }}
+          style={{ marginLeft: 15, marginTop: 5 }}
         />
         <View style={styles.infoContainer}>
           <FontAwesome
             name={"info-circle"}
             size={30}
             color={"#A3FD01"}
-            onPress={() => navigation.navigate("muscleGroup")}
             style={styles.infoIcon}
           />
           <Text style={styles.textInfo}>

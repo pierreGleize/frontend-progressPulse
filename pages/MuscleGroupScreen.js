@@ -2,8 +2,12 @@ import { StyleSheet, Text, View, FlatList } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
 import Underline from "../components/Underline";
+import { useSelector } from "react-redux";
 
 export default function MuscleGroupScreen({ navigation }) {
+
+  const exercisesLength = useSelector((state) => state.workoutCreation.value.exercises.length)
+  console.log(exercisesLength)
   const handleFinish = () => {
     navigation.navigate("workoutSummary", { backTo: "muscleGroup" });
   };
@@ -27,10 +31,10 @@ export default function MuscleGroupScreen({ navigation }) {
       <View style={styles.topContainer}>
         <FontAwesome
           name={"chevron-left"}
-          size={30}
+          size={24}
           color={"#3BC95F"}
           onPress={() => navigation.navigate("WorkoutType")}
-          style={{ marginLeft: 10, marginTop: 5 }}
+          style={{ marginLeft: 15, marginTop: 5 }}
         />
         <View>
           <Text style={styles.title}>Exercices </Text>
@@ -68,7 +72,7 @@ export default function MuscleGroupScreen({ navigation }) {
       </View>
       <View style={styles.bottomContainer}>
         <Text style={styles.bottomText}>
-          Exercices sélectionnés : <Text style={styles.bottomSpan}>0</Text>
+          Exercices sélectionnés : <Text style={styles.bottomSpan}>{exercisesLength}</Text>
         </Text>
         <View style={styles.bottomBtnContainer}>
           <Button

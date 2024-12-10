@@ -4,7 +4,6 @@ import Button from "../components/Button";
 import Underline from "../components/Underline";
 import { LinearGradient } from "expo-linear-gradient";
 
-
 export default function WorkoutDifficultyScreen({ navigation }) {
 
   const difficulty = ["Debutant", "Intermediaire", "Confirme"]
@@ -17,12 +16,24 @@ export default function WorkoutDifficultyScreen({ navigation }) {
       <View style={styles.topContainer}>
         <FontAwesome
           name={"chevron-left"}
-          size={30}
+          size={24}
           color={"#3BC95F"}
+          style={{ marginLeft: 15, marginTop: 5 }}
           onPress={() => navigation.navigate("WorkoutType")}
         />
-        <Text style={styles.title}>Niveau de la séance</Text>
-        <Underline width={80} />
+        <View>
+          <Text style={styles.title}>Niveau de la séance</Text>
+          <Underline width={80} />
+        </View>
+        <View style={styles.infoContainer}>
+          <FontAwesome
+            name={"info-circle"}
+            size={30}
+            color={"#A3FD01"}
+            style={styles.infoIcon}
+          />
+          <Text style={styles.textInfo}>Indique ton niveau pour commencer</Text>
+        </View>
       </View>
       <View style={styles.infoContainer}>
           <FontAwesome
@@ -71,7 +82,6 @@ const styles = StyleSheet.create({
     paddingVertical: 50,
     paddingHorizontal: 10,
   },
-
   title: {
     marginTop: 20,
     fontSize: 28,

@@ -126,9 +126,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0D0D36",
+    // backgroundColor: "#0D0D36",
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingTop: 50,
+    paddingTop: 40,
   },
   mainTitle: {
     fontSize: 25,
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "80%",
-    height: "35",
+    height: 40,
     borderRadius: 10,
     backgroundColor: "white",
     marginTop: 25,
