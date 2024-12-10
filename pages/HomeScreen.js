@@ -1,27 +1,46 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Button from "../components/Button";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useSelector } from "react-redux";
 
 export default function HomeScreen({ navigation }) {
+  const user = useSelector((state) => state.user.value);
   const handleAddWorkout = () => {
     navigation.navigate("WorkoutType");
   };
 
-  const handleWorkoutNavigation = () => {
-    navigation.navigate("workoutSummary", { backTo: "Home" });
+  const handleWorkoutNavigation = (name) => {
+    navigation.navigate("startWorkout", {
+      headerTitle: name,
+    });
   };
+
+  const workouts = ["Ma séance préfaite", "Ma séance sur mesure"];
+  const workout = workouts.map((element, index) => (
+    <Button
+      key={index}
+      background="#A3FD01"
+      borderColor="none"
+      textButton={element}
+      textColor="black"
+      width={300}
+      height={50}
+      onPress={() => handleWorkoutNavigation(element)}
+      isLinearGradiant={true}
+      colorsGradiant={["#3BC95F", "#1D632F"]}
+    />
+  ));
 
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Text style={styles.title}>Hello Pierre,</Text>
+        <Text style={styles.title}>Hello {user.username},</Text>
         <Text style={styles.span}>prêt pour un nouvel entrainement ?</Text>
         <View style={styles.infoContainer}>
           <FontAwesome
             name={"info-circle"}
             size={30}
             color={"#A3FD01"}
-            onPress={() => navigation.navigate("muscleGroup")}
             style={styles.infoIcon}
           />
           <Text style={styles.textInfo}>
@@ -41,14 +60,14 @@ export default function HomeScreen({ navigation }) {
           onPress={handleAddWorkout}
           isLinearGradiant={false}
         />
-        <Button
+        {/* <Button
           background="#A3FD01"
           borderColor="none"
           textButton="Ma séance préfaite"
           textColor="black"
           width={300}
           height={50}
-          onPress={handleWorkoutNavigation}
+          onPress={() => handleWorkoutNavigation(textButton)}
           isLinearGradiant={true}
           colorsGradiant={["#3BC95F", "#1D632F"]}
         />
@@ -59,10 +78,11 @@ export default function HomeScreen({ navigation }) {
           textColor="black"
           width={300}
           height={50}
-          onPress={handleWorkoutNavigation}
+          onPress={() => handleWorkoutNavigation(textButton)}
           isLinearGradiant={true}
           colorsGradiant={["#3BC95F", "#1D632F"]}
-        />
+        /> */}
+        {workout}
       </View>
     </View>
   );

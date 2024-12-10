@@ -9,7 +9,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
   const { name } = route.params;
 
   const handleFinish = () => {
-    navigation.navigate("workoutSummary", { backTo: "exercicesChoices" });
+    navigation.navigate("muscleGroup");
   };
 
   return (
@@ -17,10 +17,10 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
       <View style={styles.topContainer}>
         <FontAwesome
           name={"chevron-left"}
-          size={30}
+          size={24}
           color={"#3BC95F"}
           onPress={() => navigation.navigate("muscleGroup")}
-          style={{ marginLeft: 10, marginTop: 5 }}
+          style={{ marginLeft: 15, marginTop: 5 }}
         />
         <View style={{ marginVertical: 20 }}>
           <Text style={styles.title}>{name}</Text>
@@ -37,7 +37,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
         >
           <ExerciseBtn
             textButton="Tirage hozizontale à la poulie"
-            image={require('../assets/dos/rowingbarre.gif')}
+            image={require("../assets/dos/rowingbarre.gif")}
           />
           <ExerciseBtn
             textButton="Traction"
@@ -74,9 +74,9 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
         <Button
           background="#A3FD01"
           borderColor="none"
-          textButton="Terminer"
+          textButton="Terminer la séance"
           textColor="black"
-          width={150}
+          width={240}
           height={50}
           onPress={handleFinish}
           isLinearGradiant={false}
