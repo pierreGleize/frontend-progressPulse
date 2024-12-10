@@ -31,10 +31,10 @@ export default function MuscleGroupScreen({ navigation }) {
       <View style={styles.topContainer}>
         <FontAwesome
           name={"chevron-left"}
-          size={30}
+          size={24}
           color={"#3BC95F"}
           onPress={() => navigation.navigate("WorkoutType")}
-          style={{ marginLeft: 10, marginTop: 5 }}
+          style={{ marginLeft: 15, marginTop: 5 }}
         />
         <View>
           <Text style={styles.title}>Exercices </Text>

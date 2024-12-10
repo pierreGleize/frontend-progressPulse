@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "80%",
-    height: "35",
+    height: 40,
     borderRadius: 10,
     backgroundColor: "white",
     marginTop: 25,
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   image: {
-    height: "40%",
+    height: "35%",
     width: "100%",
   },
   orContainer: {

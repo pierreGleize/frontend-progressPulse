@@ -21,6 +21,7 @@ import WorkoutChoiceScreen from "./pages/WorkoutChoiceScreen";
 import WorkoutSummaryScreen from "./pages/WorkoutSummaryScreen";
 import MuscleGroupScreen from "./pages/MuscleGroupScreen";
 import ExercicesChoiceScreen from "./pages/ExercicesChoiceScreen";
+import StartWorkout from "./pages/StartWorkout";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -74,28 +75,59 @@ const TabNavigator = () => {
 export default function App() {
   return (
     <Provider store={store}>
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Signin" component={SigninScreen} />
-        <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen name="TabNavigator" component={TabNavigator} />
-        <Stack.Screen name="WorkoutType" component={WorkoutTypeScreen} />
-        <Stack.Screen
-          name="WorkoutDifficulty"
-          component={WorkoutDifficultyScreen}
-        />
-        <Stack.Screen name="workoutChoice" component={WorkoutChoiceScreen} />
-        <Stack.Screen name="workoutSummary" component={WorkoutSummaryScreen} />
-        <Stack.Screen name="muscleGroup" component={MuscleGroupScreen} />
-        <Stack.Screen
-          name="exercicesChoices"
-          component={ExercicesChoiceScreen}
-        />
-        {/* <Stack.Screen name="exercice" component={ExerciceScreen} />
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Signin" component={SigninScreen} />
+          <Stack.Screen name="Signup" component={SignupScreen} />
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="WorkoutType" component={WorkoutTypeScreen} />
+          <Stack.Screen
+            name="WorkoutDifficulty"
+            component={WorkoutDifficultyScreen}
+          />
+          <Stack.Screen name="workoutChoice" component={WorkoutChoiceScreen} />
+          <Stack.Screen
+            name="workoutSummary"
+            component={WorkoutSummaryScreen}
+          />
+          <Stack.Screen name="muscleGroup" component={MuscleGroupScreen} />
+          <Stack.Screen
+            name="exercicesChoices"
+            component={ExercicesChoiceScreen}
+          />
+          <Stack.Screen name="startWorkout" component={StartWorkout} />
+          {/* <Stack.Screen
+            name="startWorkout"
+            component={StartWorkout}
+            options={({ route, navigation }) => ({
+              headerTitle: route.params.headerTitle || "Ma séance",
+              headerShown: true,
+              headerTitleStyle: {
+                color: "white",
+                fontSize: 18,
+                fontWeight: "600",
+              },
+              headerStyle: {
+                backgroundColor: "#0D0D36",
+                borderBottomWidth: 2,
+                borderBottomColor: "white",
+              },
+              headerLeft: () => (
+                <FontAwesome
+                  name="chevron-left"
+                  size={24}
+                  color="#3BC95F"
+                  style={{ marginLeft: 15 }}
+                  onPress={() => navigation.navigate("Home")}
+                />
+              ),
+            })}
+          /> */}
+          {/* <Stack.Screen name="exercice" component={ExerciceScreen} />
         <Stack.Screen name="timer" component={TimerScreen} />
         <Stack.Screen name="workoutEnding" component={WorkoutEndingScreen} /> */}
-      </Stack.Navigator>
-    </NavigationContainer>
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
 }

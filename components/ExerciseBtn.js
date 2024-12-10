@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-    borderColor: "red",
+    // borderColor: "red",
     padding: 10,
   },
   picture: {

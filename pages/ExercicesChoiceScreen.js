@@ -169,10 +169,10 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
       <View style={styles.topContainer}>
         <FontAwesome
           name={"chevron-left"}
-          size={30}
+          size={24}
           color={"#3BC95F"}
           onPress={() => navigation.navigate("muscleGroup")}
-          style={{ marginLeft: 10, marginTop: 5 }}
+          style={{ marginLeft: 15, marginTop: 5 }}
         />
         <View style={{ marginVertical: 20 }}>
           <Text style={styles.title}>{name}</Text>
@@ -195,9 +195,9 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
         <Button
           background="#A3FD01"
           borderColor="none"
-          textButton="Terminer"
+          textButton="Terminer la séance"
           textColor="black"
-          width={150}
+          width={240}
           height={50}
           onPress={handleFinish}
           isLinearGradiant={false}
