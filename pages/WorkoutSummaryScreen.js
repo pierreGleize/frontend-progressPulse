@@ -1,18 +1,32 @@
 import {
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
   ScrollView,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Underline from "../components/Underline";
 import Button from "../components/Button";
 import ExerciseCard from "../components/ExerciseCard";
+import { useSelector } from "react-redux";
 
 export default function WorkoutSummaryScreen({ navigation, route }) {
   const { backTo, categorie = {} } = route.params || {};
   console.log(backTo);
+
+  const workout = useSelector(state => state.workoutCreation.value)
+
+  const card = workout.exercises.map((data, i) => {
+    console.log(data)
+/*     return (
+     <ExerciseCard key={i}
+            exerciseName={data.exerciceName}
+            numberOfSets={data}
+            numberOfReps={data}
+            weight={data}
+            restTime={data.rest}
+          />
+    ) */
+  })
+
   return (
     <View style={styles.container}>
       <View>
@@ -26,27 +40,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       </View>
       <View style={styles.mainContainer}>
         <ScrollView>
-          <ExerciseCard
-            exerciseName="Squat"
-            numberOfSets={4}
-            numberOfReps={12}
-            weight={80}
-            restTime={120}
-          />
-          <ExerciseCard
-            exerciseName="Bench"
-            numberOfSets={1}
-            numberOfReps={1}
-            weight={80}
-            restTime={120}
-          />
-          <ExerciseCard
-            exerciseName="Bench"
-            numberOfSets={1}
-            numberOfReps={1}
-            weight={80}
-            restTime={120}
-          />
+          {card}
         </ScrollView>
       </View>
 

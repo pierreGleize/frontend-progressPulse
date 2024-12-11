@@ -5,7 +5,7 @@ const initialState = {
 };
 
 export const workoutCreationSlice= createSlice({
- name: 'user',
+ name: 'workoutCreation',
  initialState,
  reducers: {
    addExercise: (state, action) => {
@@ -19,9 +19,21 @@ export const workoutCreationSlice= createSlice({
    },
    resetWorkoutCreation: (state, action) =>{
     state.value = {name: null, exercises: []}
+   },
+   addAllExercise: (state, action) => {
+    for(let exercices of action.payload){
+      const exerciseToAdd = {
+      exercice : exercices.exercice._id,
+      exerciceName : exercices.exercice.name,
+      muscleGroupe : exercices.exercice.muscleGroupe,
+      rest : exercices.rest,
+      customSets : exercices.sets
+    }
+      state.value.exercises.push(exerciseToAdd)
+    }
    }
  }
 });
 
-export const { addExercise, addWorkoutName, resetWorkoutCreation, removeExercise} = workoutCreationSlice.actions;
+export const { addExercise, addWorkoutName, resetWorkoutCreation, removeExercise, addAllExercise} = workoutCreationSlice.actions;
 export default workoutCreationSlice.reducer;
