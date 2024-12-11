@@ -31,6 +31,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/exercises/${name}`)
     .then(response => response.json())
     .then(data => {
+      console.log(data)
       if(data){
         setExercisesList(data.data)
       }
@@ -90,6 +91,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
 
   const exercisesToShow = exercisesList.map((exercise, i) => {
     const muscleGroup = exercise.muscleGroupe.toLowerCase()
+    console.log(muscleGroup)
     const imagePath = images[muscleGroup][exercise.image]
     return <ExerciseBtn
     key={i}
@@ -159,7 +161,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
                 width="260"
                 height="40"
                 background='#272D34'
-                borderWidth="1"
+                borderWidth={1}
                 borderColor="#A3FD01"
                 onPress={addToWorkout}>
               </Button>
@@ -284,7 +286,7 @@ const styles = StyleSheet.create({
   },
   input:{
     width: '100%',
-    height: "30",
+    height: "35",
     backgroundColor: "white",
     borderRadius: 5,
     padding: 10,
@@ -297,7 +299,7 @@ const styles = StyleSheet.create({
   },
   restInput:{
     width: '35%',
-    height: "30",
+    height: "35",
     backgroundColor: "white",
     borderRadius: 5,
     padding: 10,

@@ -77,9 +77,10 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="Signin" component={SigninScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          
           <Stack.Screen name="WorkoutType" component={WorkoutTypeScreen} />
           <Stack.Screen
             name="WorkoutDifficulty"

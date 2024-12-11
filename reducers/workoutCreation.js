@@ -12,7 +12,17 @@ export const workoutCreationSlice= createSlice({
     state.value.exercises.push(action.payload) 
    },
    removeExercise: (state, action) => {
+    console.log(action.payload)
     state.value.exercises = state.value.exercises.filter(exercise => exercise.exercise != action.payload)
+   },
+   updateCustomSets: (state, action) => {
+    console.log(action.payload.exerciseID)
+    for (let exercise of state.value.exercises){
+      if (exercise.exercise === action.payload.exerciseID){
+        exercise.customSets = action.payload.newSets
+        exercise.rest = action.payload.rest
+      }
+    }
    },
    addWorkoutName: (state, action) => {
     state.value.name = action.payload
@@ -23,5 +33,5 @@ export const workoutCreationSlice= createSlice({
  }
 });
 
-export const { addExercise, addWorkoutName, resetWorkoutCreation, removeExercise} = workoutCreationSlice.actions;
+export const { addExercise, addWorkoutName, resetWorkoutCreation, removeExercise, updateCustomSets} = workoutCreationSlice.actions;
 export default workoutCreationSlice.reducer;

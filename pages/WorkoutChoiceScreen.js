@@ -9,7 +9,7 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
 
   const {name} = route.params
   const handleNavigateToSummary = (name) => {
-    navigation.navigate('workoutSummary', {name : name})
+    navigation.navigate('workoutSummary', { backTo: "workoutChoice" })
   }
   const [added, setAdded] = useState([])
 
@@ -31,7 +31,7 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
         textColor="white"
         width={350}
         height={60}
-        onPress={() => handleNavigateToSummary(name)}
+        onPress={() => handleNavigateToSummary()}
         isLinearGradiant={true}
         colorsGradiant={["#3BC95F", "#1D632F"]}
       />

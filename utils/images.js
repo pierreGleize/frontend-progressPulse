@@ -1,5 +1,5 @@
 const images = {
-    abdos: {
+    abdominaux: {
       crunchpoulie: require("../assets/abdos/crunchpoulie.gif"),
       planche: require("../assets/abdos/planche.gif"),
       relevegenoux: require("../assets/abdos/relevegenoux.gif"),
@@ -23,7 +23,7 @@ const images = {
         tiragevertical: require("../assets/dos/tiragevertical.gif"),
         traction: require("../assets/dos/traction.gif"),
     },
-    epaules: {
+    épaules: {
         developpemilitaire: require("../assets/epaules/developpemilitaire.gif"),
         elevationsfrontales: require("../assets/epaules/elevationsfrontales.gif"),
         elevationslaterales: require("../assets/epaules/elevationslaterales.gif"),
