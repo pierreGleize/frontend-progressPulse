@@ -8,7 +8,6 @@ export default function HomeScreen({ navigation }) {
   const handleAddWorkout = () => {
     navigation.navigate("WorkoutType");
   };
-
   const handleWorkoutNavigation = (name) => {
     navigation.navigate("startWorkout", {
       headerTitle: name,
@@ -93,7 +92,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#0D0D36",
     paddingVertical: 50,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
   },
   topContainer: {
     flex: 1,

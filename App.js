@@ -5,14 +5,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-<<<<<<< HEAD
-import user from './reducers/user';
-=======
-import user from './reducers/user'
-import workoutCreation from './reducers/workoutCreation'
->>>>>>> 3f5d8887605b62d115801c0f779c55fa02ec0b98
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import user from "./reducers/user";
+import workoutCreation from "./reducers/workoutCreation";
 
 import SigninScreen from "./pages/SigninScreen";
 import SignupScreen from "./pages/SignupScreen";
@@ -26,13 +22,14 @@ import WorkoutSummaryScreen from "./pages/WorkoutSummaryScreen";
 import MuscleGroupScreen from "./pages/MuscleGroupScreen";
 import ExercicesChoiceScreen from "./pages/ExercicesChoiceScreen";
 import StartWorkout from "./pages/StartWorkout";
+import SongScreen from "./pages/SongScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: {user, workoutCreation},
- });
+  reducer: { user, workoutCreation },
+});
 
 const TabNavigator = () => {
   return (
@@ -84,6 +81,7 @@ export default function App() {
           <Stack.Screen name="Signin" component={SigninScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="song" component={SongScreen} />
           <Stack.Screen name="WorkoutType" component={WorkoutTypeScreen} />
           <Stack.Screen
             name="WorkoutDifficulty"

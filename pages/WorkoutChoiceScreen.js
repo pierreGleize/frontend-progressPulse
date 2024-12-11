@@ -4,67 +4,63 @@ import Underline from "../components/Underline";
 import Button from "../components/Button";
 import { useEffect, useState } from "react";
 
-
 export default function WorkoutChoiceScreen({ navigation, route }) {
-
-  const {name} = route.params
-  const handleNavigateToSummary = (name) => {
-    navigation.navigate('workoutSummary', {name : name})
-  }
-  const [added, setAdded] = useState([])
+  const { name } = route.params;
+  const handleNavigateToSummary = () => {
+    navigation.navigate("workoutSummary", { backTo: "workoutChoice" });
+  };
+  const [added, setAdded] = useState([]);
 
   useEffect(() => {
-    fetch (`${process.env.EXPO_PUBLIC_SERVER_IP}/workouts/byDifficulty/${name}`)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-      setAdded(data.data)
-    })
-  }, [])
+    fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/workouts/byDifficulty/${name}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setAdded(data.data);
+      });
+  }, []);
 
   const nameWorkout = added.map((data, i) => {
     return (
-      <Button key={i}
+      <Button
+        key={i}
         background="#A3FD01"
         borderColor="none"
         textButton={data.name}
         textColor="white"
         width={350}
         height={60}
-        onPress={() => handleNavigateToSummary(name)}
+        onPress={() => handleNavigateToSummary()}
         isLinearGradiant={true}
         colorsGradiant={["#3BC95F", "#1D632F"]}
       />
-    )
-  }) 
-  
+    );
+  });
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <FontAwesome
           name={"chevron-left"}
-          size={30}
+          size={24}
           color={"#3BC95F"}
+          style={{ marginLeft: 15, marginTop: 5 }}
           onPress={() => navigation.navigate("WorkoutDifficulty")}
         />
         <Text style={styles.title}>{name}</Text>
         <Underline width={80} />
       </View>
       <View style={styles.infoContainer}>
-          <FontAwesome
-            name={"info-circle"}
-            size={30}
-            color={"#A3FD01"}
-            style={styles.infoIcon}
-          />
-          <Text style={styles.textInfo}>
-            Choisis ta séance !
-          </Text>
-        </View>
-        <View style={styles.btn}>
-          {nameWorkout}
-        </View>
+        <FontAwesome
+          name={"info-circle"}
+          size={30}
+          color={"#A3FD01"}
+          style={styles.infoIcon}
+        />
+        <Text style={styles.textInfo}>Choisis ta séance !</Text>
       </View>
+      <View style={styles.btn}>{nameWorkout}</View>
+    </View>
   );
 }
 
@@ -86,7 +82,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 10
+    marginTop: 10,
   },
 
   infoIcon: {
@@ -106,8 +102,8 @@ const styles = StyleSheet.create({
   btn: {
     fontSize: 40,
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     margin: 20,
   },
   btnText: {
