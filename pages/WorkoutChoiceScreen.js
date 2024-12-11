@@ -4,28 +4,48 @@ import Underline from "../components/Underline";
 import Button from "../components/Button";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addAllExercise } from "../reducers/workoutCreation";
+import { addAllExercise, resetWorkoutCreation } from "../reducers/workoutCreation";
 
 
 export default function WorkoutChoiceScreen({ navigation, route }) {
 
   const dispatch = useDispatch()
-  const {name} = route.params
+  const { name } = route.params
   const handleNavigateToSummary = (data) => {
-    navigation.navigate('workoutSummary', {backTo :'workoutChoice'})
-    dispatch(addAllExercise(data/* {exercice : data._id, exerciceName : data.name, muscleGroupe : data.muscleGroupe, rest : data.rest, customSets: data.sets} */))
+    dispatch(resetWorkoutCreation())
+    let exerciseToAdd = []
+    for (let exercise of data) {
+      let customSets = [];
+      for (let set of exercise.sets) {
+        customSets.push({
+          weight: set.weight,
+          reps: set.rep
+        })
+      }
+      exerciseToAdd.push({
+        exercise: exercise.exercice._id,
+        exerciseName: exercise.exercice.name,
+        muscleGroup: exercise.exercice.muscleGroupe,
+        rest: exercise.rest,
+        customSets: customSets
+      })
+    }
+    dispatch(addAllExercise(exerciseToAdd))
+    navigation.navigate('workoutSummary', { backTo: 'workoutChoice' })
   }
-  const [add, setAdd] = useState([])
+
+  const [addWorkout, setAddWorkout] = useState([])
 
   useEffect(() => {
-    fetch (`${process.env.EXPO_PUBLIC_SERVER_IP}/workouts/byDifficulty/${name}`)
-    .then(response => response.json())
-    .then(data => {
-      setAdd(data.data)
-    })
+    fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/workouts/byDifficulty/${name}`)
+      .then(response => response.json())
+      .then(data => {
+        setAddWorkout(data.data)
+      })
   }, [])
 
-  const nameWorkout = add.map((data, i) => {
+  const nameWorkout = addWorkout.map((data, i) => {
+    console.log(data.exercices)
     return (
       <Button key={i}
         background="#A3FD01"
@@ -39,8 +59,8 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
         colorsGradiant={["#3BC95F", "#1D632F"]}
       />
     )
-  }) 
-  
+  })
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -54,20 +74,20 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
         <Underline width={80} />
       </View>
       <View style={styles.infoContainer}>
-          <FontAwesome
-            name={"info-circle"}
-            size={30}
-            color={"#A3FD01"}
-            style={styles.infoIcon}
-          />
-          <Text style={styles.textInfo}>
-            Choisis ta séance !
-          </Text>
-        </View>
-        <View style={styles.btn}>
-          {nameWorkout}
-        </View>
+        <FontAwesome
+          name={"info-circle"}
+          size={30}
+          color={"#A3FD01"}
+          style={styles.infoIcon}
+        />
+        <Text style={styles.textInfo}>
+          Choisis ta séance !
+        </Text>
       </View>
+      <View style={styles.btn}>
+        {nameWorkout}
+      </View>
+    </View>
   );
 }
 

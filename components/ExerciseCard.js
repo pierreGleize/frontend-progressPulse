@@ -3,16 +3,34 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { removeExercise } from "../reducers/workoutCreation";
 
 const ExerciseCard = ({
   exerciseName,
   numberOfSets,
   numberOfReps,
   weight,
-  restTime,
+  restMinutes,
+  restSeconds,
   isEditable = true,
+  exerciseID,
+  openModal
 }) => {
+
+  const dispatch = useDispatch()
+
   const [isCompleted, setIsCompleted] = useState(false);
+
+  const handleDelete = () => {
+    dispatch(removeExercise(exerciseID))
+  }
+
+  const handleUpdate = () => {
+    openModal(exerciseName, exerciseID, weight, numberOfReps, numberOfSets, restMinutes, restSeconds)
+  }
+
+
   return (
     <View style={{ marginTop: 20, marginBottom: 10 }}>
       <View style={styles.titleContainer}>
@@ -40,13 +58,13 @@ const ExerciseCard = ({
               Charge : <Text style={styles.span}>{weight} kg</Text>
             </Text>
             <Text style={styles.text}>
-              Temps de repos : <Text style={styles.span}>{restTime}</Text>
+              Temps de repos : <Text style={styles.span}>{restMinutes} min {restSeconds} sec</Text>
             </Text>
           </View>
           {isEditable ? (
             <View style={styles.iconContainer}>
-              <FontAwesome name={"pencil"} size={20} color={"#3BC95F"} />
-              <FontAwesome name={"trash"} size={20} color={"#3BC95F"} />
+              <FontAwesome name={"pencil"} size={20} color={"#3BC95F"} onPress={handleUpdate}/>
+              <FontAwesome name={"trash"} size={20} color={"#3BC95F"} onPress={handleDelete}/>
             </View>
           ) : (
             <TouchableOpacity

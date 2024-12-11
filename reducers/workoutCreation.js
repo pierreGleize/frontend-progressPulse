@@ -12,7 +12,17 @@ export const workoutCreationSlice= createSlice({
     state.value.exercises.push(action.payload) 
    },
    removeExercise: (state, action) => {
+    console.log(action.payload)
     state.value.exercises = state.value.exercises.filter(exercise => exercise.exercise != action.payload)
+   },
+   updateCustomSets: (state, action) => {
+    console.log(action.payload.exerciseID)
+    for (let exercise of state.value.exercises){
+      if (exercise.exercise === action.payload.exerciseID){
+        exercise.customSets = action.payload.newSets
+        exercise.rest = action.payload.rest
+      }
+    }
    },
    addWorkoutName: (state, action) => {
     state.value.name = action.payload
@@ -21,13 +31,13 @@ export const workoutCreationSlice= createSlice({
     state.value = {name: null, exercises: []}
    },
    addAllExercise: (state, action) => {
-    for(let exercices of action.payload){
+    for(let exercice of action.payload){
       const exerciseToAdd = {
-      exercice : exercices.exercice._id,
-      exerciceName : exercices.exercice.name,
-      muscleGroupe : exercices.exercice.muscleGroupe,
-      rest : exercices.rest,
-      customSets : exercices.sets
+      exercise : exercice.exercise,
+      exerciseName : exercice.exerciseName,
+      muscleGroup : exercice.muscleGroup,
+      rest : exercice.rest,
+      customSets : exercice.customSets
     }
       state.value.exercises.push(exerciseToAdd)
     }
@@ -35,5 +45,5 @@ export const workoutCreationSlice= createSlice({
  }
 });
 
-export const { addExercise, addWorkoutName, resetWorkoutCreation, removeExercise, addAllExercise} = workoutCreationSlice.actions;
+export const { addExercise, addWorkoutName, resetWorkoutCreation, removeExercise, updateCustomSets, addAllExercise} = workoutCreationSlice.actions;
 export default workoutCreationSlice.reducer;

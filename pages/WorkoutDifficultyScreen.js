@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image, FlatList} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image, FlatList } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
 import Underline from "../components/Underline";
@@ -7,35 +7,35 @@ import { LinearGradient } from "expo-linear-gradient";
 export default function WorkoutDifficultyScreen({ navigation }) {
 
   const difficulty = [
-    {name : "Debutant", source : require('../assets/illustrations/debutant.png')},
-    {name: "Intermediaire", source : require('../assets/illustrations/intermediaire.png')},
-    {name: "Confirme", source : require('../assets/illustrations/confirme.png')}
+    { name: "Debutant", source: require('../assets/illustrations/debutant.png') },
+    { name: "Intermediaire", source: require('../assets/illustrations/intermediaire.png') },
+    { name: "Confirme", source: require('../assets/illustrations/confirme.png') }
   ]
 
   const handleNavigateToWorkout = (name) => {
-    navigation.navigate('workoutChoice', {name : name})
+    navigation.navigate('workoutChoice', { name: name })
   }
 
-  const button = difficulty.map((data,i) => {
+  const button = difficulty.map((data, i) => {
     return (
       <TouchableOpacity key={i}
-      activeOpacity={0.7}
-      style={styles.btn}
-      onPress={() => handleNavigateToWorkout(data.name)}
-    >
-      <LinearGradient
-        colors={["#3BC95F", "#1D632F"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.gradiant}
+        activeOpacity={0.7}
+        style={styles.btn}
+        onPress={() => handleNavigateToWorkout(data.name)}
       >
-        <Image
-          source={data.source}
-          style={styles.image}
-        />
+        <LinearGradient
+          colors={["#3BC95F", "#1D632F"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.gradiant}
+        >
+          <Image
+            source={data.source}
+            style={styles.image}
+          />
           <Text style={styles.btnText}>{data.name}</Text>
-      </LinearGradient>
-    </TouchableOpacity>
+        </LinearGradient>
+      </TouchableOpacity>
     )
   })
 
