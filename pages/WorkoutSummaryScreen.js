@@ -162,10 +162,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           animationType="fade"
           transparent={true}
           visible={modalTitleVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalTitleVisible(false);
-          }}>
+      >
           <KeyboardAvoidingView style={styles.modalBackground} behavior={Platform.OS === "ios" ? "padding" : "height"}>
             <View style={styles.modalTitleView}>
               <View style={styles.crossContainer}>
@@ -212,10 +209,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           animationType="fade"
           transparent={true}
           visible={modalCustomSetsVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setmodalCustomSetsVisible(!modalVisible);
-          }}>
+      >
           <KeyboardAvoidingView style={styles.modalBackground} behavior={Platform.OS === "ios" ? "padding" : "height"}>
             <View style={styles.modalView}>
               <View style={styles.crossContainer}>
