@@ -85,6 +85,7 @@ export default function SignupScreen({ navigation }) {
         placeholder="Email"
         onChangeText={(value) => setEmail(value)}
         value={email}
+        autoCapitalize="none"
       ></TextInput>
       <TextInput
         style={styles.input}

@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user'
 import workoutCreation from './reducers/workoutCreation'
+import workouts from "./reducers/workouts";
 
 import SigninScreen from "./pages/SigninScreen";
 import SignupScreen from "./pages/SignupScreen";
@@ -30,8 +31,8 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: { user, workoutCreation },
-});
+  reducer: {user, workoutCreation, workouts},
+ });
 
 const TabNavigator = () => {
   return (
@@ -80,10 +81,10 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        
           <Stack.Screen name="Signin" component={SigninScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
-
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="WorkoutType" component={WorkoutTypeScreen} />
           <Stack.Screen
             name="WorkoutDifficulty"

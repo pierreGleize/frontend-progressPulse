@@ -10,28 +10,29 @@ import { addAllExercise, resetWorkoutCreation } from "../reducers/workoutCreatio
 export default function WorkoutChoiceScreen({ navigation, route }) {
 
   const dispatch = useDispatch()
-  const { name } = route.params
+  const {name} = route.params
   const handleNavigateToSummary = (data) => {
     dispatch(resetWorkoutCreation())
-    let exerciseToAdd = []
-    for (let exercise of data) {
-      let customSets = [];
-      for (let set of exercise.sets) {
+    let exercisesToAdd = []
+    for (let exercise of data){
+      console.log(exercise.sets)
+      let customSets = []
+      for (let set of exercise.sets){
         customSets.push({
           weight: set.weight,
           reps: set.rep
         })
       }
-      exerciseToAdd.push({
-        exercise: exercise.exercice._id,
-        exerciseName: exercise.exercice.name,
-        muscleGroup: exercise.exercice.muscleGroupe,
-        rest: exercise.rest,
-        customSets: customSets
+      exercisesToAdd.push({
+      exercise : exercise.exercice._id,
+      exerciseName :exercise.exercice.name,
+      muscleGroup: exercise.exercice.muscleGroupe,
+      rest : exercise.rest,
+      customSets : customSets
       })
     }
-    dispatch(addAllExercise(exerciseToAdd))
-    navigation.navigate('workoutSummary', { backTo: 'workoutChoice' })
+    dispatch(addAllExercise(exercisesToAdd))
+    navigation.navigate('workoutSummary', {backTo :'workoutChoice'})
   }
 
   const [addWorkout, setAddWorkout] = useState([])
