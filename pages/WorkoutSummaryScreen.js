@@ -7,7 +7,6 @@ import {
   Platform,
   TextInput,
   Text,
-  Text
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
@@ -212,11 +211,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       <Modal
           animationType="fade"
           transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}>
+          visible={modalCustomSetsVisible}
+          >
           <KeyboardAvoidingView style={styles.modalBackground} behavior={Platform.OS === "ios" ? "padding" : "height"}>
             <View style={styles.modalView}>
               <View style={styles.crossContainer}>
@@ -224,7 +220,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
                     name={"times"}
                     size={30}
                     color={"white"}
-                    onPress={closeModal}
+                    onPress={closeModalCustomSets}
                     style={styles.infoIcon}
                 />
               </View>
