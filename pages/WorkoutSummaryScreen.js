@@ -1,7 +1,5 @@
 import {
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
   ScrollView,
   Modal,
@@ -10,7 +8,6 @@ import {
   TextInput
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Underline from "../components/Underline";
 import Button from "../components/Button";
 import ExerciseCard from "../components/ExerciseCard";
 import { useSelector, useDispatch } from "react-redux";

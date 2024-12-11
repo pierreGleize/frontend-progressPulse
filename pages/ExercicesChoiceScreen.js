@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
   },
   input:{
     width: '100%',
-    height: "35",
+    height: 35,
     backgroundColor: "white",
     borderRadius: 5,
     padding: 10,
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
   },
   restInput:{
     width: '35%',
-    height: "35",
+    height: 35,
     backgroundColor: "white",
     borderRadius: 5,
     padding: 10,

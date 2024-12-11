@@ -3,26 +3,29 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Underline from "../components/Underline";
 import Button from "../components/Button";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addAllExercise } from "../reducers/workoutCreation";
 
 
 export default function WorkoutChoiceScreen({ navigation, route }) {
 
+  const dispatch = useDispatch()
   const {name} = route.params
-  const handleNavigateToSummary = (name) => {
-    navigation.navigate('workoutSummary', { backTo: "workoutChoice" })
+  const handleNavigateToSummary = (data) => {
+    navigation.navigate('workoutSummary', {backTo :'workoutChoice'})
+    dispatch(addAllExercise(data/* {exercice : data._id, exerciceName : data.name, muscleGroupe : data.muscleGroupe, rest : data.rest, customSets: data.sets} */))
   }
-  const [added, setAdded] = useState([])
+  const [add, setAdd] = useState([])
 
   useEffect(() => {
     fetch (`${process.env.EXPO_PUBLIC_SERVER_IP}/workouts/byDifficulty/${name}`)
     .then(response => response.json())
     .then(data => {
-      console.log(data)
-      setAdded(data.data)
+      setAdd(data.data)
     })
   }, [])
 
-  const nameWorkout = added.map((data, i) => {
+  const nameWorkout = add.map((data, i) => {
     return (
       <Button key={i}
         background="#A3FD01"
@@ -31,7 +34,7 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
         textColor="white"
         width={350}
         height={60}
-        onPress={() => handleNavigateToSummary()}
+        onPress={() => handleNavigateToSummary(data.exercices)}
         isLinearGradiant={true}
         colorsGradiant={["#3BC95F", "#1D632F"]}
       />

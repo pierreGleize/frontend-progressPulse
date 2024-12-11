@@ -6,10 +6,38 @@ import { LinearGradient } from "expo-linear-gradient";
 
 export default function WorkoutDifficultyScreen({ navigation }) {
 
-  const difficulty = ["Debutant", "Intermediaire", "Confirme"]
+  const difficulty = [
+    {name : "Debutant", source : require('../assets/illustrations/debutant.png')},
+    {name: "Intermediaire", source : require('../assets/illustrations/intermediaire.png')},
+    {name: "Confirme", source : require('../assets/illustrations/confirme.png')}
+  ]
+
   const handleNavigateToWorkout = (name) => {
     navigation.navigate('workoutChoice', {name : name})
   }
+
+  const button = difficulty.map((data,i) => {
+    return (
+      <TouchableOpacity key={i}
+      activeOpacity={0.7}
+      style={styles.btn}
+      onPress={() => handleNavigateToWorkout(data.name)}
+    >
+      <LinearGradient
+        colors={["#3BC95F", "#1D632F"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.gradiant}
+      >
+        <Image
+          source={data.source}
+          style={styles.image}
+        />
+          <Text style={styles.btnText}>{data.name}</Text>
+      </LinearGradient>
+    </TouchableOpacity>
+    )
+  })
 
   return (
     <View style={styles.container}>
@@ -32,44 +60,11 @@ export default function WorkoutDifficultyScreen({ navigation }) {
             color={"#A3FD01"}
             style={styles.infoIcon}
           />
-          <Text style={styles.textInfo}>Indique ton niveau pour commencer</Text>
+          <Text style={styles.textInfo}>Indique ton niveau pour commencer !</Text>
         </View>
       </View>
-      <View style={styles.infoContainer}>
-          <FontAwesome
-            name={"info-circle"}
-            size={30}
-            color={"#A3FD01"}
-            style={styles.infoIcon}
-          />
-          <Text style={styles.textInfo}>
-            Indique ton niveau pour commencer !
-          </Text>
-        </View>
       <View style={styles.btnContainer}>
-      <FlatList
-          data={difficulty}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={1}
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: "center",
-            alignItems: 'center'
-          }}
-          renderItem={({ item }) => (
-            <Button
-              background="#A3FD01"
-              borderColor="none"
-              textButton={item}
-              textColor="white"
-              width={350}
-              height={150}
-              onPress={() => handleNavigateToWorkout(item)}
-              isLinearGradiant={true}
-              colorsGradiant={["#3BC95F", "#1D632F"]}
-            />
-          )}
-        />
+        {button}
       </View>
     </View>
   );

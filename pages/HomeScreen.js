@@ -83,6 +83,16 @@ export default function HomeScreen({ navigation }) {
           colorsGradiant={["#3BC95F", "#1D632F"]}
         /> */}
         {workout}
+        <Button
+          background="#A3FD01"
+          borderColor="none"
+          textButton="exercice"
+          textColor="black"
+          width={300}
+          height={50}
+          onPress={() => navigation.navigate('exercice')}
+          isLinearGradiant={false}
+        />
       </View>
     </View>
   );

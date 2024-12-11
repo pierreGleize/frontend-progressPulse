@@ -22,6 +22,7 @@ import WorkoutSummaryScreen from "./pages/WorkoutSummaryScreen";
 import MuscleGroupScreen from "./pages/MuscleGroupScreen";
 import ExercicesChoiceScreen from "./pages/ExercicesChoiceScreen";
 import StartWorkout from "./pages/StartWorkout";
+import ExerciceScreen from "./pages/ExerciceScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -97,6 +98,7 @@ export default function App() {
             component={ExercicesChoiceScreen}
           />
           <Stack.Screen name="startWorkout" component={StartWorkout} />
+          <Stack.Screen name="exercice" component={ExerciceScreen} />
           {/* <Stack.Screen
             name="startWorkout"
             component={StartWorkout}
