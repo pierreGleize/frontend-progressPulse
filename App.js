@@ -5,10 +5,18 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
 
+<<<<<<< HEAD
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
 import workoutCreation from "./reducers/workoutCreation";
+=======
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import user from './reducers/user'
+import workoutCreation from './reducers/workoutCreation'
+import workouts from "./reducers/workouts";
+>>>>>>> e35afdd3df1ac000b668d4363d7c8cd25bf5b777
 
 import SigninScreen from "./pages/SigninScreen";
 import SignupScreen from "./pages/SignupScreen";
@@ -21,15 +29,27 @@ import WorkoutChoiceScreen from "./pages/WorkoutChoiceScreen";
 import WorkoutSummaryScreen from "./pages/WorkoutSummaryScreen";
 import MuscleGroupScreen from "./pages/MuscleGroupScreen";
 import ExercicesChoiceScreen from "./pages/ExercicesChoiceScreen";
+<<<<<<< HEAD
 import StartWorkout from "./pages/StartWorkout";
 import SongScreen from "./pages/SongScreen";
+=======
+import StartWorkoutScreen from "./pages/StartWorkoutScreen";
+import ExerciceScreen from "./pages/ExerciceScreen";
+import TimerScreen from "./pages/TimerScreen";
+import WorkoutEndingScreen from "./pages/WorkoutEndingScreen";
+>>>>>>> e35afdd3df1ac000b668d4363d7c8cd25bf5b777
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
+<<<<<<< HEAD
   reducer: { user, workoutCreation },
 });
+=======
+  reducer: {user, workoutCreation, workouts},
+ });
+>>>>>>> e35afdd3df1ac000b668d4363d7c8cd25bf5b777
 
 const TabNavigator = () => {
   return (
@@ -78,6 +98,7 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+        
           <Stack.Screen name="Signin" component={SigninScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
@@ -97,7 +118,10 @@ export default function App() {
             name="exercicesChoices"
             component={ExercicesChoiceScreen}
           />
-          <Stack.Screen name="startWorkout" component={StartWorkout} />
+          <Stack.Screen name="startWorkout" component={StartWorkoutScreen} />
+          <Stack.Screen name="exercice" component={ExerciceScreen} />
+          <Stack.Screen name="timer" component={TimerScreen} />
+          <Stack.Screen name="workoutEnding" component={WorkoutEndingScreen} />
           {/* <Stack.Screen
             name="startWorkout"
             component={StartWorkout}

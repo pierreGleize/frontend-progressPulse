@@ -14,7 +14,7 @@ import ExerciseBtn from "../components/ExerciseBtn";
 import Button from "../components/Button";
 // import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Underline from "../components/Underline";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import images from "../utils/images";
 import { useDispatch, useSelector } from "react-redux";
 import { addExercise } from "../reducers/workoutCreation";
@@ -40,6 +40,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/exercises/${name}`)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         if (data) {
           setExercisesList(data.data);
         }
@@ -47,7 +48,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
   }, []);
 
   const handleFinish = () => {
-    navigation.navigate("workoutSummary", { backTo: "exercicesChoices" });
+    navigation.navigate("muscleGroup");
   };
 
   const openModal = (textButton, exerciseID) => {
@@ -75,7 +76,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
       setEmptyFields(false);
       let customSets = [];
       for (let i = 0; i < parseInt(nbSets); i++) {
-        customSets.push({ weight: charge, reps: nbReps });
+        customSets.push({ weight: parseInt(charge), reps: parseInt(nbReps) });
       }
       const restConverted = parseInt(restMinutes) * 60 + parseInt(restSeconds);
       const exerciseToAdd = {
@@ -99,6 +100,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
 
   const exercisesToShow = exercisesList.map((exercise, i) => {
     const muscleGroup = exercise.muscleGroupe.toLowerCase();
+    console.log(muscleGroup);
     const imagePath = images[muscleGroup][exercise.image];
     return (
       <ExerciseBtn
@@ -208,7 +210,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
               width="260"
               height="40"
               background="#272D34"
-              borderWidth="1"
+              borderWidth={1}
               borderColor="#A3FD01"
               onPress={addToWorkout}
             ></Button>
@@ -244,7 +246,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
         <Button
           background="#A3FD01"
           borderColor="none"
-          textButton="Terminer la séance"
+          textButton="Terminer"
           textColor="black"
           width={240}
           height={50}
@@ -322,11 +324,10 @@ const styles = StyleSheet.create({
   textInfo: {
     color: "white",
     paddingLeft: 10,
-    fontSize: 12,
   },
   inputsContainer: {
     width: "100%",
-    marginTop: 30,
+    marginTop: 40,
   },
   inputText: {
     color: "white",
@@ -343,11 +344,10 @@ const styles = StyleSheet.create({
   restTimeContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
   },
   restInput: {
     width: "35%",
-    height: 30,
+    height: 35,
     backgroundColor: "white",
     borderRadius: 5,
     padding: 10,

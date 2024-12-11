@@ -3,24 +3,51 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Underline from "../components/Underline";
 import Button from "../components/Button";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  addAllExercise,
+  resetWorkoutCreation,
+} from "../reducers/workoutCreation";
 
 export default function WorkoutChoiceScreen({ navigation, route }) {
+  const dispatch = useDispatch();
   const { name } = route.params;
-  const handleNavigateToSummary = () => {
+  const handleNavigateToSummary = (data) => {
+    dispatch(resetWorkoutCreation());
+    let exercisesToAdd = [];
+    for (let exercise of data) {
+      console.log(exercise.sets);
+      let customSets = [];
+      for (let set of exercise.sets) {
+        customSets.push({
+          weight: set.weight,
+          reps: set.rep,
+        });
+      }
+      exercisesToAdd.push({
+        exercise: exercise.exercice._id,
+        exerciseName: exercise.exercice.name,
+        muscleGroup: exercise.exercice.muscleGroupe,
+        rest: exercise.rest,
+        customSets: customSets,
+      });
+    }
+    dispatch(addAllExercise(exercisesToAdd));
     navigation.navigate("workoutSummary", { backTo: "workoutChoice" });
   };
-  const [added, setAdded] = useState([]);
+
+  const [addWorkout, setAddWorkout] = useState([]);
 
   useEffect(() => {
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/workouts/byDifficulty/${name}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        setAdded(data.data);
+        setAddWorkout(data.data);
       });
   }, []);
 
-  const nameWorkout = added.map((data, i) => {
+  const nameWorkout = addWorkout.map((data, i) => {
+    console.log(data.exercices);
     return (
       <Button
         key={i}
@@ -30,7 +57,7 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
         textColor="white"
         width={350}
         height={60}
-        onPress={() => handleNavigateToSummary()}
+        onPress={() => handleNavigateToSummary(data.exercices)}
         isLinearGradiant={true}
         colorsGradiant={["#3BC95F", "#1D632F"]}
       />
