@@ -39,7 +39,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
   },[])
 
   const handleFinish = () => {
-    navigation.navigate("workoutSummary", { backTo: "exercicesChoices" });
+    navigation.navigate("muscleGroup",);
   };
 
   const openModal = (textButton, exerciseID) => {
@@ -197,7 +197,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
         <Button
           background="#A3FD01"
           borderColor="none"
-          textButton="Terminer la séance"
+          textButton="Terminer"
           textColor="black"
           width={240}
           height={50}

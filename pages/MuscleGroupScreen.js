@@ -78,7 +78,7 @@ export default function MuscleGroupScreen({ navigation }) {
           <Button
             background="#A3FD01"
             borderColor="none"
-            textButton="Terminer"
+            textButton="Voir le récap"
             textColor="black"
             width={150}
             height={50}

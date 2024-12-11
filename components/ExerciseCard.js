@@ -15,7 +15,7 @@ const ExerciseCard = ({
   restSeconds,
   isEditable = true,
   exerciseID,
-  openModal
+  openModalCustomSets
 }) => {
 
   const dispatch = useDispatch()
@@ -27,7 +27,7 @@ const ExerciseCard = ({
   }
 
   const handleUpdate = () => {
-    openModal(exerciseName, exerciseID, weight, numberOfReps, numberOfSets, restMinutes, restSeconds)
+    openModalCustomSets(exerciseName, exerciseID, weight, numberOfReps, numberOfSets, restMinutes, restSeconds)
   }
 
 

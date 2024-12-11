@@ -4,7 +4,7 @@ import Underline from "../components/Underline";
 import Button from "../components/Button";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addAllExercise } from "../reducers/workoutCreation";
+import { addAllExercise, resetWorkoutCreation } from "../reducers/workoutCreation";
 
 
 export default function WorkoutChoiceScreen({ navigation, route }) {
@@ -12,8 +12,27 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
   const dispatch = useDispatch()
   const {name} = route.params
   const handleNavigateToSummary = (data) => {
+    dispatch(resetWorkoutCreation())
+    let exercisesToAdd = []
+    for (let exercise of data){
+      console.log(exercise.sets)
+      let customSets = []
+      for (let set of exercise.sets){
+        customSets.push({
+          weight: set.weight,
+          reps: set.rep
+        })
+      }
+      exercisesToAdd.push({
+      exercise : exercise.exercice._id,
+      exerciseName :exercise.exercice.name,
+      muscleGroup: exercise.exercice.muscleGroupe,
+      rest : exercise.rest,
+      customSets : customSets
+      })
+    }
+    dispatch(addAllExercise(exercisesToAdd))
     navigation.navigate('workoutSummary', {backTo :'workoutChoice'})
-    dispatch(addAllExercise(data/* {exercice : data._id, exerciceName : data.name, muscleGroupe : data.muscleGroupe, rest : data.rest, customSets: data.sets} */))
   }
   const [add, setAdd] = useState([])
 
