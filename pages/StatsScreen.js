@@ -4,162 +4,35 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
-  Modal,
-  KeyboardAvoidingView,
-  Platform,
-  TextInput,
   Dimensions,
 } from "react-native";
-import { LineChart } from "react-native-chart-kit";
+import { LineChart, BarChart } from "react-native-chart-kit";
 import Underline from "../components/Underline";
-import Button from "../components/Button";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addWeight } from "../reducers/user";
 import moment from "moment";
 
 export default function StatsScreen({ navigation }) {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [weight, setWeight] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [error, setError] = useState(false);
-  const chartRef = useRef(null);
   const user = useSelector((state) => state.user.value);
-  const dispatch = useDispatch();
 
-  const dataLimite = user.weight.slice(0, 10);
-  const weights = dataLimite.map((element) => {
-    return [element.weight];
-  });
+  const dataLimite =
+    user.weight.length > 0 &&
+    [...user.weight]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 8)
+      .sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  const labels = dataLimite.map((element) => {
-    element.date.slice(0, 10);
-    return [moment(element.date).format("DD-MM")];
-  });
+  const weights = dataLimite && dataLimite.map((element) => element.weight);
 
-  const changeWeight = () => {
-    if (!weight) {
-      setError(true);
-      setErrorMessage("Veuillez remplir correctement le champ de saisie");
-      return;
-    }
-    fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/addWeight`, {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({ weight, token: user.token }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result === false) {
-          setError(true);
-          setErrorMessage(data.error);
-        } else {
-          dispatch(addWeight(data.newWeight));
-          closeModal();
-        }
-      });
-  };
-
-  const closeModal = () => {
-    setModalVisible(!modalVisible);
-    setError(false);
-    setErrorMessage("");
-    setWeight(null);
-  };
-
-  // const data = {
-  //   labels: user.weight.map((element) => moment(element.date).format("MM-DD")), // Utilisez les dates des poids
-  //   datasets: [
-  //     {
-  //       data: user.weight.map((element) => element.weight), // Utilisez les poids des utilisateurs
-  //       color: (opacity = 1) => `rgba(255, 99, 132, ${opacity})`,
-  //     },
-  //   ],
-  // };
-
-  // const chartConfig = {
-  //   axisLeft: {
-  //     axisMinimum: 0,
-  //   },
-  //   axisRight: {
-  //     enabled: false,
-  //   },
-  //   xAxis: {
-  //     position: "BOTTOM",
-  //   },
-  //   zoom: {
-  //     enabled: true,
-  //     scaleX: true,
-  //     scaleY: false,
-  //   },
-  //   pan: {
-  //     enabled: true,
-  //     scaleX: true,
-  //     scaleY: false,
-  //   },
-  //   color: (opacity = 1) => `rgba(255, 99, 132, ${opacity})`, // Correctly define the color function
-  // };
+  const labels =
+    dataLimite &&
+    dataLimite.map((element) => {
+      return moment(element.date).format("DD-MM");
+    });
 
   return (
     <ScrollView style={styles.container}>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(!modalVisible)}
-      >
-        <KeyboardAvoidingView
-          style={styles.modalBackground}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          <View style={styles.modalView}>
-            <View style={styles.topModal}>
-              <View style={styles.crossContainer}>
-                <FontAwesome
-                  name={"times"}
-                  size={30}
-                  color={"white"}
-                  onPress={closeModal}
-                  style={styles.infoIcon}
-                />
-              </View>
-              <View style={styles.infoContainer}>
-                <FontAwesome
-                  name={"info-circle"}
-                  size={25}
-                  color={"#A3FD01"}
-                  style={styles.infoIcon}
-                />
-                <Text style={styles.textInfo}>
-                  Ajoutez votre poids une fois par semaine pour le voir
-                  s'afficher sur le graphique et suivre votre progression.
-                </Text>
-              </View>
-            </View>
-            <View style={styles.bottomModal}>
-              <TextInput
-                style={styles.input}
-                placeholder="Ton poids"
-                keyboardType="numeric"
-                onChangeText={(value) => setWeight(value)}
-                value={weight}
-              />
-              {error && <Text style={styles.errorText}>{errorMessage}</Text>}
-              <Button
-                textButton="Valider"
-                textColor="#A3FD01"
-                width={180}
-                height={40}
-                background="#272D34"
-                borderWidth={1}
-                borderColor="#A3FD01"
-                onPress={changeWeight}
-              />
-            </View>
-          </View>
-        </KeyboardAvoidingView>
-      </Modal>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Statistiques</Text>
         <Underline width={100} />
@@ -185,34 +58,87 @@ export default function StatsScreen({ navigation }) {
         <Underline width={80} />
       </View>
 
-      <View style={{ alignItems: "center" }}>
+      <TouchableOpacity
+        style={styles.chartContainer}
+        activeOpacity={0.7}
+        onPress={() => navigation.navigate("weight")}
+      >
         <LineChart
           data={{
-            labels,
+            labels:
+              labels.length > 0
+                ? labels
+                : ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"],
             datasets: [
               {
-                data: weights,
+                data: weights.length > 0 ? weights : [0],
               },
             ],
           }}
           width={Dimensions.get("window").width}
+          withInnerLines={true}
+          segments={6}
           height={220}
           yAxisSuffix="kg"
           yAxisInterval={1}
           chartConfig={{
-            backgroundColor: "#e26a00",
-            backgroundGradientFrom: "#fb8c00",
-            backgroundGradientTo: "#ffa726",
-            decimalPlaces: 2,
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            backgroundGradientFrom: "#4645AB",
+            backgroundGradientTo: "#1C1C45",
+            decimalPlaces: 1,
+            color: (opacity = 1) => `rgba(163, 253, 1, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             style: {
               borderRadius: 16,
             },
             propsForDots: {
-              r: "6",
-              strokeWidth: "2",
-              stroke: "#ffa726",
+              r: "4",
+              strokeWidth: "1",
+              stroke: "#1D632F",
+            },
+          }}
+          bezier
+          style={{
+            marginVertical: 8,
+            borderRadius: 16,
+          }}
+        />
+      </TouchableOpacity>
+      <View style={{ alignItems: "center", marginBottom: 30 }}></View>
+      <View style={styles.secondTtitleContainer}>
+        <Text style={styles.secondTitle}>
+          Ton nombre d'entraînements par semaine
+        </Text>
+        <Underline width={80} />
+      </View>
+      <View style={styles.chartContainer}>
+        <BarChart
+          data={{
+            labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"],
+            datasets: [
+              {
+                data: [10, 5, 6, 4, 3, 11],
+              },
+            ],
+          }}
+          width={Dimensions.get("window").width}
+          withInnerLines={true}
+          segments={6}
+          height={220}
+          // yAxisSuffix="kg"
+          yAxisInterval={1}
+          chartConfig={{
+            backgroundGradientFrom: "#4645AB",
+            backgroundGradientTo: "#1C1C45",
+            decimalPlaces: 0,
+            color: (opacity = 1) => `rgba(163, 253, 1, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            style: {
+              borderRadius: 16,
+            },
+            propsForDots: {
+              r: "4",
+              strokeWidth: "1",
+              stroke: "#1D632F",
             },
           }}
           bezier
@@ -222,24 +148,7 @@ export default function StatsScreen({ navigation }) {
           }}
         />
       </View>
-      <View style={{ alignItems: "center" }}>
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          activeOpacity={0.8}
-          onPress={() => setModalVisible(!modalVisible)}
-        >
-          <Text style={styles.buttonText}>Ajouter mon poids</Text>
-          <FontAwesome name={"plus-circle"} size={30} color={"#272D34"} />
-        </TouchableOpacity>
-      </View>
-      {/* <View style={{ alignItems: "center" }}>
-        <LineChart
-          style={{ width: Dimensions.get("window").width, height: 220 }}
-          data={data}
-          chartConfig={chartConfig}
-          ref={chartRef}
-        />
-      </View> */}
+      <View style={{ alignItems: "center" }}></View>
     </ScrollView>
   );
 }
@@ -250,60 +159,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#0D0D36",
     paddingVertical: 60,
     paddingHorizontal: 20,
-  },
-  modalBackground: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalView: {
-    width: "85%",
-    height: 300,
-    backgroundColor: "#272D34",
-    borderRadius: 20,
-    padding: 15,
-    shadowColor: "#000",
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  topModal: {
-    marginBottom: 30,
-  },
-  infoContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    paddingHorizontal: 10,
-  },
-  bottomModal: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  crossContainer: {
-    width: "100%",
-    alignItems: "flex-end",
-    marginBottom: 30,
-  },
-  input: {
-    width: "100%",
-    height: 35,
-    backgroundColor: "white",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 15,
-  },
-  errorText: {
-    color: "red",
-  },
-  infoIcon: {
-    marginRight: 10,
-  },
-  textInfo: {
-    color: "white",
-    fontSize: 12,
   },
   titleContainer: {
     marginBottom: 30,
@@ -364,5 +219,9 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 18,
     fontWeight: 600,
+  },
+  chartContainer: {
+    alignItems: "center",
+    marginBottom: 20,
   },
 });

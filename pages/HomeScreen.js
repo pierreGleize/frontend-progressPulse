@@ -15,23 +15,22 @@ export default function HomeScreen({ navigation }) {
     });
   };
 
- 
   const workoutsToShow = workouts.map((element, index) => {
     return (
-    <Button
-      key={index}
-      background="#A3FD01"
-      borderColor="none"
-      textButton={element.name}
-      textColor="black"
-      width={300}
-      height={50}
-      onPress={() => handleWorkoutNavigation(element._id)}
-      isLinearGradiant={true}
-      colorsGradiant={["#3BC95F", "#1D632F"]}
-    />
-  )}
-);
+      <Button
+        key={index}
+        background="#A3FD01"
+        borderColor="none"
+        textButton={element.name}
+        textColor="black"
+        width={300}
+        height={50}
+        onPress={() => handleWorkoutNavigation(element._id)}
+        isLinearGradiant={true}
+        colorsGradiant={["#3BC95F", "#1D632F"]}
+      />
+    );
+  });
 
   return (
     <View style={styles.container}>
@@ -62,39 +61,7 @@ export default function HomeScreen({ navigation }) {
           onPress={handleAddWorkout}
           isLinearGradiant={false}
         />
-        {/* <Button
-          background="#A3FD01"
-          borderColor="none"
-          textButton="Ma séance préfaite"
-          textColor="black"
-          width={300}
-          height={50}
-          onPress={() => handleWorkoutNavigation(textButton)}
-          isLinearGradiant={true}
-          colorsGradiant={["#3BC95F", "#1D632F"]}
-        />
-        <Button
-          background="#A3FD01"
-          borderColor="none"
-          textButton="Ma séance sur mesure"
-          textColor="black"
-          width={300}
-          height={50}
-          onPress={() => handleWorkoutNavigation(textButton)}
-          isLinearGradiant={true}
-          colorsGradiant={["#3BC95F", "#1D632F"]}
-        /> */}
         {workoutsToShow}
-        <Button
-          background="#A3FD01"
-          borderColor="none"
-          textButton="exercice"
-          textColor="black"
-          width={300}
-          height={50}
-          onPress={() => navigation.navigate('exercice')}
-          isLinearGradiant={false}
-        />
         <Button
           background="#A3FD01"
           borderColor="none"
@@ -102,7 +69,7 @@ export default function HomeScreen({ navigation }) {
           textColor="black"
           width={300}
           height={50}
-          onPress={() => navigation.navigate('workoutEnding')}
+          onPress={() => navigation.navigate("workoutEnding")}
           isLinearGradiant={false}
         />
       </View>

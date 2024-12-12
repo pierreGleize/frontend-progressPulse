@@ -1,7 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: { token: null, username: null, email: null, sound: null, weight: [] },
+  value: {
+    token: null,
+    username: null,
+    email: null,
+    sound: null,
+    weight: [],
+    target: [],
+  },
 };
 
 export const userSlice = createSlice({
@@ -14,6 +21,7 @@ export const userSlice = createSlice({
       state.value.email = action.payload.email;
       state.value.sound = action.payload.sound;
       state.value.weight = action.payload.weight;
+      state.value.target = action.payload.target;
     },
     logout: (state, action) => {
       state.value = {
@@ -23,10 +31,11 @@ export const userSlice = createSlice({
         sound: null,
         seances: [],
         weight: [],
+        target: [],
       };
     },
     changeSound: (state, action) => {
-      state.value.sound = action.payload.sound;
+      state.value.sound = action.payload;
     },
     addWeight: (state, action) => {
       state.value.weight.push(action.payload);
