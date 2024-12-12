@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View, TouchableWithoutFeedback, Keyboard } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Underline from "../components/Underline";
 import Button from "../components/Button";
@@ -20,6 +20,7 @@ export default function WorkoutEndingScreen({ navigation }) {
     }
 
     return (
+      /*   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}/> */
         <View style={styles.container}>
             <View style={styles.topContainer}>
                 <Text style={styles.title}>Séance terminée !</Text>
@@ -51,6 +52,7 @@ export default function WorkoutEndingScreen({ navigation }) {
                     onPress={() => navigation.navigate('TabNavigator')} />
             </View>
         </View>
+ /*        </TouchableWithoutFeedback> */
     )
 }
 
@@ -96,7 +98,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         borderRadius: 20,
         padding: 10,
-        margin: 10
+        margin: 10,
+        textAlignVertical: 'top'
     },
 
     bottomContainer: {
