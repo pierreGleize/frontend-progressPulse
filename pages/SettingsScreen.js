@@ -107,7 +107,7 @@ export default function SettingsScreen({ navigation }) {
             <View style={styles.bottomModal}>
               <TextInput
                 style={styles.input}
-                placeholder={user.email}
+                placeholder={"Entrée votre nouvelle adresse email"}
                 placeholderTextColor={"#272D34"}
                 onChangeText={(value) => setEmail(value)}
                 value={email}
