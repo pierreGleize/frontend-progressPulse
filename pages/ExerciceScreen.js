@@ -5,7 +5,7 @@ import Underline from "../components/Underline";
 import { useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function Exercice({ navigation }) {
+export default function ExerciceScreen({ navigation }) {
 
     const [modalVisible, setModalVisible] = useState(false)
 
@@ -21,7 +21,8 @@ export default function Exercice({ navigation }) {
         <View style={styles.container}>
             <Modal animationType="fade"
                 transparent={true}
-                visible={modalVisible}>
+                visible={modalVisible}
+            >
                 <View style={styles.modalContainer}>
                     <View style={styles.iconModal}>
                         <FontAwesome
@@ -242,7 +243,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#272D34',
         borderRadius: 20,
         padding: 15,
-        margin: 'auto'
+        margin: 'auto',
+        
     },
 
     iconModal: {

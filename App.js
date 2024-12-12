@@ -5,10 +5,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import user from './reducers/user'
-import workoutCreation from './reducers/workoutCreation'
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import user from "./reducers/user";
+import workoutCreation from "./reducers/workoutCreation";
 import workouts from "./reducers/workouts";
 
 import SigninScreen from "./pages/SigninScreen";
@@ -26,13 +26,18 @@ import StartWorkoutScreen from "./pages/StartWorkoutScreen";
 import ExerciceScreen from "./pages/ExerciceScreen";
 import TimerScreen from "./pages/TimerScreen";
 import WorkoutEndingScreen from "./pages/WorkoutEndingScreen";
+import SongScreen from "./pages/SongScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: {user, workoutCreation, workouts},
- });
+  reducer: {
+    user,
+    workouts,
+    workoutCreation,
+  },
+});
 
 const TabNavigator = () => {
   return (
@@ -68,8 +73,8 @@ const TabNavigator = () => {
           },
         })}
       >
-        <Tab.Screen name="Stats" component={StatsScreen} />
         <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Stats" component={StatsScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     </LinearGradient>
@@ -81,10 +86,11 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-        
+        {/* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */}
           <Stack.Screen name="Signin" component={SigninScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="song" component={SongScreen} />
           <Stack.Screen name="WorkoutType" component={WorkoutTypeScreen} />
           <Stack.Screen
             name="WorkoutDifficulty"
@@ -104,36 +110,6 @@ export default function App() {
           <Stack.Screen name="exercice" component={ExerciceScreen} />
           <Stack.Screen name="timer" component={TimerScreen} />
           <Stack.Screen name="workoutEnding" component={WorkoutEndingScreen} />
-          {/* <Stack.Screen
-            name="startWorkout"
-            component={StartWorkout}
-            options={({ route, navigation }) => ({
-              headerTitle: route.params.headerTitle || "Ma séance",
-              headerShown: true,
-              headerTitleStyle: {
-                color: "white",
-                fontSize: 18,
-                fontWeight: "600",
-              },
-              headerStyle: {
-                backgroundColor: "#0D0D36",
-                borderBottomWidth: 2,
-                borderBottomColor: "white",
-              },
-              headerLeft: () => (
-                <FontAwesome
-                  name="chevron-left"
-                  size={24}
-                  color="#3BC95F"
-                  style={{ marginLeft: 15 }}
-                  onPress={() => navigation.navigate("Home")}
-                />
-              ),
-            })}
-          /> */}
-          {/* <Stack.Screen name="exercice" component={ExerciceScreen} />
-        <Stack.Screen name="timer" component={TimerScreen} />
-        <Stack.Screen name="workoutEnding" component={WorkoutEndingScreen} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -14,15 +14,18 @@ export const workoutsSlice= createSlice({
            state.value.push(seance)
        }
       },
+      
       addWorkout: (state,action) => {
           // Exemple de l'action payload reçu {séanceToAdd}
           state.value.push(action.payload)
           console.log(state.value[0].exercises)
       },
+
       removeWorkout: (state,action) =>{
       // Exemple de l'action payload reçu 'nomDeSeanceASupprimer'
           state.value.filter(seance => seance.name =! action.payload)
       },
+
       updateWorkoutSets: (state,action) => {
           // Exemple de l'action payload !
           // {workoutName: "nomSeanceAModifier", exerciseName: "nomExerciceAmodifier", customSets: [{weight:70, reps:8}, ...]}

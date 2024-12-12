@@ -1,21 +1,177 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TextInput, Platform, KeyboardAvoidingView, TouchableOpacity } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Underline from "../components/Underline";
+import Button from "../components/Button";
+import { LinearGradient } from "expo-linear-gradient";
+import { useState } from "react";
+import { TimerPickerModal } from "react-native-timer-picker";
 
 export default function TimerScreen({ navigation }) {
 
+    const [reps, setReps] = useState('')
+    const [weight, setWeight] = useState('')
+    const [emptyFields, setEmptyFields] = useState(false);
+    const [input, setInput] = useState(false)
+    const [showPicker, setShowPicker] = useState(false);
+    const [alarmString, setAlarmString] = useState('2:00');
+
+    const formatTime = ({minutes, seconds}) => {
+
+    const timeParts = [];
+    if (minutes !== undefined) {
+        timeParts.push(minutes.toString().padStart(2, "0"));
+    }
+    if (seconds !== undefined) {
+        //seconds.toString : convertit la variable seconds en une chaîne de caractères
+        //.padStart(2, "0") : ajoute des zéros au début de la chaîne 
+        timeParts.push(seconds.toString().padStart(2, "0"));
+    }
+    return timeParts.join(":");
+};
+
+    const addSet = () => {
+        if (!reps || !weight) {
+            setEmptyFields(true)
+            setInput(false)
+        } else {
+            setEmptyFields(false)
+            setInput(true)
+        }
+    }
+
+    const updateSet = () => {
+        setInput(false)
+    }
+
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
             <View style={styles.topContainer}>
-                <FontAwesome
-                    name={"chevron-left"}
-                    size={24}
-                    color={"#3BC95F"}
-                    onPress={() => navigation.navigate("exercice")}
-                    style={{ marginLeft: 15, marginTop: 40 }}
-                />
+                <Text style={styles.title}>Temps de repos</Text>
+                <Underline width={80} />
             </View>
-            <Text style={styles.title}>TimerScreen</Text>
-        </View>
+            <TouchableOpacity style={styles.timer} onPress={() => setShowPicker(true)}>
+                <Text style={styles.textTimer}>{alarmString}</Text>
+            </TouchableOpacity> 
+            <TimerPickerModal
+            visible={showPicker}
+            setIsVisible={setShowPicker}
+            onConfirm={(pickedDuration) => {
+                setAlarmString(formatTime(pickedDuration));
+                setShowPicker(false);
+            }}
+            modalTitle="Rest"
+            onCancel={() => setShowPicker(false)}
+            closeOnOverlayPress
+            hideHours
+/*             Audio={Audio}
+            LinearGradient={LinearGradient}
+            Haptics={Haptics} */
+            styles={{
+                theme: "dark",
+            }}
+            modalProps={{
+                overlayOpacity: 0.4,
+            }}
+        />
+            {!input && (<View>
+                <View style={styles.btn}>
+                    <Button
+                        textButton="Démarrer le minuteur"
+                        textColor="black"
+                        width="70%"
+                        height={50}
+                        background="#A3FD01"
+                    />
+                </View>
+                <View>
+                    <LinearGradient
+                        style={styles.linear}
+                        colors={['#4645AB', '#1C1C45']}
+                        start={{ x: 0, y: 1 }}
+                        end={{ x: 1, y: 0 }}>
+                        <View style={styles.data}>
+                            <Text style={styles.text}>Nombre de répétitions effectuées : </Text>
+                            <Underline width={60} />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Nombre de répétitions"
+                                onChangeText={value => setReps(value)}
+                                value={reps}
+                            />
+                        </View>
+                        <View style={styles.data}>
+                            <Text style={styles.text}>Charge de l'exercice :</Text>
+                            <Underline width={60} />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Charge"
+                                onChangeText={value => setWeight(value)}
+                                value={weight}
+                            />
+                        </View>
+                        {emptyFields && (
+                            <Text style={styles.errorMessage}>
+                                Veuillez remplir tous les champs
+                            </Text>
+                        )}
+                        <View style={styles.btnContainer}>
+                            <Button
+                                textButton="Valider la saisie"
+                                textColor="black"
+                                width="60%"
+                                height={50}
+                                background="#A3FD01"
+                                onPress={addSet} />
+                        </View>
+                    </LinearGradient>
+                </View>
+            </View>)}
+            {input && (<View>
+                <View style={styles.topContainer}>
+                    <Text style={styles.title}>Temps de repos</Text>
+                    <Underline width={80} />
+                </View>
+                <View style={styles.timer}>
+                    <Text style={styles.textTimer}>2 : 00</Text>
+                </View>
+                <View style={styles.btnInput}>
+                    <Button
+                        textButton="Passer à la série suivante"
+                        textColor="black"
+                        width="70%"
+                        height={50}
+                        background="#A3FD01"
+                        onPress={() => navigation.navigate('exercice')}
+                    />
+                </View>
+                <LinearGradient
+                    style={styles.linearInput}
+                    colors={['#4645AB', '#1C1C45']}
+                    start={{ x: 0, y: 1 }}
+                    end={{ x: 1, y: 0 }}>
+                    <View style={styles.pencil}>
+                        <FontAwesome name={"pencil"} size={20} color={"#3BC95F"} onPress={updateSet} />
+                    </View>
+                    <View style={styles.dataInput}>
+                        <Text style={styles.textTitle}>Nombre de répétitions effectuées : </Text>
+                        <Underline width={60} />
+                    </View>
+                    <Text style={styles.textInput}>{reps}</Text>
+                    <View style={styles.dataInput}>
+                        <Text style={styles.textTitle}>Charge de l'exercice :</Text>
+                        <Underline width={60} />
+                    </View>
+                    <Text style={styles.textInput} >{weight}</Text>
+                </LinearGradient>
+            </View>)}
+        </KeyboardAvoidingView>
     )
 }
 
@@ -23,18 +179,120 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#0D0D36',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
 
     topContainer: {
-        flex: 1,
+        marginTop: 50,
+        marginLeft: 30,
         justifyContent: "space-between",
     },
 
     title: {
         fontSize: 32,
         color: "white",
-        fontWeight: 600,
+        fontWeight: 'bold',
+    },
+
+    timer: {
+        width: '60%',
+        height: '10%',
+        backgroundColor: '#D9D9D9',
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginTop: 30,
+    },
+
+    textTimer: {
+        fontSize: 60,
+        fontWeight: 'bold'
+    },
+
+    btnContainer: {
+        alignItems: 'center'
+    },
+
+    btn: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 80,
+    },
+
+    linear: {
+        height: 350,
+        width: '80%',
+        justifyContent: 'center',
+        margin: 'auto',
+        borderRadius: 10,
+    },
+
+    data: {
+        paddingTop: 15,
+        marginLeft: 20
+    },
+
+    text: {
+        color: '#ffffff',
+        fontSize: 16,
+        fontWeight: 'bold'
+    },
+
+    inputContainer: {
+        alignItems: 'center'
+    },
+
+    input: {
+        width: '70%',
+        height: 50,
+        backgroundColor: '#D9D9D9',
+        borderRadius: 10,
+        padding: 10,
+        margin: 10,
+    },
+
+    errorMessage: {
+        color: "red",
+        textAlign: "center",
+    },
+
+    linearInput: {
+        height: 200,
+        width: '80%',
+        justifyContent: 'flex-start',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginTop: 80,
+        borderRadius: 10,
+    },
+
+    pencil: {
+        alignItems: 'flex-end',
+        marginTop: 10,
+        marginRight: 15,
+    },
+
+    dataInput: {
+        paddingTop: 15,
+        marginLeft: 20
+    },
+
+    textTitle: {
+        color: '#ffffff',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+
+    textInput: {
+        color: '#ffffff',
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+
+    btnInput: {
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 })

@@ -1,24 +1,40 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image, FlatList } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+  FlatList,
+} from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
 import Underline from "../components/Underline";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function WorkoutDifficultyScreen({ navigation }) {
-
   const difficulty = [
-    { name: "Debutant", source: require('../assets/illustrations/debutant.png') },
-    { name: "Intermediaire", source: require('../assets/illustrations/intermediaire.png') },
-    { name: "Confirme", source: require('../assets/illustrations/confirme.png') }
-  ]
+    {
+      name: "Debutant",
+      source: require("../assets/illustrations/debutant.png"),
+    },
+    {
+      name: "Intermediaire",
+      source: require("../assets/illustrations/intermediaire.png"),
+    },
+    {
+      name: "Confirme",
+      source: require("../assets/illustrations/confirme.png"),
+    },
+  ];
 
   const handleNavigateToWorkout = (name) => {
-    navigation.navigate('workoutChoice', { name: name })
-  }
+    navigation.navigate("workoutChoice", { name: name });
+  };
 
   const button = difficulty.map((data, i) => {
     return (
-      <TouchableOpacity key={i}
+      <TouchableOpacity
+        key={i}
         activeOpacity={0.7}
         style={styles.btn}
         onPress={() => handleNavigateToWorkout(data.name)}
@@ -29,15 +45,12 @@ export default function WorkoutDifficultyScreen({ navigation }) {
           end={{ x: 1, y: 0 }}
           style={styles.gradiant}
         >
-          <Image
-            source={data.source}
-            style={styles.image}
-          />
+          <Image source={data.source} style={styles.image} />
           <Text style={styles.btnText}>{data.name}</Text>
         </LinearGradient>
       </TouchableOpacity>
-    )
-  })
+    );
+  });
 
   return (
     <View style={styles.container}>
@@ -60,12 +73,12 @@ export default function WorkoutDifficultyScreen({ navigation }) {
             color={"#A3FD01"}
             style={styles.infoIcon}
           />
-          <Text style={styles.textInfo}>Indique ton niveau pour commencer !</Text>
+          <Text style={styles.textInfo}>
+            Indique ton niveau pour commencer !
+          </Text>
         </View>
       </View>
-      <View style={styles.btnContainer}>
-        {button}
-      </View>
+      <View style={styles.btnContainer}>{button}</View>
     </View>
   );
 }
@@ -124,9 +137,9 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     top: 40,
     right: 10,
-    position: 'absolute',
+    position: "absolute",
     color: "white",
-    textAlign: 'right'
+    textAlign: "right",
   },
 
   image: {
