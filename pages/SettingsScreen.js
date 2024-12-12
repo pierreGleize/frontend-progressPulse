@@ -127,7 +127,7 @@ export default function SettingsScreen({ navigation }) {
                 width="180"
                 height="40"
                 background="#272D34"
-                borderWidth="1"
+                borderWidth={1}
                 borderColor="#A3FD01"
                 onPress={changeEmail}
               />

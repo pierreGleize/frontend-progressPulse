@@ -17,6 +17,7 @@ import {
   updateCustomSets,
   addWorkoutName,
   resetWorkoutCreation,
+  removeExercise
 } from "../reducers/workoutCreation";
 import { addWorkout } from "../reducers/workouts";
 import Underline from "../components/Underline";
@@ -72,7 +73,16 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     setmodalCustomSetsVisible(true);
   };
 
+  const handleDelete = (exerciseID) => {
+    dispatch(removeExercise(exerciseID))
+  }
+
   const updateExercise = () => {
+    if (!charge || !nbSets || !nbReps || !restSeconds || !restMinutes){
+      setEmptyFields(true)
+      return
+    }
+    setEmptyFields(false)
     let customSets = [];
     for (let i = 0; i < parseInt(nbSets); i++) {
       customSets.push({ weight: parseInt(charge), reps: parseInt(nbReps) });
@@ -124,6 +134,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             restSeconds={seconds}
             exerciseID={exercise.exercise}
             openModalCustomSets={openModalCustomSets}
+            handleDelete={handleDelete}
           />
         );
       }
@@ -160,7 +171,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           if (data.result === true) {
             setPostError(false);
             const workoutToAddToStore = {
-              id: data.userWorkout._id,
+              _id: data.userWorkout._id,
               name: data.userWorkout.name,
               exercises: data.userWorkout.exercises,
             };

@@ -55,16 +55,6 @@ export default function SigninScreen({ navigation }) {
               setSignupError(data.error);
             } else {
               dispatch(login(data.userInfos));
-<<<<<<< HEAD
-              fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/${data.userInfos.token}`)
-              .then(response => response.json())
-              .then(data => {
-                if(data.userWorkouts){
-                  dispatch(addAllUserWorkouts(data.userWorkouts))
-                }
-                navigation.navigate("TabNavigator", { screen: "Home" });
-              })
-=======
               fetch(
                 `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/${data.userInfos.token}`
               )
@@ -76,7 +66,6 @@ export default function SigninScreen({ navigation }) {
 
                   navigation.navigate("TabNavigator", { screen: "Home" });
                 });
->>>>>>> f888ef33e46046fdece2bfa04394b16b7fad8c65
             }
           });
       }
