@@ -15,23 +15,32 @@ const ExerciseCard = ({
   restSeconds,
   isEditable = true,
   exerciseID,
-  openModalCustomSets
+  openModalCustomSets,
+  handleDelete,
+  startExercise
 }) => {
 
   const dispatch = useDispatch()
 
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const handleDelete = () => {
-    dispatch(removeExercise(exerciseID))
-  }
 
   const handleUpdate = () => {
     openModalCustomSets(exerciseName, exerciseID, weight, numberOfReps, numberOfSets, restMinutes, restSeconds)
   }
 
+  const handlePress = () => {
+    if (isEditable === false){
+      startExercise(exerciseID)
+    }
+  }
+
 
   return (
+    <TouchableOpacity
+              activeOpacity={1}
+              onPress={handlePress}
+            >
     <View style={{ marginTop: 20, marginBottom: 10 }}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{exerciseName}</Text>
@@ -64,24 +73,22 @@ const ExerciseCard = ({
           {isEditable ? (
             <View style={styles.iconContainer}>
               <FontAwesome name={"pencil"} size={20} color={"#3BC95F"} onPress={handleUpdate}/>
-              <FontAwesome name={"trash"} size={20} color={"#3BC95F"} onPress={handleDelete}/>
+              <FontAwesome name={"trash"} size={20} color={"#3BC95F"} onPress={() => handleDelete(exerciseID)}/>
             </View>
           ) : (
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => setIsCompleted(!isCompleted)}
-            >
+
               <FontAwesome
                 name={isCompleted ? "check-circle" : "play-circle-o"}
                 size={45}
                 color={isCompleted ? "#A3FD01" : "white"}
                 style={styles.iconStartWorkout}
               />
-            </TouchableOpacity>
+            
           )}
         </View>
       </LinearGradient>
     </View>
+    </TouchableOpacity>
   );
 };
 

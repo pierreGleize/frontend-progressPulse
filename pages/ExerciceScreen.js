@@ -1,12 +1,23 @@
-import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, Modal } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, Modal, Image, ScrollView } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
 import Underline from "../components/Underline";
 import { useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
+import { useSelector } from "react-redux";
+import images from "../utils/images";
 
-export default function ExerciceScreen({ navigation }) {
-
+export default function Exercice({ navigation, route }) {
+    const { workoutID, exerciseID } = route.params || {};
+    const workouts = useSelector(state => state.workouts.value)
+    const workoutSelected = workouts.find(workout => workout._id === workoutID)
+    const exerciseSelected = workoutSelected.exercises.find(exercise => exercise._id === exerciseID)
+    const imagePath = images[exerciseSelected.exercise.muscleGroupe.toLowerCase()][exerciseSelected.exercise.image]
+    
+    const descriptionSentences = exerciseSelected.exercise.description.split(/(?<=[.!?])\s+/)
+    const descriptionSetencesToShow = descriptionSentences.map((sentence, i )=> {
+        return <Text style={styles.sentence} key={i}>► {sentence}</Text>
+    })
     const [modalVisible, setModalVisible] = useState(false)
 
     const openModal = () => {
@@ -34,33 +45,36 @@ export default function ExerciceScreen({ navigation }) {
                         />
                     </View>
                     <View style={styles.titleModal}>
-                        <Text style={styles.text}>Crunch Poulie</Text>
+                        <Text style={styles.text}>{exerciseSelected.exercise.name}</Text>
                         <Underline width={80} />
                     </View>
-                    <Text style={styles.textModal}>
-                        {`o Agenouillez-vous devant l’appareil à poulie et tenez les cordes sur les côtés de votre tête. Première position \n
-o Pliez les hanches, fléchissez la colonne vertébrale et contractez les abdos pour tirer le poids vars le bas et vers vous \n
-o Revenez lentement en première position, juste avant que le poids ne touche le support\n
-o Répétez le mouvement jusqu’au nombre de répétitions prévu.`}
-                    </Text>
+                    <View style={styles.descriptionContainer}>
+                        <ScrollView>
+                            {descriptionSetencesToShow}
+                        </ScrollView>
+                    </View>
                     <TouchableOpacity activeOpacity={0.7} style={styles.btn} onPress={closeModal}>
                         <Text style={styles.textButton}>OK</Text>
                     </TouchableOpacity>
                 </View>
             </Modal>
             <View>
-                <ImageBackground style={styles.image} source={require('../assets/abdos/crunchpoulie.gif')}>
-                    <FontAwesome
+                <View style={styles.imageContainer}>
+                    <View style={styles.arrowContainer}>
+                        <FontAwesome
                         name={"chevron-left"}
                         size={24}
                         color={"#3BC95F"}
-                        onPress={() => navigation.navigate("TabNavigator")}
+                        onPress={() => navigation.navigate("startWorkout", {workoutID: workoutID})}
                         style={{ marginLeft: 15, marginTop: 40 }}
-                    />
-                </ImageBackground>
+                        />
+                    </View>
+                    
+                    <Image style={styles.image} source={imagePath}></Image>
+                </View>
             </View>
             <View style={styles.instruction}>
-                <Text style={styles.title}>Crunch Poulie</Text>
+                <Text style={styles.title}>{exerciseSelected.exercise.name}</Text>
                 <TouchableOpacity activeOpacity={0.7} style={styles.btn} onPress={openModal}>
                     <Text style={styles.textButton}>Voir les instructions</Text>
                 </TouchableOpacity>
@@ -102,7 +116,7 @@ o Répétez le mouvement jusqu’au nombre de répétitions prévu.`}
             <View>
                 <Text style={styles.text}>Objectifs de la série</Text>
                 <Underline width={100} />
-                <Text style={styles.serie}>Série 1 sur 3</Text>
+                <Text style={styles.serie}>Série 1 sur {exerciseSelected.customSets.length}</Text>
                 <View style={styles.objContainer}>
                     <LinearGradient
                         colors={['#1C1C45', '#4645AB']}
@@ -110,14 +124,14 @@ o Répétez le mouvement jusqu’au nombre de répétitions prévu.`}
                         end={{ x: 1, y: 0 }}
                         style={styles.linearObj}
                     >
-                        <Text style={styles.obj}>Nombre de répétitons : 8</Text>
+                        <Text style={styles.obj}>Nombre de répétitons : {exerciseSelected.customSets[0].reps}</Text>
                     </LinearGradient>
                     <LinearGradient
                         colors={['#1C1C45', '#4645AB']}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}
                         style={styles.linearObj}>
-                        <Text style={styles.obj}>Charge : 55 kg</Text>
+                        <Text style={styles.obj}>Charge : {exerciseSelected.customSets[0].weight} kg</Text>
                     </LinearGradient>
                 </View>
             </View>
@@ -142,11 +156,24 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
 
-    image: {
-        height: 360,
+    imageContainer: {
+        height: 350,
         width: "100%",
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
+        backgroundColor: "white",
+        alignItems: "center"
+    },
+
+    arrowContainer: {
+        width: '100%',
+        
+    },
+
+    image: {
+        width: 280,
+        height: 280
+
     },
 
     title: {
@@ -239,7 +266,7 @@ const styles = StyleSheet.create({
 
     modalContainer: {
         width: "80%",
-        height: "80%",
+        height: "70%",
         backgroundColor: '#272D34',
         borderRadius: 20,
         padding: 15,
@@ -256,16 +283,21 @@ const styles = StyleSheet.create({
         marginLeft: 15,
     },
 
-    textModal: {
+    descriptionContainer: {
         backgroundColor: '#D9D9D9',
         justifyContent: 'space-between',
         width: '90%',
         height: '70%',
-        textAlign: 'start',
+        justifyContent: "flex-start",
         margin: 'auto',
         paddingLeft: 5,
-        paddingTop: 10,
+        paddingTop: 20,
         borderRadius: 10,
+    },
+    sentence : {
+        paddingHorizontal: 10,
+        marginBottom : 15
+
     }
 
 });

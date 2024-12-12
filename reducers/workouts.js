@@ -23,17 +23,27 @@ export const workoutsSlice= createSlice({
 
       removeWorkout: (state,action) =>{
       // Exemple de l'action payload reçu 'nomDeSeanceASupprimer'
-          state.value.filter(seance => seance.name =! action.payload)
+          state.value = state.value.filter(seance => seance._id !== action.payload)
+      },
+      removeExercise: (state, action) => {
+        for (let workout of state.value){
+            if (workout._id === action.payload.workoutID){
+                console.log(workout.exercises[0]._id)
+                console.log(action.payload.exerciseID)
+                workout.exercises = workout.exercises.filter(exercise => exercise._id !== action.payload.exerciseID)
+            }
+        }
       },
 
       updateWorkoutSets: (state,action) => {
           // Exemple de l'action payload !
           // {workoutName: "nomSeanceAModifier", exerciseName: "nomExerciceAmodifier", customSets: [{weight:70, reps:8}, ...]}
-          for (let seance of state.value){
-              if (seance.name === action.payload.workoutName){
-                  for (let exercice of seance.exercises){
-                      if (exercice.exercise.name === action.payload.exerciseName){
-                          exercice.customSets = action.payload.customSets
+          for (let workout of state.value){
+              if (workout._id === action.payload.workoutID){
+                  for (let exercise of workout.exercises){
+                      if (exercise._id == action.payload.exerciseID){
+                          exercise.customSets = action.payload.customSets
+                          exercise.rest = action.payload.rest
                       }
                   }
               }
@@ -42,5 +52,5 @@ export const workoutsSlice= createSlice({
     }
 });
    
-   export const { addAllUserWorkouts, addWorkout, removeWorkout, updateWorkoutSets} = workoutsSlice.actions;
+   export const { addAllUserWorkouts, addWorkout, removeWorkout, updateWorkoutSets, removeExercise} = workoutsSlice.actions;
    export default workoutsSlice.reducer;

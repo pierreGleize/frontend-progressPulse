@@ -4966,11 +4966,14 @@ react-native-web@~0.19.13:
     postcss-value-parser "^4.2.0"
     styleq "^0.1.3"
 
+<<<<<<< HEAD
 react-native-wheel-time-picker@^0.4.3:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/react-native-wheel-time-picker/-/react-native-wheel-time-picker-0.4.3.tgz#95c014f556714f5839d05093477a147a40f3cb35"
   integrity sha512-2h9PggFL39xamxIlq6DDwVHqjl2F3SQfBaUHpMXc2Qq9vzpet0ew2LnWCG5Jh++1rQ01OFszD1r9EQ/JwT8R9Q==
 
+=======
+>>>>>>> 76b4c9a022f605fa64b8fcebdc16215806d23c89
 react-native@0.76.3:
   version "0.76.3"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.76.3.tgz"
