@@ -55,17 +55,14 @@ export default function SigninScreen({ navigation }) {
               setSignupError(data.error);
             } else {
               dispatch(login(data.userInfos));
-              fetch(
-                `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/${data.userInfos.token}`
-              )
-                .then((response) => response.json())
-                .then((data) => {
-                  if (data.userWorkouts) {
-                    dispatch(addAllUserWorkouts(data.userWorkouts));
-                  }
-
-                  navigation.navigate("TabNavigator", { screen: "Home" });
-                });
+              fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/${data.userInfos.token}`)
+              .then(response => response.json())
+              .then(data => {
+                if(data.userWorkouts){
+                  dispatch(addAllUserWorkouts(data.userWorkouts))
+                }
+                navigation.navigate("TabNavigator", { screen: "Home" });
+              })
             }
           });
       }

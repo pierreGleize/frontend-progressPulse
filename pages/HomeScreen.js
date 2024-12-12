@@ -6,31 +6,31 @@ import { useSelector } from "react-redux";
 export default function HomeScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const workouts = useSelector((state) => state.workouts.value);
-  console.log(workouts);
-  console.log(user.target);
   const handleAddWorkout = () => {
     navigation.navigate("WorkoutType");
   };
-  const handleWorkoutNavigation = (name) => {
+  const handleWorkoutNavigation = (workoutID) => {
     navigation.navigate("startWorkout", {
-      headerTitle: name,
+      workoutID: workoutID,
     });
   };
 
-  const workoutsToShow = workouts.map((element, index) => (
-    <Button
-      key={index}
-      background="#A3FD01"
-      borderColor="none"
-      textButton={element.name}
-      textColor="black"
-      width={300}
-      height={50}
-      onPress={() => handleWorkoutNavigation(element.name)}
-      isLinearGradiant={true}
-      colorsGradiant={["#3BC95F", "#1D632F"]}
-    />
-  ));
+  const workoutsToShow = workouts.map((element, index) => {
+    return (
+      <Button
+        key={index}
+        background="#A3FD01"
+        borderColor="none"
+        textButton={element.name}
+        textColor="black"
+        width={300}
+        height={50}
+        onPress={() => handleWorkoutNavigation(element._id)}
+        isLinearGradiant={true}
+        colorsGradiant={["#3BC95F", "#1D632F"]}
+      />
+    );
+  });
 
   return (
     <View style={styles.container}>
@@ -61,39 +61,7 @@ export default function HomeScreen({ navigation }) {
           onPress={handleAddWorkout}
           isLinearGradiant={false}
         />
-        {/* <Button
-          background="#A3FD01"
-          borderColor="none"
-          textButton="Ma séance préfaite"
-          textColor="black"
-          width={300}
-          height={50}
-          onPress={() => handleWorkoutNavigation(textButton)}
-          isLinearGradiant={true}
-          colorsGradiant={["#3BC95F", "#1D632F"]}
-        />
-        <Button
-          background="#A3FD01"
-          borderColor="none"
-          textButton="Ma séance sur mesure"
-          textColor="black"
-          width={300}
-          height={50}
-          onPress={() => handleWorkoutNavigation(textButton)}
-          isLinearGradiant={true}
-          colorsGradiant={["#3BC95F", "#1D632F"]}
-        /> */}
         {workoutsToShow}
-        <Button
-          background="#A3FD01"
-          borderColor="none"
-          textButton="exercice"
-          textColor="black"
-          width={300}
-          height={50}
-          onPress={() => navigation.navigate("exercice")}
-          isLinearGradiant={false}
-        />
         <Button
           background="#A3FD01"
           borderColor="none"

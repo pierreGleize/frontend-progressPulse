@@ -8,9 +8,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
-
 import workoutCreation from "./reducers/workoutCreation";
+import currentWorkout from "./reducers/currentWorkout";
 import workouts from "./reducers/workouts";
+
 import SigninScreen from "./pages/SigninScreen";
 import SignupScreen from "./pages/SignupScreen";
 import HomeScreen from "./pages/HomeScreen";
@@ -37,6 +38,7 @@ const store = configureStore({
     user,
     workouts,
     workoutCreation,
+    currentWorkout,
   },
 });
 
@@ -87,6 +89,7 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+          {/* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */}
           <Stack.Screen name="Signin" component={SigninScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
@@ -111,9 +114,6 @@ export default function App() {
           <Stack.Screen name="exercice" component={ExerciceScreen} />
           <Stack.Screen name="timer" component={TimerScreen} />
           <Stack.Screen name="workoutEnding" component={WorkoutEndingScreen} />
-          {/* <Stack.Screen name="exercice" component={ExerciceScreen} />
-        <Stack.Screen name="timer" component={TimerScreen} />
-        <Stack.Screen name="workoutEnding" component={WorkoutEndingScreen} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
