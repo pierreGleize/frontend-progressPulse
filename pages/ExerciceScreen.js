@@ -7,7 +7,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
 import images from "../utils/images";
 
-<<<<<<< HEAD
 export default function Exercice({ navigation, route }) {
     const { workoutID, exerciseID } = route.params || {};
     const workouts = useSelector(state => state.workouts.value)
@@ -19,10 +18,6 @@ export default function Exercice({ navigation, route }) {
     const descriptionSetencesToShow = descriptionSentences.map((sentence, i )=> {
         return <Text style={styles.sentence} key={i}>► {sentence}</Text>
     })
-=======
-export default function ExerciceScreen({ navigation }) {
-
->>>>>>> 3c8b40d9a7ebc45123cbf1188af961c1f0bbc9ac
     const [modalVisible, setModalVisible] = useState(false)
 
     const openModal = () => {

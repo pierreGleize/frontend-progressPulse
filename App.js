@@ -9,15 +9,10 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
 import workoutCreation from "./reducers/workoutCreation";
-<<<<<<< HEAD
 import currentWorkout from "./reducers/currentWorkout"
 import workouts from "./reducers/workouts";
 
 
-=======
-import workouts from "./reducers/workouts";
-
->>>>>>> 3c8b40d9a7ebc45123cbf1188af961c1f0bbc9ac
 import SigninScreen from "./pages/SigninScreen";
 import SignupScreen from "./pages/SignupScreen";
 import HomeScreen from "./pages/HomeScreen";
@@ -81,8 +76,8 @@ const TabNavigator = () => {
           },
         })}
       >
-        <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Stats" component={StatsScreen} />
+        <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     </LinearGradient>
