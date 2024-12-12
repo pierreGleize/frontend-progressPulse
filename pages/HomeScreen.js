@@ -6,7 +6,8 @@ import { useSelector } from "react-redux";
 export default function HomeScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const workouts = useSelector((state) => state.workouts.value);
-  console.log(workouts)
+  console.log(workouts);
+  console.log(user.target);
   const handleAddWorkout = () => {
     navigation.navigate("WorkoutType");
   };
@@ -16,7 +17,6 @@ export default function HomeScreen({ navigation }) {
     });
   };
 
- 
   const workoutsToShow = workouts.map((element, index) => (
     <Button
       key={index}
@@ -91,7 +91,7 @@ export default function HomeScreen({ navigation }) {
           textColor="black"
           width={300}
           height={50}
-          onPress={() => navigation.navigate('exercice')}
+          onPress={() => navigation.navigate("exercice")}
           isLinearGradiant={false}
         />
         <Button
@@ -101,7 +101,7 @@ export default function HomeScreen({ navigation }) {
           textColor="black"
           width={300}
           height={50}
-          onPress={() => navigation.navigate('workoutEnding')}
+          onPress={() => navigation.navigate("workoutEnding")}
           isLinearGradiant={false}
         />
       </View>

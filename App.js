@@ -8,12 +8,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
-import workoutCreation from "./reducers/workoutCreation";
 
-// import { Provider } from "react-redux";
-// import { configureStore } from "@reduxjs/toolkit";
-// import user from "./reducers/user";
-// import workoutCreation from "./reducers/workoutCreation";
+import workoutCreation from "./reducers/workoutCreation";
 import workouts from "./reducers/workouts";
 import SigninScreen from "./pages/SigninScreen";
 import SignupScreen from "./pages/SignupScreen";
@@ -31,6 +27,7 @@ import ExerciceScreen from "./pages/ExerciceScreen";
 import TimerScreen from "./pages/TimerScreen";
 import WorkoutEndingScreen from "./pages/WorkoutEndingScreen";
 import SongScreen from "./pages/SongScreen";
+import WeightScreen from "./pages/WeightScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -94,6 +91,7 @@ export default function App() {
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="song" component={SongScreen} />
+          <Stack.Screen name="weight" component={WeightScreen} />
           <Stack.Screen name="WorkoutType" component={WorkoutTypeScreen} />
           <Stack.Screen
             name="WorkoutDifficulty"
