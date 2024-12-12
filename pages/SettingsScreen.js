@@ -124,8 +124,8 @@ export default function SettingsScreen({ navigation }) {
               <Button
                 textButton="Valider"
                 textColor="#A3FD01"
-                width="180"
-                height="40"
+                width={180}
+                height={40}
                 background="#272D34"
                 borderWidth={1}
                 borderColor="#A3FD01"
