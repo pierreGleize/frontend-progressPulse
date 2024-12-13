@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Button from "../components/Button";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
@@ -22,7 +22,7 @@ export default function HomeScreen({ navigation }) {
         background="#A3FD01"
         borderColor="none"
         textButton={element.name}
-        textColor="black"
+        textColor="white"
         width={300}
         height={50}
         onPress={() => handleWorkoutNavigation(element._id)}
@@ -61,7 +61,9 @@ export default function HomeScreen({ navigation }) {
           onPress={handleAddWorkout}
           isLinearGradiant={false}
         />
+        <ScrollView style= {{indicatorStyle: 'white'}}>
         {workoutsToShow}
+        </ScrollView>
       </View>
     </View>
   );

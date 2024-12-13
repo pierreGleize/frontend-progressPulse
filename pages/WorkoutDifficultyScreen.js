@@ -4,10 +4,8 @@ import {
   TouchableOpacity,
   View,
   Image,
-  FlatList,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Button from "../components/Button";
 import Underline from "../components/Underline";
 import { LinearGradient } from "expo-linear-gradient";
 

@@ -298,7 +298,7 @@ export default function WeightScreen({ navigation, route }) {
                   display="default"
                   onChange={onChange}
                   accentColor="#A3FD01"
-                  themeVariant="dark"
+                  themeVariant="light"
                   minimumDate={new Date()}
                 />
               </View>
@@ -537,7 +537,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 15,
     marginVertical: 16,
-    shadowColor: "#FFFFFF",
+    /* shadowColor: "#FFFFFF", */
     shadowOpacity: 0.8,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 0 },
