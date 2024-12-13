@@ -147,8 +147,9 @@ export default function SettingsScreen({ navigation }) {
             >
               <FontAwesome
                 name={"envelope"}
-                size={28}
-                color={"#272D34"}
+                size={23}
+                color={"#A3FD01"}
+                // color={"#272D34"}
                 style={styles.infoIcon}
               />
               <Text style={styles.text}>{user.email}</Text>
@@ -160,15 +161,15 @@ export default function SettingsScreen({ navigation }) {
             >
               <FontAwesome
                 name={"music"}
-                size={28}
-                color={"#272D34"}
+                size={23}
+                color={"#A3FD01"}
                 style={styles.infoIcon}
               />
               <Text style={styles.text}>{user.sound}</Text>
               <FontAwesome
                 name={"arrow-right"}
-                size={20}
-                color={"#272D34"}
+                size={15}
+                color={"white"}
                 style={styles.infoIcon}
               />
             </TouchableOpacity>
@@ -260,15 +261,19 @@ const styles = StyleSheet.create({
   settingContainer: {
     width: "100%",
     maxWidth: 500,
-    height: 250,
-    backgroundColor: "#EBF2F4",
+    height: 140,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    shadowColor: "#FFFFFF",
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 0 },
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
   },
   inputWrapper: {
-    width: "85%",
-    backgroundColor: "white",
+    width: "93%",
     height: "85%",
     borderRadius: 20,
   },
@@ -276,13 +281,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: 10,
-    borderBottomColor: "#EBF2F4",
+    borderBottomColor: "rgba(255, 255, 255, 0.2)",
     borderBottomWidth: 1,
     height: 40,
   },
   text: {
     margin: "auto",
-    color: "#272D34",
+    color: "white",
   },
   input: {
     width: "100%",

@@ -106,7 +106,7 @@ export default function StatsScreen({ navigation }) {
       <View style={{ alignItems: "center", marginBottom: 30 }}></View>
       <View style={styles.secondTtitleContainer}>
         <Text style={styles.secondTitle}>
-          Ton nombre d'entraînements par semaine
+          Ton nombre d'entraînements par mois
         </Text>
         <Underline width={80} />
       </View>
@@ -184,14 +184,17 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 500,
     height: 70,
-    backgroundColor: "#EBF2F4",
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    shadowColor: "#FFFFFF",
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 0 },
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
   },
   inputWrapper: {
-    width: "90%",
-    backgroundColor: "white",
+    width: "95%",
     height: "70%",
     borderRadius: 20,
     justifyContent: "center",
@@ -204,7 +207,12 @@ const styles = StyleSheet.create({
   },
   span: {
     fontWeight: 600,
-    color: "black",
+    fontSize: 16,
+    color: "white",
+  },
+  text: {
+    color: "white",
+    fontSize: 14,
   },
   buttonContainer: {
     width: 220,

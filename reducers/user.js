@@ -7,7 +7,7 @@ const initialState = {
     email: null,
     sound: null,
     weight: [],
-    target: [],
+    target: {},
   },
 };
 
@@ -31,7 +31,7 @@ export const userSlice = createSlice({
         sound: null,
         seances: [],
         weight: [],
-        target: [],
+        target: {},
       };
     },
     changeSound: (state, action) => {
@@ -43,9 +43,18 @@ export const userSlice = createSlice({
     updateEmail: (state, action) => {
       state.value.email = action.payload;
     },
+    updateTarget: (state, action) => {
+      state.value.target = action.payload;
+    },
   },
 });
 
-export const { login, logout, changeSound, addWeight, updateEmail } =
-  userSlice.actions;
+export const {
+  login,
+  logout,
+  changeSound,
+  addWeight,
+  updateEmail,
+  updateTarget,
+} = userSlice.actions;
 export default userSlice.reducer;
