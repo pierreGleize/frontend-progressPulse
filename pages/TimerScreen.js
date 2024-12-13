@@ -7,6 +7,7 @@ import { useState } from "react";
 import { TimerPickerModal } from "react-native-timer-picker";
 import { useDispatch, useSelector } from "react-redux";
 import { addExerciseSet } from "../reducers/currentWorkout";
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 
 export default function TimerScreen({ navigation, route }) {
     const { workoutID, exerciseID } = route.params || {};
@@ -18,7 +19,6 @@ export default function TimerScreen({ navigation, route }) {
     const [emptyFields, setEmptyFields] = useState(false);
     const [input, setInput] = useState(false)
     const [showPicker, setShowPicker] = useState(false);
-    const [alarmString, setAlarmString] = useState('02:00');
 
     // Récupération des données de la séance en cours
     const currentWorkout = useSelector(state => state.currentWorkout.value)
@@ -33,21 +33,41 @@ export default function TimerScreen({ navigation, route }) {
     // Récupération du nombre de série à faire
     const nbSets = exerciseSelected.customSets.length
  
+    const [minutes, setMinutes] = useState('2');
+    const [secondes, setSecondes] = useState('00')
+    const [isPlaying, setIsPlaying] = useState(false)
+    const [isTimerVisible, setIsTimerVisible] = useState(false);
 
-    const formatTime = ({minutes, seconds}) => {
+    //Retourne le tableau 'timeMinuteParts', qui contiendra la valeur des minutes formatée
+    const formatMinuteTime = ({ minutes }) => {
+        const timeMinuteParts = [];
+        if (minutes !== undefined) {
+            timeMinuteParts.push(minutes.toString().padStart(2, "0"));
+        }
+        return timeMinuteParts
+    };
 
-    const timeParts = [];
-    if (minutes !== undefined) {
-        timeParts.push(minutes.toString().padStart(2, "0"));
+    //Retourne le tableau 'timeMinuteParts', qui contiendra la valeur des secondes formatée
+    const formatSecondTime = ({ seconds }) => {
+        const timeSecondParts = [];
+        if (seconds !== undefined) {
+            //seconds.toString : convertit la variable seconds en une chaîne de caractères
+            //.padStart(2, "0") : ajoute des zéros au début de la chaîne 
+            timeSecondParts.push(seconds.toString().padStart(2, "0"));
+        }
+        return timeSecondParts
     }
-    if (seconds !== undefined) {
-        //seconds.toString : convertit la variable seconds en une chaîne de caractères
-        //.padStart(2, "0") : ajoute des zéros au début de la chaîne 
-        timeParts.push(seconds.toString().padStart(2, "0"));
-    }
-    return timeParts.join(":");
-};
 
+    //Permet de lancer et de rendre visible le minuteur
+    const timerClick = () => {
+        setIsPlaying(true)
+        setIsTimerVisible(true)
+    }
+
+    //Converti les minutes et les secondes formaté en nombre de secondes
+    let time = ((minutes * 60) + parseFloat(secondes));
+
+    //Vérifie si les input sont bien remplis et sauvegarde les données rentrées
     const addSet = () => {
         if (!reps || !weight) {
             setEmptyFields(true)
@@ -83,6 +103,17 @@ export default function TimerScreen({ navigation, route }) {
         setInput(false)
     }
 
+    //Si le minuteur se termine et que les input sont pas remplis, envoi un message d'erreur et reste sur la page 
+    const changeScreen = () => {
+        if (input) {
+            navigation.navigate('TabNavigator')
+        } else {
+            setEmptyFields(true)
+        }
+    }
+
+
+
     return (
         <KeyboardAvoidingView
             style={styles.container}
@@ -92,42 +123,89 @@ export default function TimerScreen({ navigation, route }) {
                 <Text style={styles.title}>Temps de repos</Text>
                 <Underline width={80} />
             </View>
-            <TouchableOpacity style={styles.timer} onPress={() => setShowPicker(true)}>
-                <Text style={styles.textTimer}>{alarmString}</Text>
-            </TouchableOpacity> 
-            <TimerPickerModal
-            date = {new Date(0, 0, 0, 0, 1, 0)}
-            visible={showPicker}
-            setIsVisible={setShowPicker}
-            onConfirm={(pickedDuration) => {
-                setAlarmString(formatTime(pickedDuration));
-                setShowPicker(false);
-            }}
-            modalTitle="Rest"
-            onCancel={() => setShowPicker(false)}
-            closeOnOverlayPress
-            hideHours
-/*             Audio={Audio}
-            LinearGradient={LinearGradient}
-            Haptics={Haptics} */
-            styles={{
-                theme: "dark",
-            }}
-            modalProps={{
-                overlayOpacity: 0.4,
-            }}
-        />
-            {!input && (<View>
-                <View style={styles.btn}>
-                    <Button
-                        textButton="Démarrer le minuteur"
-                        textColor="black"
-                        width="70%"
-                        height={50}
-                        background="#A3FD01"
-                    />
+            {emptyFields && (
+                <View >
+                    <Text style={styles.errorMessage}>
+                        Veuillez remplir tous les champs de saisie pour passer à la série suivante
+                    </Text>
                 </View>
+            )}
+            {!isTimerVisible &&
                 <View>
+                    <TouchableOpacity style={styles.timer} onPress={() => setShowPicker(true)}>
+                        <Text style={styles.textTimer}>{minutes}:{secondes}</Text>
+                    </TouchableOpacity>
+                    <View style={styles.btn}>
+                        <Button
+                            textButton="Démarrer le minuteur"
+                            textColor="black"
+                            width="70%"
+                            height={50}
+                            background="#A3FD01"
+                            onPress={timerClick}
+                        />
+                    </View>
+                    {/* Modal permettant de changer son temps de repos */}
+                    <TimerPickerModal
+                        visible={showPicker}
+                        setIsVisible={setShowPicker}
+                        onConfirm={(pickedDuration) => {
+                            setMinutes(formatMinuteTime(pickedDuration));
+                            setSecondes(formatSecondTime(pickedDuration));
+                            setShowPicker(false);
+                        }}
+                        modalTitle="Rest"
+                        onCancel={() => setShowPicker(false)}
+                        closeOnOverlayPress
+                        hideHours
+                        /*          Audio={Audio},od
+                                    LinearGradient={LinearGradient}
+                                    Haptics={Haptics} */
+                        styles={{
+                            theme: "dark",
+                        }}
+                        modalProps={{
+                            overlayOpacity: 0.4,
+                        }}
+                    />
+                </View>}
+            {isTimerVisible &&
+                <View>
+                    <View style={styles.count}>
+                        {/* Minuteur */}
+                        <CountdownCircleTimer
+                            isPlaying={isPlaying}
+                            duration={time}
+                            colors={["#A3FD01", "#850606", "#850606", "#850606", "#850606"]}
+                            colorsTime={[5, 3, 2, 1, 0]}
+                            onComplete={changeScreen}
+                            updateInterval={1}
+                        >
+                            {({ remainingTime, color }) => (
+                                <View>
+                                    <Text style={{ color: '#ffffff', fontSize: 18, textAlign: 'center' }}>Next set in</Text>
+                                    <Text style={{ color, fontSize: 40, textAlign: 'center' }}>
+                                        {remainingTime}
+                                    </Text>
+                                    <Text style={{ color: '#ffffff', fontSize: 18, textAlign: 'center' }}>seconds</Text>
+                                </View>
+                            )}
+                        </CountdownCircleTimer>
+                    </View>
+                    <View style={styles.btnInput}>
+                        <Button
+                            textButton="Passer à la série suivante"
+                            textColor="black"
+                            width="70%"
+                            height={50}
+                            background="#A3FD01"
+                            onPress={() => navigation.navigate('TabNavigator')}
+                        />
+                    </View>
+                </View>
+            }
+            <View>
+                {!input && (
                     <LinearGradient
                         style={styles.linear}
                         colors={['#4645AB', '#1C1C45']}
@@ -141,6 +219,7 @@ export default function TimerScreen({ navigation, route }) {
                             <TextInput
                                 style={styles.input}
                                 placeholder="Nombre de répétitions"
+                                keyboardType="numeric"
                                 onChangeText={value => setReps(value)}
                                 value={reps}
                             />
@@ -153,6 +232,7 @@ export default function TimerScreen({ navigation, route }) {
                             <TextInput
                                 style={styles.input}
                                 placeholder="Charge"
+                                keyboardType="numeric"
                                 onChangeText={value => setWeight(value)}
                                 value={weight}
                             />
@@ -171,40 +251,29 @@ export default function TimerScreen({ navigation, route }) {
                                 background="#A3FD01"
                                 onPress={addSet} />
                         </View>
+                    </LinearGradient>)}
+                {input && (<View>
+                    <LinearGradient
+                        style={styles.linearInput}
+                        colors={['#4645AB', '#1C1C45']}
+                        start={{ x: 0, y: 1 }}
+                        end={{ x: 1, y: 0 }}>
+                        <View style={styles.pencil}>
+                            <FontAwesome name={"pencil"} size={20} color={"#3BC95F"} onPress={updateSet} />
+                        </View>
+                        <View style={styles.dataInput}>
+                            <Text style={styles.textTitle}>Nombre de répétitions effectuées : </Text>
+                            <Underline width={60} />
+                        </View>
+                        <Text style={styles.textInput}>{reps}</Text>
+                        <View style={styles.dataInput}>
+                            <Text style={styles.textTitle}>Charge de l'exercice :</Text>
+                            <Underline width={60} />
+                        </View>
+                        <Text style={styles.textInput} >{weight}</Text>
                     </LinearGradient>
-                </View>
-            </View>)}
-            {input && (<View>
-                <LinearGradient
-                    style={styles.linearInput}
-                    colors={['#4645AB', '#1C1C45']}
-                    start={{ x: 0, y: 1 }}
-                    end={{ x: 1, y: 0 }}>
-                    <View style={styles.pencil}>
-                        <FontAwesome name={"pencil"} size={20} color={"#3BC95F"} onPress={updateSet} />
-                    </View>
-                    <View style={styles.dataInput}>
-                        <Text style={styles.textTitle}>Nombre de répétitions effectuées : </Text>
-                        <Underline width={60} />
-                    </View>
-                    <Text style={styles.textInput}>{reps} répétitions</Text>
-                    <View style={styles.dataInput}>
-                        <Text style={styles.textTitle}>Charge de l'exercice :</Text>
-                        <Underline width={60} />
-                    </View>
-                    <Text style={styles.textInput} >{weight} kg</Text>
-                </LinearGradient>
-                <View style={styles.btnInput}>
-                    <Button
-                        textButton="Passer à la série suivante"
-                        textColor="black"
-                        width="70%"
-                        height={50}
-                        background="#A3FD01"
-                        onPress={validateSet}
-                    />
-                </View>
-            </View>)}
+                </View>)}
+            </View>
         </KeyboardAvoidingView>
     )
 }
@@ -229,7 +298,7 @@ const styles = StyleSheet.create({
 
     timer: {
         width: '60%',
-        height: '10%',
+        height: '25%',
         backgroundColor: '#D9D9D9',
         borderRadius: 20,
         justifyContent: 'center',
@@ -237,6 +306,12 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: 30,
+    },
+
+    count: {
+        marginTop: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 
     textTimer: {
@@ -251,7 +326,7 @@ const styles = StyleSheet.create({
     btn: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 80,
+        marginBottom: 10,
     },
 
     linear: {
