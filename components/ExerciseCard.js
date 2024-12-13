@@ -3,8 +3,9 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { removeExercise } from "../reducers/workoutCreation";
+import { useEffect } from "react";
 
 const ExerciseCard = ({
   exerciseName,
@@ -22,8 +23,23 @@ const ExerciseCard = ({
 
   const dispatch = useDispatch()
 
+  // Récupération de la séance en cours
+  const currentWorkout = useSelector(state => state.currentWorkout.value)
+  const currentExercise = currentWorkout.performances.find(e => e.exercise === exerciseID)
+
   const [isCompleted, setIsCompleted] = useState(false);
 
+  useEffect(() => {
+    if (currentExercise){
+      if (currentExercise.sets.length >= numberOfSets){
+        setIsCompleted(true)
+      } else {
+        setIsCompleted(false)
+      }
+    } else {
+      setIsCompleted(false)
+    }
+  },[currentExercise])
 
   const handleUpdate = () => {
     openModalCustomSets(exerciseName, exerciseID, weight, numberOfReps, numberOfSets, restMinutes, restSeconds)
@@ -31,6 +47,7 @@ const ExerciseCard = ({
 
   const handlePress = () => {
     if (isEditable === false){
+      if(!isCompleted)
       startExercise(exerciseID)
     }
   }

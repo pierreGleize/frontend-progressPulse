@@ -9,8 +9,10 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
 import workoutCreation from "./reducers/workoutCreation";
-import currentWorkout from "./reducers/currentWorkout";
+import currentWorkout from "./reducers/currentWorkout"
 import workouts from "./reducers/workouts";
+import workoutsHistory from "./reducers/workoutsHistory"
+
 
 import SigninScreen from "./pages/SigninScreen";
 import SignupScreen from "./pages/SignupScreen";
@@ -39,6 +41,7 @@ const store = configureStore({
     workouts,
     workoutCreation,
     currentWorkout,
+    workoutsHistory
   },
 });
 

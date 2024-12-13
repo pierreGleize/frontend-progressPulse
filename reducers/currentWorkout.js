@@ -23,7 +23,7 @@ export const currentWorkoutSlice = createSlice({
     },
     addExerciseSet: (state, action) => {
       // Exemple de l'action payload {exerciseID: z4gefz4fez4, weight: 50, reps: 10, rest: 90}
-      const exerciseAlreadyAdded = state.value.performances.some(performance => performance.exercise.equals(action.payload.exerciseID));
+      const exerciseAlreadyAdded = state.value.performances.some(performance => performance.exercise === action.payload.exerciseID);
       if (exerciseAlreadyAdded){
 	      state.value.performances.forEach(performance => {
 		      if (performance.exercise === action.payload.exerciseID){

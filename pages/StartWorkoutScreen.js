@@ -43,7 +43,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
 
   // Récupération de l'historique de la séance en cours
   const currentWorkout = useSelector(state => state.currentWorkout.value)
-  console.log(currentWorkout)
+  // console.log(currentWorkout.performances[0].sets)
   
   // Récupération de l'utilisateur connecté
   const user = useSelector(state => state.user.value)
@@ -140,6 +140,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         workoutID : workoutID,
       }
       dispatch(addWorkoutInformation(informationToAdd))
+    } else {
+      navigation.navigate("workoutEnding")
     }
   }
 
