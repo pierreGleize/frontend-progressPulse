@@ -544,16 +544,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 15,
     marginVertical: 16,
-<<<<<<< HEAD
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 0 },
-=======
     // shadowColor: "#FFFFFF",
     // shadowOpacity: 0.8,
     // shadowRadius: 10,
     // shadowOffset: { width: 0, height: 0 },
->>>>>>> b8c406ee7c6beedce9f671363b8326684acde5d0
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.2)",
   },
