@@ -37,9 +37,9 @@ export default function WeightScreen({ navigation, route }) {
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    if (Platform.OS === "android") {
-      setShow(false);
-    }
+    // if (Platform.OS === "android") {
+    //   setShow(false);
+    // }
     setDate(currentDate);
   };
 
@@ -291,14 +291,21 @@ export default function WeightScreen({ navigation, route }) {
                 onChangeText={(value) => setWeightTarget(value)}
                 value={weightTarget}
               />
-              <View style={{ marginBottom: 15 }}>
+              <View
+                style={{
+                  marginBottom: 15,
+                  backgroundColor: "grey",
+                  borderRadius: 10,
+                  alignItems: "center",
+                }}
+              >
                 <DateTimePicker
                   value={date}
                   mode="date"
                   display="default"
                   onChange={onChange}
-                  accentColor="#A3FD01"
-                  themeVariant="dark"
+                  // accentColor="#A3FD01"
+                  // themeVariant="dark"
                   minimumDate={new Date()}
                 />
               </View>
@@ -537,10 +544,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 15,
     marginVertical: 16,
-    shadowColor: "#FFFFFF",
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 0 },
+    // shadowColor: "#FFFFFF",
+    // shadowOpacity: 0.8,
+    // shadowRadius: 10,
+    // shadowOffset: { width: 0, height: 0 },
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.2)",
   },
