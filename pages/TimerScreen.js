@@ -5,15 +5,34 @@ import Button from "../components/Button";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { TimerPickerModal } from "react-native-timer-picker";
+import { useDispatch, useSelector } from "react-redux";
+import { addExerciseSet } from "../reducers/currentWorkout";
 
-export default function TimerScreen({ navigation }) {
+export default function TimerScreen({ navigation, route }) {
+    const { workoutID, exerciseID } = route.params || {};
 
+    const dispatch = useDispatch()
+  
     const [reps, setReps] = useState('')
     const [weight, setWeight] = useState('')
     const [emptyFields, setEmptyFields] = useState(false);
     const [input, setInput] = useState(false)
     const [showPicker, setShowPicker] = useState(false);
-    const [alarmString, setAlarmString] = useState('2:00');
+    const [alarmString, setAlarmString] = useState('02:00');
+
+    // Récupération des données de la séance en cours
+    const currentWorkout = useSelector(state => state.currentWorkout.value)
+    // Récupération de l'exercice en cours
+    const currentExercise = currentWorkout.performances.find(e => e.exercise === exerciseID)
+
+    // Récupération de la séance en cours
+    const workouts = useSelector(state => state.workouts.value)
+    const workoutSelected = workouts.find(workout => workout._id === workoutID)
+    // Récupération de l'exercice sélectionné dans la séance
+    const exerciseSelected = workoutSelected.exercises.find(exercise => exercise._id === exerciseID)
+    // Récupération du nombre de série à faire
+    const nbSets = exerciseSelected.customSets.length
+ 
 
     const formatTime = ({minutes, seconds}) => {
 
@@ -39,6 +58,27 @@ export default function TimerScreen({ navigation }) {
         }
     }
 
+    const validateSet = () => {
+        const restToAdd = 90
+        const setToAdd = {
+            exerciseID: exerciseID,
+            weight: parseInt(weight),
+            reps: parseInt(reps),
+            rest : restToAdd
+        }
+        dispatch(addExerciseSet(setToAdd))
+        if (currentExercise){
+            if(currentExercise.sets.length + 1 < nbSets){
+                navigation.navigate('exercice', {exerciseID: exerciseID, workoutID: workoutID})
+            } else {
+                navigation.navigate("startWorkout", {workoutID: workoutID})
+            }
+        } else {
+            navigation.navigate('exercice', {exerciseID: exerciseID, workoutID: workoutID})
+        }
+          
+    }
+
     const updateSet = () => {
         setInput(false)
     }
@@ -56,6 +96,7 @@ export default function TimerScreen({ navigation }) {
                 <Text style={styles.textTimer}>{alarmString}</Text>
             </TouchableOpacity> 
             <TimerPickerModal
+            date = {new Date(0, 0, 0, 0, 1, 0)}
             visible={showPicker}
             setIsVisible={setShowPicker}
             onConfirm={(pickedDuration) => {
@@ -134,23 +175,6 @@ export default function TimerScreen({ navigation }) {
                 </View>
             </View>)}
             {input && (<View>
-                <View style={styles.topContainer}>
-                    <Text style={styles.title}>Temps de repos</Text>
-                    <Underline width={80} />
-                </View>
-                <View style={styles.timer}>
-                    <Text style={styles.textTimer}>2 : 00</Text>
-                </View>
-                <View style={styles.btnInput}>
-                    <Button
-                        textButton="Passer à la série suivante"
-                        textColor="black"
-                        width="70%"
-                        height={50}
-                        background="#A3FD01"
-                        onPress={() => navigation.navigate('exercice')}
-                    />
-                </View>
                 <LinearGradient
                     style={styles.linearInput}
                     colors={['#4645AB', '#1C1C45']}
@@ -163,13 +187,23 @@ export default function TimerScreen({ navigation }) {
                         <Text style={styles.textTitle}>Nombre de répétitions effectuées : </Text>
                         <Underline width={60} />
                     </View>
-                    <Text style={styles.textInput}>{reps}</Text>
+                    <Text style={styles.textInput}>{reps} répétitions</Text>
                     <View style={styles.dataInput}>
                         <Text style={styles.textTitle}>Charge de l'exercice :</Text>
                         <Underline width={60} />
                     </View>
-                    <Text style={styles.textInput} >{weight}</Text>
+                    <Text style={styles.textInput} >{weight} kg</Text>
                 </LinearGradient>
+                <View style={styles.btnInput}>
+                    <Button
+                        textButton="Passer à la série suivante"
+                        textColor="black"
+                        width="70%"
+                        height={50}
+                        background="#A3FD01"
+                        onPress={validateSet}
+                    />
+                </View>
             </View>)}
         </KeyboardAvoidingView>
     )

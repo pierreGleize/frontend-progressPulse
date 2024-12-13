@@ -3,20 +3,41 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Underline from "../components/Underline";
 import Button from "../components/Button";
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addWorkout } from "../reducers/workoutsHistory";
+import { resetCurrentWorkout } from "../reducers/currentWorkout";
 
 
 export default function WorkoutEndingScreen({ navigation }) {
 
+    const dispatch = useDispatch()
+
     const [personnalNote, setPersonnalNote] = useState(0)
     const [ressenti, setRessenti] = useState('')
+
+    // Récupération de la séance en cours d'enregistrement
+    const currentWorkout = useSelector(state => state.currentWorkout.value)
+    const workoutsHistory = useSelector(state => state.workoutsHistory.value)
+
 
     const note = []
     for (let star = 0; star < 5; star++) {
         let color = '#ffffff'
+        let name = "star-o"
         if (star < personnalNote) {
             color = '#A3FD01'
+            name ="star"
         }
-        note.push(<FontAwesome key={star} name={'star-o'} color={color} onPress={() => setPersonnalNote(star + 1)} size={50} style={{ marginRight: 25 }} />)
+        note.push(<FontAwesome key={star} name={name} color={color} onPress={() => setPersonnalNote(star + 1)} size={50} style={{ marginRight: 25 }} />)
+    }
+
+    const handlePress = () => {
+        let currentWorkoutToAdd = {...currentWorkout}
+        currentWorkoutToAdd.note = personnalNote
+        currentWorkoutToAdd.ressenti = ressenti
+        dispatch(addWorkout(currentWorkoutToAdd))
+        dispatch(resetCurrentWorkout())
+        navigation.navigate("Home")
     }
 
     return (
@@ -49,7 +70,7 @@ export default function WorkoutEndingScreen({ navigation }) {
                     width="70%"
                     height={50}
                     background="#A3FD01"
-                    onPress={() => navigation.navigate('TabNavigator')} />
+                    onPress={handlePress} />
             </View>
         </View>
         </TouchableWithoutFeedback>

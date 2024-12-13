@@ -11,6 +11,7 @@ import user from "./reducers/user";
 import workoutCreation from "./reducers/workoutCreation";
 import currentWorkout from "./reducers/currentWorkout"
 import workouts from "./reducers/workouts";
+import workoutsHistory from "./reducers/workoutsHistory"
 
 
 import SigninScreen from "./pages/SigninScreen";
@@ -40,6 +41,7 @@ const store = configureStore({
     workouts,
     workoutCreation,
     currentWorkout,
+    workoutsHistory
   },
 });
 

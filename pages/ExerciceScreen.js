@@ -2,22 +2,82 @@ import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, Modal, Image
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
 import Underline from "../components/Underline";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
 import images from "../utils/images";
 
 export default function Exercice({ navigation, route }) {
     const { workoutID, exerciseID } = route.params || {};
+
+    // Récupération des l'ensemble des séance
     const workouts = useSelector(state => state.workouts.value)
+    // Recherche de la séance avec le workoutID reçu en props
     const workoutSelected = workouts.find(workout => workout._id === workoutID)
+    // Recherche de l'exercice avec l'exerciseID reçu en props
     const exerciseSelected = workoutSelected.exercises.find(exercise => exercise._id === exerciseID)
+    // Recherche de l'image correspondant à l'exercice
     const imagePath = images[exerciseSelected.exercise.muscleGroupe.toLowerCase()][exerciseSelected.exercise.image]
-    
+    // Transformation du paragraphe de descripiton en tableau
     const descriptionSentences = exerciseSelected.exercise.description.split(/(?<=[.!?])\s+/)
     const descriptionSetencesToShow = descriptionSentences.map((sentence, i )=> {
         return <Text style={styles.sentence} key={i}>► {sentence}</Text>
     })
+
+    const [currentSet, setCurrentSet] = useState(1)
+    const [noHistory, setNoHistory] = useState(false)
+
+    console.log(noHistory)
+    
+    console.log(currentSet)
+    // Récupération des performances de la séance en cours
+    const currentWorkout = useSelector(state => state.currentWorkout.value)
+    // Vérification si l'exercice est présent dans le reducers et combien de sets ont été enregistrés
+    useEffect(() => {
+        const exerciseExist = currentWorkout.performances.find(e => e.exercise === exerciseID)
+        if (exerciseExist){
+            setCurrentSet(exerciseExist.sets.length + 1)
+        }
+    },[currentWorkout])
+
+    // Récupération de l'historique de performance pour cette séance et cet exercice
+    const workoutsHistory = useSelector(state => state.workoutsHistory.value)
+    const currentWorkoutHistory = workoutsHistory.filter(workout => workout.workout === workoutID)
+    let mostRecentWorkout = null
+    let mostRecentExercise = null
+    let mostRecentSets = []
+    if(currentWorkoutHistory.length > 0){
+        mostRecentWorkout = currentWorkoutHistory.reduce((latest, current) => {
+            return new Date(current.date) > new Date(latest.date) ? current : latest;
+          });
+        mostRecentExercise = mostRecentWorkout.performances.find(e => e.exercise === exerciseID)
+        if (mostRecentExercise){
+            mostRecentSets = mostRecentExercise.sets
+        }
+    }
+    
+
+    const mostRecentSetsToShow = mostRecentSets.map((set, i) => {
+        return (
+            <LinearGradient
+                key={i}
+                colors={['#1C1C45', '#4645AB']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.linearPerf}>
+                <Text style={styles.perf}>Série {i+1} : {set.reps} x {set.weight}kg</Text>
+            </LinearGradient>
+            )
+        })
+   
+    useEffect(() => {
+        if(mostRecentSetsToShow.length === 0){
+            setNoHistory(true)
+        }else {
+            setNoHistory(false)
+        }
+    },[mostRecentSetsToShow])
+    
     const [modalVisible, setModalVisible] = useState(false)
 
     const openModal = () => {
@@ -79,44 +139,20 @@ export default function Exercice({ navigation, route }) {
                     <Text style={styles.textButton}>Voir les instructions</Text>
                 </TouchableOpacity>
             </View>
+            {!noHistory &&
             <View>
                 <Text style={styles.text}>Performances de ta dernière séance</Text>
                 <Underline width={100} />
                 <View style={styles.perfcontainer}>
-                    <LinearGradient
-                        colors={['#1C1C45', '#4645AB']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        style={styles.linearPerf}>
-                        <Text style={styles.perf}>Série 1 : 10 x 50kg</Text>
-                    </LinearGradient>
-                    <LinearGradient
-                        colors={['#1C1C45', '#4645AB']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        style={styles.linearPerf}>
-                        <Text style={styles.perf}>Série 2 : 10 x 50kg</Text>
-                    </LinearGradient>
-                    <LinearGradient
-                        colors={['#1C1C45', '#4645AB']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        style={styles.linearPerf}>
-                        <Text style={styles.perf}>Série 3 : 10 x 50kg</Text>
-                    </LinearGradient>
-                    <LinearGradient
-                        colors={['#1C1C45', '#4645AB']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        style={styles.linearPerf}>
-                        <Text style={styles.perf}>Série 4 : 10 x 50kg</Text>
-                    </LinearGradient>
+                    {noHistory && <Text style={styles.noHistory}>Pas encore de performances enregistrées</Text>}
+                    {mostRecentSetsToShow}
                 </View>
             </View>
+            }
             <View>
                 <Text style={styles.text}>Objectifs de la série</Text>
                 <Underline width={100} />
-                <Text style={styles.serie}>Série 1 sur {exerciseSelected.customSets.length}</Text>
+                <Text style={styles.serie}>Série {currentSet} sur {exerciseSelected.customSets.length}</Text>
                 <View style={styles.objContainer}>
                     <LinearGradient
                         colors={['#1C1C45', '#4645AB']}
@@ -143,7 +179,7 @@ export default function Exercice({ navigation, route }) {
                     width={300}
                     height={60}
                     borderColor="none"
-                    onPress={() => navigation.navigate('timer')} />
+                    onPress={() => navigation.navigate('timer', {exerciseID: exerciseID, workoutID: workoutID})} />
             </View>
         </View>
     );
@@ -190,6 +226,7 @@ const styles = StyleSheet.create({
         height: 35,
         marginLeft: 'auto',
         marginRight: 'auto',
+        marginBottom: 10,
         paddingTop: 6,
         backgroundColor: 'transparent',
         borderRadius: 10,
@@ -260,8 +297,11 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        justifyContent: 'center',
-        alignItems: 'center'
+        position: "absolute",
+        bottom: 30,
+        alignItems: "center",
+        width: "100%",
+        marginHorizontal: 10
     },
 
     modalContainer: {
@@ -298,6 +338,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         marginBottom : 15
 
+    },
+    noHistory:{
+        color: "red",
+        fontWeight: "600"
+    },
+    perfDate: {
+        color: "white",
+        width: "100%",
+        textAlign: "center"
     }
 
 });
