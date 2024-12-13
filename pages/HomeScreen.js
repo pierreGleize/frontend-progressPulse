@@ -62,16 +62,6 @@ export default function HomeScreen({ navigation }) {
           isLinearGradiant={false}
         />
         {workoutsToShow}
-        <Button
-          background="#A3FD01"
-          borderColor="none"
-          textButton="workoutEnding"
-          textColor="black"
-          width={300}
-          height={50}
-          onPress={() => navigation.navigate("workoutEnding")}
-          isLinearGradiant={false}
-        />
       </View>
     </View>
   );
