@@ -21,7 +21,7 @@ export default function Exercice({ navigation, route }) {
     // Transformation du paragraphe de descripiton en tableau
     const descriptionSentences = exerciseSelected.exercise.description.split(/(?<=[.!?])\s+/)
     const descriptionSetencesToShow = descriptionSentences.map((sentence, i )=> {
-        return <Text style={styles.sentence} key={i}>► {sentence}</Text>
+        return <Text style={styles.sentence} key={i}>{i+1} - {sentence}</Text>
     })
 
     const [currentSet, setCurrentSet] = useState(1)

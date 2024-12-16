@@ -49,11 +49,17 @@ export default function TimerScreen({ navigation, route }) {
   // Récupération du temps de repos de l'exercice
   const restTime = exerciseSelected.rest;
   // Conversion du restTime en minutes secondes
-  const restMinutes = Math.floor(restTime / 60);
-  const resSeconds = restTime % 60;
+  let restMinutes = Math.floor(restTime / 60);
+  let restSeconds = restTime % 60;
+  if (restMinutes < 10){
+    restMinutes = "0" + restMinutes.toString() 
+  }
+  if(restSeconds < 10){
+    restSeconds = "0" + restSeconds.toString()
+  }
 
   const [minutes, setMinutes] = useState(restMinutes);
-  const [secondes, setSecondes] = useState(resSeconds);
+  const [secondes, setSecondes] = useState(restSeconds);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isTimerVisible, setIsTimerVisible] = useState(false);
 
@@ -139,16 +145,8 @@ export default function TimerScreen({ navigation, route }) {
           <Text style={styles.title}>Temps de repos</Text>
           <Underline width={80} />
         </View>
-        {emptyFields && (
-          <View>
-            <Text style={styles.errorMessage}>
-              Veuillez remplir tous les champs de saisie pour passer à la série
-              suivante
-            </Text>
-          </View>
-        )}
         {!isTimerVisible && (
-          <View>
+          <View style={styles.timerContainer}>
             <TouchableOpacity
               style={styles.timer}
               onPress={() => setShowPicker(true)}
@@ -193,7 +191,7 @@ export default function TimerScreen({ navigation, route }) {
           </View>
         )}
         {isTimerVisible && (
-          <View>
+          <View style={styles.timerContainerStarted}>
             <View style={styles.count}>
               {/* Minuteur */}
               <CountdownCircleTimer
@@ -243,7 +241,7 @@ export default function TimerScreen({ navigation, route }) {
             </View>
           </View>
         )}
-        <View>
+        <View style={styles.inputSection}>
           {!input && (
             <LinearGradient
               style={styles.linear}
@@ -297,7 +295,7 @@ export default function TimerScreen({ navigation, route }) {
             </LinearGradient>
           )}
           {input && (
-            <View>
+            <View style={styles}>
               <LinearGradient
                 style={styles.linearInput}
                 colors={["#4645AB", "#1C1C45"]}
@@ -353,7 +351,7 @@ const styles = StyleSheet.create({
 
   timer: {
     width: "60%",
-    height: "25%",
+    height: 100,
     backgroundColor: "#D9D9D9",
     borderRadius: 20,
     justifyContent: "center",
@@ -361,6 +359,7 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
     marginTop: 30,
+    
   },
 
   count: {
@@ -390,17 +389,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: "auto",
     borderRadius: 10,
+    
   },
 
   data: {
     paddingTop: 15,
     marginLeft: 20,
+    
   },
 
   text: {
     color: "#ffffff",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "400",
   },
 
   inputContainer: {
@@ -423,7 +424,7 @@ const styles = StyleSheet.create({
   },
 
   linearInput: {
-    height: 200,
+    height: 230,
     width: "80%",
     justifyContent: "flex-start",
     marginLeft: "auto",
@@ -441,12 +442,13 @@ const styles = StyleSheet.create({
   dataInput: {
     paddingTop: 15,
     marginLeft: 20,
+    marginBottom: 12
   },
 
   textTitle: {
     color: "#ffffff",
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "400",
   },
 
   textInput: {
@@ -454,10 +456,25 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
+    marginBottom: "15"
   },
 
   btnInput: {
     justifyContent: "center",
     alignItems: "center",
   },
+  timerContainer :{
+    height: "30%"
+  },
+  timerContainerStarted : {
+    height: "32%"
+
+  },
+  inputSection : {
+    height: "45%",
+    marginTop: 5
+  },
+  test : {
+    height: 200
+  }
 });
