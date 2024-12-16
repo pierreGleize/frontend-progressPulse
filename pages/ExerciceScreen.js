@@ -27,9 +27,7 @@ export default function Exercice({ navigation, route }) {
     const [currentSet, setCurrentSet] = useState(1)
     const [noHistory, setNoHistory] = useState(false)
 
-    console.log(noHistory)
-    
-    console.log(currentSet)
+
     // Récupération des performances de la séance en cours
     const currentWorkout = useSelector(state => state.currentWorkout.value)
     // Vérification si l'exercice est présent dans le reducers et combien de sets ont été enregistrés
@@ -139,15 +137,22 @@ export default function Exercice({ navigation, route }) {
                     <Text style={styles.textButton}>Voir les instructions</Text>
                 </TouchableOpacity>
             </View>
+            
             {!noHistory &&
-            <View>
+            
+            <View style={styles.perfContainer}>
                 <Text style={styles.text}>Performances de ta dernière séance</Text>
                 <Underline width={100} />
+                <ScrollView>
                 <View style={styles.perfcontainer}>
                     {noHistory && <Text style={styles.noHistory}>Pas encore de performances enregistrées</Text>}
+                    
                     {mostRecentSetsToShow}
+                    
                 </View>
+                </ScrollView>
             </View>
+            
             }
             <View>
                 <Text style={styles.text}>Objectifs de la série</Text>
@@ -171,6 +176,7 @@ export default function Exercice({ navigation, route }) {
                     </LinearGradient>
                 </View>
             </View>
+            
             <View style={styles.button}>
                 <Button
                     textButton="Valider la série"
@@ -347,6 +353,9 @@ const styles = StyleSheet.create({
         color: "white",
         width: "100%",
         textAlign: "center"
+    },
+    perfContainer: {
+        height: "135"
     }
 
 });

@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, ImageBackground } from "react-native";
 import Button from "../components/Button";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
@@ -33,39 +33,39 @@ export default function HomeScreen({ navigation }) {
   });
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topContainer}>
-        <Text style={styles.title}>Hello {user.username},</Text>
-        <Text style={styles.span}>prêt pour un nouvel entrainement ?</Text>
-        <View style={styles.infoContainer}>
-          <FontAwesome
-            name={"info-circle"}
-            size={30}
-            color={"#A3FD01"}
-            style={styles.infoIcon}
+      <View style={styles.container}>
+        <View style={styles.topContainer}>
+          <Text style={styles.title}>Hello {user.username},</Text>
+          <Text style={styles.span}>prêt pour un nouvel entrainement ?</Text>
+          <View style={styles.infoContainer}>
+            <FontAwesome
+              name={"info-circle"}
+              size={30}
+              color={"#A3FD01"}
+              style={styles.infoIcon}
+            />
+            <Text style={styles.textInfo}>
+              Crée ta séance et commence l'entrainement
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.btnContainer}>
+          <Button
+            background="#A3FD01"
+            borderColor="none"
+            textButton="Ajouter une séance"
+            textColor="black"
+            width={300}
+            height={50}
+            onPress={handleAddWorkout}
+            isLinearGradiant={false}
           />
-          <Text style={styles.textInfo}>
-            Crée ta séance et commence l'entrainement
-          </Text>
+          <ScrollView >
+            {workoutsToShow}
+          </ScrollView>
         </View>
       </View>
-
-      <View style={styles.btnContainer}>
-        <Button
-          background="#A3FD01"
-          borderColor="none"
-          textButton="Ajouter une séance"
-          textColor="black"
-          width={300}
-          height={50}
-          onPress={handleAddWorkout}
-          isLinearGradiant={false}
-        />
-        <ScrollView style= {{indicatorStyle: 'white'}}>
-        {workoutsToShow}
-        </ScrollView>
-      </View>
-    </View>
   );
 }
 
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#0D0D36",
     paddingVertical: 50,
     paddingHorizontal: 20,
+    justifyContent: 'center',
   },
   topContainer: {
     flex: 1,

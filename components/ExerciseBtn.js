@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeExercise } from "../reducers/workoutCreation";
 
+
 const ExerciseBtn = ({ exerciseID, textButton, image, openModal }) => {
 
   const dispatch = useDispatch()

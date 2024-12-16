@@ -37,9 +37,9 @@ export default function WeightScreen({ navigation, route }) {
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    if (Platform.OS === "android") {
-      setShow(false);
-    }
+    // if (Platform.OS === "android") {
+    //   setShow(false);
+    // }
     setDate(currentDate);
   };
 
@@ -291,7 +291,14 @@ export default function WeightScreen({ navigation, route }) {
                 onChangeText={(value) => setWeightTarget(value)}
                 value={weightTarget}
               />
-              <View style={{ marginBottom: 15 }}>
+              <View
+                style={{
+                  marginBottom: 15,
+                  backgroundColor: "grey",
+                  borderRadius: 10,
+                  alignItems: "center",
+                }}
+              >
                 <DateTimePicker
                   value={date}
                   mode="date"
