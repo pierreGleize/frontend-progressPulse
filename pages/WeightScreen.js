@@ -395,7 +395,7 @@ export default function WeightScreen({ navigation, route }) {
           <FontAwesome name={"chevron-left"} size={24} color={"#3BC95F"} />
           <Text style={styles.backToText}>Statistiques</Text>
         </TouchableOpacity>
-        <Text style={styles.topTitle}>Suivie de poids</Text>
+        <Text style={styles.topTitle}>Suivi de poids</Text>
       </View>
       <Text style={styles.nameTitle}>{user.username}</Text>
       <ScrollView style={styles.weightContainer}>

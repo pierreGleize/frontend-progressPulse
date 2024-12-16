@@ -64,7 +64,7 @@ export default function TimerScreen({ navigation, route }) {
   const workoutSelected = workouts.find((workout) => workout._id === workoutID);
   // Récupération de l'exercice sélectionné dans la séance
   const exerciseSelected = workoutSelected.exercises.find(
-    (exercise) => exercise._id === exerciseID
+    (exercise) => exercise.exercise._id === exerciseID
   );
   // Récupération du nombre de série à faire
   const nbSets = exerciseSelected.customSets.length;

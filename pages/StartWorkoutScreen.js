@@ -192,7 +192,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             weight={exercise.customSets[0].weight}
             restMinutes={minutes}
             restSeconds={seconds}
-            exerciseID={exercise._id}
+            exerciseID={exercise.exercise._id}
             handleDelete={handleDeleteExercise}
             openModalCustomSets={openModalCustomSets}
             isEditable={isEditable}

@@ -25,7 +25,7 @@ export default function Exercice({ navigation, route }) {
   const workoutSelected = workouts.find((workout) => workout._id === workoutID);
   // Recherche de l'exercice avec l'exerciseID reçu en props
   const exerciseSelected = workoutSelected.exercises.find(
-    (exercise) => exercise._id === exerciseID
+    (exercise) => exercise.exercise._id === exerciseID
   );
   // Recherche de l'image correspondant à l'exercice
   const imagePath =
@@ -61,7 +61,7 @@ export default function Exercice({ navigation, route }) {
   // Récupération de l'historique de performance pour cette séance et cet exercice
   const workoutsHistory = useSelector((state) => state.workoutsHistory.value);
   const currentWorkoutHistory = workoutsHistory.filter(
-    (workout) => workout.workout === workoutID
+    (workout) => workout.workoutID === workoutID
   );
   let mostRecentWorkout = null;
   let mostRecentExercise = null;
@@ -111,6 +111,99 @@ export default function Exercice({ navigation, route }) {
   const closeModal = () => {
     setModalVisible(false);
   };
+
+  // // Récupération des l'ensemble des séance
+  // const workouts = useSelector((state) => state.workouts.value);
+  // // Recherche de la séance avec le workoutID reçu en props
+  // const workoutSelected = workouts.find((workout) => workout._id === workoutID);
+  // // Recherche de l'exercice avec l'exerciseID reçu en props
+  // const exerciseSelected = workoutSelected.exercises.find(
+  //   (exercise) => exercise._id === exerciseID
+  // );
+  // Recherche de l'image correspondant à l'exercice
+  // const imagePath =
+  //   images[exerciseSelected.exercise.muscleGroupe.toLowerCase()][
+  //     exerciseSelected.exercise.image
+  //   ];
+  // // Transformation du paragraphe de descripiton en tableau
+  // const descriptionSentences =
+  //   exerciseSelected.exercise.description.split(/(?<=[.!?])\s+/);
+  // const descriptionSetencesToShow = descriptionSentences.map((sentence, i) => {
+  //   return (
+  //     <Text style={styles.sentence} key={i}>
+  //       {i + 1} - {sentence}
+  //     </Text>
+  //   );
+  // });
+
+  // const [currentSet, setCurrentSet] = useState(1);
+  // const [noHistory, setNoHistory] = useState(false);
+
+  // // Récupération des performances de la séance en cours
+  // const currentWorkout = useSelector((state) => state.currentWorkout.value);
+  // // Vérification si l'exercice est présent dans le reducers et combien de sets ont été enregistrés
+  // useEffect(() => {
+  //   const exerciseExist = currentWorkout.performances.find(
+  //     (e) => e.exercise === exerciseID
+  //   );
+  //   if (exerciseExist) {
+  //     setCurrentSet(exerciseExist.sets.length + 1);
+  //   }
+  // }, [currentWorkout]);
+
+  // // Récupération de l'historique de performance pour cette séance et cet exercice
+  // const workoutsHistory = useSelector((state) => state.workoutsHistory.value);
+  // const currentWorkoutHistory = workoutsHistory.filter(
+  //   (workout) => workout.workout === workoutID
+  // );
+  // let mostRecentWorkout = null;
+  // let mostRecentExercise = null;
+  // let mostRecentSets = [];
+  // if (currentWorkoutHistory.length > 0) {
+  //   mostRecentWorkout = currentWorkoutHistory.reduce((latest, current) => {
+  //     return new Date(current.date) > new Date(latest.date) ? current : latest;
+  //   });
+  //   mostRecentExercise = mostRecentWorkout.performances.find(
+  //     (e) => e.exercise === exerciseID
+  //   );
+  //   if (mostRecentExercise) {
+  //     mostRecentSets = mostRecentExercise.sets;
+  //   }
+  // }
+
+  // const mostRecentSetsToShow = mostRecentSets.map((set, i) => {
+  //   return (
+  //     <LinearGradient
+  //       key={i}
+  //       colors={["#1C1C45", "#4645AB"]}
+  //       start={{ x: 0, y: 0 }}
+  //       end={{ x: 1, y: 0 }}
+  //       style={styles.linearPerf}
+  //     >
+  //       <Text style={styles.perf}>
+  //         Série {i + 1} : {set.reps} x {set.weight}kg
+  //       </Text>
+  //     </LinearGradient>
+  //   );
+  // });
+
+  // useEffect(() => {
+  //   if (mostRecentSetsToShow.length === 0) {
+  //     setNoHistory(true);
+  //   } else {
+  //     setNoHistory(false);
+  //   }
+  // }, [mostRecentSetsToShow]);
+
+  // const [modalVisible, setModalVisible] = useState(false);
+
+  // const openModal = () => {
+  //   setModalVisible(true);
+  // };
+
+  // const closeModal = () => {
+  //   setModalVisible(false);
+  // };
 
   return (
     <View style={styles.container}>

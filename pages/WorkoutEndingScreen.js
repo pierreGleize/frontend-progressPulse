@@ -35,9 +35,18 @@ export default function WorkoutEndingScreen({ navigation }) {
         let currentWorkoutToAdd = {...currentWorkout}
         currentWorkoutToAdd.note = personnalNote
         currentWorkoutToAdd.ressenti = ressenti
-        dispatch(addWorkout(currentWorkoutToAdd))
-        dispatch(resetCurrentWorkout())
-        navigation.navigate("Home")
+        fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/histories/addWorkout`, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(currentWorkoutToAdd)
+        })
+        .then(response => response.json())
+        .then(data => {
+            dispatch(addWorkout(data.workoutAdded))
+            dispatch(resetCurrentWorkout())
+            navigation.navigate("Home")
+        })
+        
     }
 
     return (
