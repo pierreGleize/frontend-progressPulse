@@ -33,7 +33,7 @@ export default function WorkoutTypeScreen({ navigation }) {
           onPress={() => navigation.navigate("muscleGroup")}
         >
           <LinearGradient
-            colors={["#3BC95F", "#1D632F"]}
+            colors={["#3BC95F", "#1f532c"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.gradiant}
@@ -54,7 +54,7 @@ export default function WorkoutTypeScreen({ navigation }) {
           onPress={() => navigation.navigate("WorkoutDifficulty")}
         >
           <LinearGradient
-            colors={["#3BC95F", "#1D632F"]}
+            colors={["#3BC95F", "#1f532c"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.gradiant}

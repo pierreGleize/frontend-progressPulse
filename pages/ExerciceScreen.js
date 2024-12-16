@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, Modal, Image, ScrollView } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Modal, ScrollView } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
 import Underline from "../components/Underline";
@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
 import images from "../utils/images";
+import { Image } from 'expo-image';
+
 
 export default function Exercice({ navigation, route }) {
     const { workoutID, exerciseID } = route.params || {};
@@ -21,7 +23,7 @@ export default function Exercice({ navigation, route }) {
     // Transformation du paragraphe de descripiton en tableau
     const descriptionSentences = exerciseSelected.exercise.description.split(/(?<=[.!?])\s+/)
     const descriptionSetencesToShow = descriptionSentences.map((sentence, i )=> {
-        return <Text style={styles.sentence} key={i}>► {sentence}</Text>
+        return <Text style={styles.sentence} key={i}>{i+1} - {sentence}</Text>
     })
 
     const [currentSet, setCurrentSet] = useState(1)

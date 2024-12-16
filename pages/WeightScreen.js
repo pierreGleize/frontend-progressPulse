@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addWeight, updateTarget } from "../reducers/user";
 import moment from "moment";
 import Button from "../components/Button";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Progress from "react-native-progress";
 
 export default function WeightScreen({ navigation, route }) {
@@ -32,18 +32,60 @@ export default function WeightScreen({ navigation, route }) {
   const [isCheckedLoss, setIsCheckedLoss] = useState(false);
   const [isCheckedGain, setIsCheckedGain] = useState(false);
 
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    // if (Platform.OS === "android") {
-    //   setShow(false);
-    // }
-    setDate(currentDate);
+  useEffect(() => {
+    if (currentWeight && targetWeight && user.target.objectif === "Gain") {
+      // Calcul en pourcentage l'objectif de l'utilisateur si il veut prendre du poids
+      const newProgressValuePourcent = Math.floor(
+        (currentWeight / targetWeight) * 100
+      );
+      // Même chose pour passer la valeur à Progress.Bar, Proggres.Circle qui accepte une valeure sur une  échelle de 0 à 1
+      const newProgressValue = currentWeight / targetWeight;
+
+      setProgressValue(newProgressValue);
+      setProgressValuePourcent(newProgressValuePourcent);
+
+      if (newProgressValue === 1) {
+        Alert.alert("Félicitation vous avez atteint votre objectif !");
+      }
+    } else if (
+      currentWeight &&
+      targetWeight &&
+      user.target.objectif === "Loss"
+    ) {
+      // Calcul inversé pour objectif de perte de poids
+      const newProgressValue = targetWeight / currentWeight;
+      const newProgressValuePourcent = Math.floor(
+        (targetWeight / currentWeight) * 100
+      );
+      setProgressValue(newProgressValue);
+      setProgressValuePourcent(newProgressValuePourcent);
+      if (newProgressValue === 1) {
+        Alert.alert("Félicitation vous avez atteint votre objectif !");
+      }
+    }
+  }, [user.weight, user.target]);
+
+  //Pour ouvir le popup de la date
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+  //Pour fermer le popup de la date
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
   };
 
-  const changeWeight = () => {
+  //Pour enregistrer la date sélectionnée lorsque l'utilisateur entre son objectif de poids
+  const handleConfirmDate = (date) => {
+    setDate(date);
+    hideDatePicker();
+  };
+  // Ajouter un nouveau poids dans la BDD et l'enregistrer dans le reducer user
+  const handleAddWeight = () => {
     if (!weight) {
       setError(true);
       setErrorMessage("Veuillez remplir correctement le champ de saisie");
@@ -65,7 +107,7 @@ export default function WeightScreen({ navigation, route }) {
         }
       });
   };
-
+  // Enregistrer son objectif de poids dans la BDD puis dans le reducer
   const addTargetWeight = () => {
     if (!weightTarget || !date) {
       setError(true);
@@ -116,13 +158,14 @@ export default function WeightScreen({ navigation, route }) {
     setIsCheckedGain(false);
     setIsCheckedLoss(false);
   };
-
+  // Récupération de son poids de départ et la date correspondante, premier élément du tableau user.weight
   const startWeight = user.weight?.length === 0 ? 0 : user.weight[0].weight;
   const startDate =
     user.weight?.length === 0
       ? "DD/MM/YYYY"
       : moment(user.weight[0].date).format("Do MMM YYYY");
 
+  // Récupération de son poids en cours et la date correspondante, dernier élément du tableau user.weight
   const currentWeight =
     user.weight?.length === 0 ? 0 : user.weight.at(-1).weight;
   const currentDate =
@@ -130,39 +173,13 @@ export default function WeightScreen({ navigation, route }) {
       ? "DD/MM/YYYY"
       : moment(user.weight.at(-1).date).format("Do MMM YYYY");
 
+  // Récupération de son objectif de poids et la date correspondante, dans user.target qui est un objet
   const targetWeight = !user.target.weight ? 0 : user.target.weight;
   const targetDate = !user.target.date
     ? "DD/MM/YYYY"
     : moment(user.target.date).format("Do MMM YYYY");
 
-  useEffect(() => {
-    if (currentWeight && targetWeight && user.target.objectif === "Gain") {
-      const newProgressValue = currentWeight / targetWeight;
-      const newProgressValuePourcent = Math.floor(
-        (currentWeight / targetWeight) * 100
-      );
-      setProgressValue(newProgressValue);
-      setProgressValuePourcent(newProgressValuePourcent);
-      if (newProgressValue === 1) {
-        Alert.alert("Félicitation vous avez atteint votre objectif !");
-      }
-    } else if (
-      currentWeight &&
-      targetWeight &&
-      user.target.objectif === "Loss"
-    ) {
-      const newProgressValue = targetWeight / currentWeight;
-      const newProgressValuePourcent = Math.floor(
-        (targetWeight / currentWeight) * 100
-      );
-      setProgressValue(newProgressValue);
-      setProgressValuePourcent(newProgressValuePourcent);
-      if (newProgressValue === 1) {
-        Alert.alert("Félicitation vous avez atteint votre objectif !");
-      }
-    }
-  }, [user.weight, user.target]);
-
+  // Liste de toutes les entrées de poids
   const weights = user.weight.map((element, index) => (
     <View
       key={index}
@@ -179,6 +196,7 @@ export default function WeightScreen({ navigation, route }) {
     </View>
   ));
 
+  // Logique pour décocher une case lorque une case est cochée
   const handleCheckbox = (name) => {
     if (name === "Loss") {
       setIsCheckedLoss(true);
@@ -242,7 +260,7 @@ export default function WeightScreen({ navigation, route }) {
                 background="#272D34"
                 borderWidth={1}
                 borderColor="#A3FD01"
-                onPress={changeWeight}
+                onPress={handleAddWeight}
               />
             </View>
           </View>
@@ -291,24 +309,35 @@ export default function WeightScreen({ navigation, route }) {
                 onChangeText={(value) => setWeightTarget(value)}
                 value={weightTarget}
               />
-              <View
+              <TouchableOpacity
                 style={{
                   marginBottom: 15,
-                  backgroundColor: "grey",
-                  borderRadius: 10,
                   alignItems: "center",
                 }}
+                onPress={showDatePicker}
               >
-                <DateTimePicker
-                  value={date}
+                <Text
+                  style={{
+                    color: "white",
+                    borderColor: "white",
+                    padding: 10,
+                    borderWidth: 1,
+                    borderRadius: 5,
+                  }}
+                >
+                  {date
+                    ? moment(date).format("DD/MM/YYYY")
+                    : moment(new Date()).format("DD/MM/YYYY")}
+                </Text>
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
                   mode="date"
-                  display="default"
-                  onChange={onChange}
-                  accentColor="#A3FD01"
-                  themeVariant="light"
+                  onConfirm={handleConfirmDate}
+                  buttonTextColorIOS="black"
+                  onCancel={hideDatePicker}
                   minimumDate={new Date()}
                 />
-              </View>
+              </TouchableOpacity>
 
               <View style={styles.checkboxWrapper}>
                 <View style={styles.checkboxContainer}>
@@ -366,7 +395,7 @@ export default function WeightScreen({ navigation, route }) {
           <FontAwesome name={"chevron-left"} size={24} color={"#3BC95F"} />
           <Text style={styles.backToText}>Réglages</Text>
         </TouchableOpacity>
-        <Text style={styles.topTitle}>Suivie de poids</Text>
+        <Text style={styles.topTitle}>Suivi de poids</Text>
       </View>
       <Text style={styles.nameTitle}>{user.username}</Text>
       <ScrollView style={styles.weightContainer}>
@@ -507,6 +536,7 @@ const styles = StyleSheet.create({
   textInfo: {
     color: "white",
     fontSize: 12,
+    marginLeft: 5,
   },
   topContainer: {
     flexDirection: "row",
@@ -544,10 +574,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 15,
     marginVertical: 16,
-    /* shadowColor: "#FFFFFF", */
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 0 },
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.2)",
   },

@@ -1,10 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Underline from "../components/Underline";
-import Button from "../components/Button";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { LinearGradient } from "expo-linear-gradient";
+import BtnWorkoutSession from "../components/BtnWorkoutSession";
 
 import {
   addAllExercise,
@@ -17,6 +16,7 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
   const handleNavigateToSummary = (data) => {
     dispatch(resetWorkoutCreation());
     let exercisesToAdd = [];
+    console.log(data)
     for (let exercise of data) {
       console.log(exercise.sets);
       let customSets = [];
@@ -49,24 +49,24 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
   }, []);
 
   const nameWorkout = addWorkout.map((data, i) => {
-    console.log(data.exercices);
+    const nbExercises = data.exercices.length + ' exercices'
+    let time = () => {
+      for (let i = 0; i < data.exercices.length; i++) {
+        let times = 0;
+        //Pour chaque exercice : (nombre de série * temps de repos + nombre de série * 45s) / 60 pour l'avoir en minutes
+        //Pour le temps complet : ((nombre de série * temps de repos + nombre de série * 45s) / 60) * nombre d'exercices dans le workout
+        times = ((data.exercices[i].sets.length * data.exercices[i].rest + data.exercices[i].sets.length * 45) / 60) * data.exercices.length
+        return Math.round(times)
+      }
+    }
     return (
-      <TouchableOpacity
-              key={i}
-              activeOpacity={0.7}
-              style={styles.btn}
-              onPress={() => handleNavigateToSummary(data.exercices)}
-            >
-              <LinearGradient
-                colors={["#3BC95F", "#1D632F"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.gradiant}
-              >
-                <Image source={require('../assets/illustrations/imageworkout2.jpg')} style={styles.image} />
-                <Text style={styles.btnText}>{data.name}</Text>
-              </LinearGradient>
-            </TouchableOpacity>
+      <BtnWorkoutSession
+        key={i}
+        name={data.name}
+        time={time() + ' min'}
+        nbExercise={nbExercises}
+        onPress={() => handleNavigateToSummary(data.exercices)}
+      />
     );
   });
 
@@ -92,7 +92,11 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
         />
         <Text style={styles.textInfo}>Choisis ta séance !</Text>
       </View>
-      <ScrollView style={styles.btnContainer}>{nameWorkout}</ScrollView>
+      <View style={styles.btnContainer}>
+        <ScrollView contentContainerStyle={{ paddingBottom: 85 }}>
+          {nameWorkout}
+        </ScrollView>
+      </View>
     </View>
   );
 }
@@ -132,7 +136,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
   },
-  
+
   btnText: {
     fontSize: 30,
     paddingHorizontal: 20,
@@ -180,6 +184,8 @@ const styles = StyleSheet.create({
   btnContainer: {
     flex: 1,
     gap: 20,
+    alignItems: 'center',
+    marginTop: 10,
   },
 
 });

@@ -75,7 +75,7 @@ const TabNavigator = () => {
           tabBarStyle: {
             backgroundColor: "transparent",
             borderTopWidth: 0,
-            height: 70,
+            height: 80,
           },
         })}
       >

@@ -13,25 +13,31 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import Button from "../components/Button";
-import { updateEmail } from "../reducers/user";
+import { updateEmail, updateUsername } from "../reducers/user";
 
 export default function SettingsScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [modalEmailVisible, setModalEmailVisible] = useState(false);
+  const [modalPasswordVisible, setModalPasswordVisible] = useState(false);
+  const [modalUsernameVisible, setModalUsernameVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [error, setError] = useState(false);
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
 
+  // Pour tester un email
   function validateEmail(email) {
     const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return regex.test(email);
   }
 
+  // Envoyer une requête au backend  pour changer l'email et enregistrer les changements dans le reducer
   const changeEmail = () => {
-    if (email.length === 0) {
+    if (!email || !password) {
       setErrorMessage("Veuillez remplir tous les champs");
       setError(true);
       return;
@@ -53,16 +59,82 @@ export default function SettingsScreen({ navigation }) {
           setErrorMessage(data.error);
         } else {
           dispatch(updateEmail(data.newEmail));
-          closeModal();
+          closeModal("email");
         }
       });
   };
 
-  const closeModal = () => {
+  // Pour changer son password
+  const changePassword = () => {
+    if (!email || !password || !newPassword) {
+      setErrorMessage("Veuillez remplir tous les champs");
+      setError(true);
+      return;
+    }
+    if (!validateEmail(email)) {
+      setErrorMessage("Adresse email non valide");
+      setError(true);
+      return;
+    }
+    fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/changePassword`, {
+      method: "PUT",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({ email, password, token: user.token, newPassword }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result === false) {
+          setError(true);
+          setErrorMessage(data.error);
+        } else {
+          closeModal("password");
+        }
+      });
+  };
+
+  // Pour changer son username
+  const changeUsername = () => {
+    if (!email || !password || !username) {
+      setErrorMessage("Veuillez remplir tous les champs");
+      setError(true);
+      return;
+    }
+    if (!validateEmail(email)) {
+      setErrorMessage("Adresse email non valide");
+      setError(true);
+      return;
+    }
+    fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/changeUsername`, {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({ email, password, token: user.token, username }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result === false) {
+          setError(true);
+          setErrorMessage(data.error);
+        } else {
+          dispatch(updateUsername(data.newUsername));
+          closeModal("username");
+        }
+      });
+  };
+
+  const closeModal = (modal) => {
     setError(false);
+    setErrorMessage("");
     setPassword("");
     setEmail("");
-    setModalVisible(!modalVisible);
+    if (modal === "email") {
+      setModalEmailVisible(false);
+    } else if (modal === "password") {
+      setModalPasswordVisible(false);
+      setNewPassword("");
+    } else if (modal === "username") {
+      setModalUsernameVisible(false);
+      setUsername("");
+    }
   };
 
   return (
@@ -70,8 +142,8 @@ export default function SettingsScreen({ navigation }) {
       <Modal
         animationType="fade"
         transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(!modalVisible)}
+        visible={modalEmailVisible}
+        onRequestClose={() => setModalEmailVisible(!modalEmailVisible)}
       >
         <KeyboardAvoidingView
           style={styles.modalBackground}
@@ -93,7 +165,7 @@ export default function SettingsScreen({ navigation }) {
                   name={"times"}
                   size={30}
                   color={"white"}
-                  onPress={closeModal}
+                  onPress={() => closeModal("email")}
                   style={styles.infoIcon}
                 />
               </View>
@@ -135,6 +207,157 @@ export default function SettingsScreen({ navigation }) {
           </View>
         </KeyboardAvoidingView>
       </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalPasswordVisible}
+        onRequestClose={() => setModalPasswordVisible(!modalPasswordVisible)}
+      >
+        <KeyboardAvoidingView
+          style={styles.modalBackground}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <View style={styles.modalView}>
+            <View style={styles.topModal}>
+              <View style={styles.crossContainer}>
+                <View style={styles.infoContainer}>
+                  <FontAwesome
+                    name={"exclamation-triangle"}
+                    size={25}
+                    color={"#A3FD01"}
+                    style={styles.infoIcon}
+                  />
+                  <Text style={styles.span}>ATTENTION</Text>
+                </View>
+                <FontAwesome
+                  name={"times"}
+                  size={30}
+                  color={"white"}
+                  onPress={() => closeModal("password")}
+                  style={styles.infoIcon}
+                />
+              </View>
+              <Text style={styles.textInfo}>
+                Vous êtes sur le point de modifier votre mot de passe.
+                Assurez-vous de bien le mémoriser !
+              </Text>
+            </View>
+            <View style={styles.bottomModal}>
+              <TextInput
+                style={styles.input}
+                placeholder={"Entrée votre adresse email"}
+                placeholderTextColor={"#272D34"}
+                onChangeText={(value) => setEmail(value)}
+                value={email}
+              />
+              <TextInput
+                style={styles.input}
+                secureTextEntry={true}
+                placeholder={"Mot de passe"}
+                placeholderTextColor={"#272D34"}
+                onChangeText={(value) => setPassword(value)}
+                value={password}
+              />
+              <TextInput
+                style={styles.input}
+                secureTextEntry={true}
+                placeholder={"Nouveau mot de passe de passe"}
+                placeholderTextColor={"#272D34"}
+                onChangeText={(value) => setNewPassword(value)}
+                value={newPassword}
+              />
+              {error && <Text style={styles.errorText}>{errorMessage}</Text>}
+              <Button
+                textButton="Valider"
+                textColor="#A3FD01"
+                width={180}
+                height={40}
+                background="#272D34"
+                borderWidth={1}
+                borderColor="#A3FD01"
+                onPress={changePassword}
+              />
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalUsernameVisible}
+        onRequestClose={() => setModalUsernameVisible(!modalUsernameVisible)}
+      >
+        <KeyboardAvoidingView
+          style={styles.modalBackground}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <View style={styles.modalView}>
+            <View style={styles.topModal}>
+              <View style={styles.crossContainer}>
+                <View style={styles.infoContainer}>
+                  <FontAwesome
+                    name={"exclamation-triangle"}
+                    size={25}
+                    color={"#A3FD01"}
+                    style={styles.infoIcon}
+                  />
+                  <Text style={styles.span}>ATTENTION</Text>
+                </View>
+                <FontAwesome
+                  name={"times"}
+                  size={30}
+                  color={"white"}
+                  onPress={() => closeModal("username")}
+                  style={styles.infoIcon}
+                />
+              </View>
+
+              <Text style={styles.textInfo}>
+                Vous êtes sur le point de modifier votre nom d'utilisateur.
+                Assurez-vous qu'il vous convient !
+              </Text>
+            </View>
+            <View style={styles.bottomModal}>
+              <TextInput
+                style={styles.input}
+                placeholder={"Entrée votre adresse email"}
+                placeholderTextColor={"#272D34"}
+                onChangeText={(value) => setEmail(value)}
+                value={email}
+              />
+              <TextInput
+                style={styles.input}
+                secureTextEntry={true}
+                placeholder={"Mot de passe"}
+                placeholderTextColor={"#272D34"}
+                onChangeText={(value) => setPassword(value)}
+                value={password}
+              />
+              <TextInput
+                style={styles.input}
+                // secureTextEntry={true}
+                placeholder={"Entrée votre nouveau nom d'utilisateur"}
+                placeholderTextColor={"#272D34"}
+                onChangeText={(value) => setUsername(value)}
+                value={username}
+              />
+              {error && <Text style={styles.errorText}>{errorMessage}</Text>}
+              <Button
+                textButton="Valider"
+                textColor="#A3FD01"
+                width={180}
+                height={40}
+                background="#272D34"
+                borderWidth={1}
+                borderColor="#A3FD01"
+                onPress={changeUsername}
+              />
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
       <Text style={styles.title}>Réglages</Text>
       <Underline width={100} />
       <View style={styles.settingWrapper}>
@@ -143,17 +366,45 @@ export default function SettingsScreen({ navigation }) {
             <TouchableOpacity
               style={styles.inputContainer}
               activeOpacity={0.7}
-              onPress={() => setModalVisible(true)}
+              onPress={() => setModalEmailVisible(true)}
             >
               <FontAwesome
                 name={"envelope"}
-                size={23}
+                size={20}
                 color={"#A3FD01"}
-                // color={"#272D34"}
                 style={styles.infoIcon}
               />
               <Text style={styles.text}>{user.email}</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.inputContainer}
+              activeOpacity={0.7}
+              onPress={() => setModalPasswordVisible(true)}
+            >
+              <FontAwesome
+                name={"lock"}
+                size={25}
+                color={"#A3FD01"}
+                style={styles.infoIcon}
+              />
+              <Text style={styles.text}>*********</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.inputContainer}
+              activeOpacity={0.7}
+              onPress={() => setModalUsernameVisible(true)}
+            >
+              <FontAwesome
+                name={"user"}
+                size={25}
+                color={"#A3FD01"}
+                style={styles.infoIcon}
+              />
+              <Text style={styles.text}>{user.username}</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity
               style={styles.inputContainer}
               activeOpacity={0.7}
@@ -170,7 +421,7 @@ export default function SettingsScreen({ navigation }) {
                 name={"arrow-right"}
                 size={15}
                 color={"white"}
-                style={styles.infoIcon}
+                style={{ position: "absolute", right: 10 }}
               />
             </TouchableOpacity>
           </View>
@@ -261,13 +512,9 @@ const styles = StyleSheet.create({
   settingContainer: {
     width: "100%",
     maxWidth: 500,
-    height: 140,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    height: 190,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderColor: "rgba(255, 255, 255, 0.2)",
-    shadowColor: "#FFFFFF",
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 0 },
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
@@ -275,7 +522,7 @@ const styles = StyleSheet.create({
   inputWrapper: {
     width: "93%",
     height: "85%",
-    borderRadius: 20,
+    justifyContent: "center",
   },
   inputContainer: {
     flexDirection: "row",
@@ -286,7 +533,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
   text: {
-    margin: "auto",
+    marginLeft: 20,
     color: "white",
   },
   input: {

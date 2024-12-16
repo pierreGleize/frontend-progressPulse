@@ -19,10 +19,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { addExerciseSet } from "../reducers/currentWorkout";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 
+import { Audio } from "expo-av";
+import sounds from "../utils/sounds";
+
 export default function TimerScreen({ navigation, route }) {
   const { workoutID, exerciseID } = route.params || {};
+  const [currentSound, setCurrentSound] = useState(null);
 
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+
+  async function playSound() {
+    if (currentSound) {
+      await currentSound.stopAsync();
+      await currentSound.unloadAsync();
+    }
+    const { sound } = await Audio.Sound.createAsync(sounds[user.sound]);
+    setCurrentSound(sound);
+    await sound.playAsync();
+  }
+
+  async function stopSound() {
+    if (currentSound) {
+      await currentSound.stopAsync();
+      await currentSound.unloadAsync();
+    }
+  }
 
   const [reps, setReps] = useState("");
   const [weight, setWeight] = useState("");
@@ -49,11 +71,17 @@ export default function TimerScreen({ navigation, route }) {
   // Récupération du temps de repos de l'exercice
   const restTime = exerciseSelected.rest;
   // Conversion du restTime en minutes secondes
-  const restMinutes = Math.floor(restTime / 60);
-  const resSeconds = restTime % 60;
+  let restMinutes = Math.floor(restTime / 60);
+  let restSeconds = restTime % 60;
+  if (restMinutes < 10){
+    restMinutes = "0" + restMinutes.toString() 
+  }
+  if(restSeconds < 10){
+    restSeconds = "0" + restSeconds.toString()
+  }
 
   const [minutes, setMinutes] = useState(restMinutes);
-  const [secondes, setSecondes] = useState(resSeconds);
+  const [secondes, setSecondes] = useState(restSeconds);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isTimerVisible, setIsTimerVisible] = useState(false);
 
@@ -65,7 +93,7 @@ export default function TimerScreen({ navigation, route }) {
     }
   };
 
-  //Retourne le tableau 'timeMinuteParts', qui contiendra la valeur des secondes formatée
+  //Retourne le tableau 'timeSecondsParts', qui contiendra la valeur des secondes formatée
   const formatSecondTime = ({ seconds }) => {
     if (seconds !== undefined) {
       //seconds.toString : convertit la variable seconds en une chaîne de caractères
@@ -95,7 +123,12 @@ export default function TimerScreen({ navigation, route }) {
     }
   };
 
-  const validateSet = () => {
+  // Je passe un argument à la fonction qui me sert de condition pour savoir où la fonction a été apellé. 
+  // Parce qu' elle est utilisée 2 fois dans le code. Je veux que le son se joue à la fin du timer et non pas lors de la navigation
+  const validateSet = (endTimer) => {
+    if (endTimer === "onComplete") {
+      playSound();
+    }
     if (input) {
       const restToAdd = parseInt(minutes) * 60 + parseInt(secondes);
       const setToAdd = {
@@ -113,12 +146,14 @@ export default function TimerScreen({ navigation, route }) {
           });
         } else {
           navigation.navigate("startWorkout", { workoutID: workoutID });
+          stopSound();
         }
       } else {
         navigation.navigate("exercice", {
           exerciseID: exerciseID,
           workoutID: workoutID,
         });
+        stopSound();
       }
     } else {
       setEmptyFields(true);
@@ -139,16 +174,8 @@ export default function TimerScreen({ navigation, route }) {
           <Text style={styles.title}>Temps de repos</Text>
           <Underline width={80} />
         </View>
-        {emptyFields && (
-          <View>
-            <Text style={styles.errorMessage}>
-              Veuillez remplir tous les champs de saisie pour passer à la série
-              suivante
-            </Text>
-          </View>
-        )}
         {!isTimerVisible && (
-          <View>
+          <View style={styles.timerContainer}>
             <TouchableOpacity
               style={styles.timer}
               onPress={() => setShowPicker(true)}
@@ -193,7 +220,7 @@ export default function TimerScreen({ navigation, route }) {
           </View>
         )}
         {isTimerVisible && (
-          <View>
+          <View style={styles.timerContainerStarted}>
             <View style={styles.count}>
               {/* Minuteur */}
               <CountdownCircleTimer
@@ -201,7 +228,7 @@ export default function TimerScreen({ navigation, route }) {
                 duration={time}
                 colors={["#A3FD01", "#850606", "#850606", "#850606", "#850606"]}
                 colorsTime={[5, 3, 2, 1, 0]}
-                onComplete={validateSet}
+                onComplete={() => validateSet("onComplete")}
                 updateInterval={1}
               >
                 {({ remainingTime, color }) => (
@@ -243,7 +270,7 @@ export default function TimerScreen({ navigation, route }) {
             </View>
           </View>
         )}
-        <View>
+        <View style={styles.inputSection}>
           {!input && (
             <LinearGradient
               style={styles.linear}
@@ -297,7 +324,7 @@ export default function TimerScreen({ navigation, route }) {
             </LinearGradient>
           )}
           {input && (
-            <View>
+            <View style={styles}>
               <LinearGradient
                 style={styles.linearInput}
                 colors={["#4645AB", "#1C1C45"]}
@@ -353,7 +380,7 @@ const styles = StyleSheet.create({
 
   timer: {
     width: "60%",
-    height: "25%",
+    height: 100,
     backgroundColor: "#D9D9D9",
     borderRadius: 20,
     justifyContent: "center",
@@ -361,6 +388,7 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
     marginTop: 30,
+    
   },
 
   count: {
@@ -390,22 +418,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: "auto",
     borderRadius: 10,
+    
   },
 
   data: {
     paddingTop: 15,
     marginLeft: 20,
+    
   },
 
   text: {
     color: "#ffffff",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "400",
   },
 
   inputContainer: {
     alignItems: "center",
-    
   },
 
   input: {
@@ -423,7 +452,7 @@ const styles = StyleSheet.create({
   },
 
   linearInput: {
-    height: 200,
+    height: 230,
     width: "80%",
     justifyContent: "flex-start",
     marginLeft: "auto",
@@ -441,12 +470,13 @@ const styles = StyleSheet.create({
   dataInput: {
     paddingTop: 15,
     marginLeft: 20,
+    marginBottom: 12
   },
 
   textTitle: {
     color: "#ffffff",
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "400",
   },
 
   textInput: {
@@ -454,10 +484,25 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
+    marginBottom: "15"
   },
 
   btnInput: {
     justifyContent: "center",
     alignItems: "center",
   },
+  timerContainer :{
+    height: "30%"
+  },
+  timerContainerStarted : {
+    height: "32%"
+
+  },
+  inputSection : {
+    height: "45%",
+    marginTop: 5
+  },
+  test : {
+    height: 200
+  }
 });
