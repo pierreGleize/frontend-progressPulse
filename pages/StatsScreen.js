@@ -41,18 +41,29 @@ export default function StatsScreen({ navigation }) {
         <Underline width={100} />
       </View>
       <View style={styles.secondTtitleContainer}>
-        <Text style={styles.secondTitle}>Global</Text>
-        <Underline width={30} />
+        {/* <Text style={styles.secondTitle}>Global</Text> */}
+        {/* <Underline width={30} /> */}
       </View>
       <View style={styles.settingWrapper}>
         <View style={styles.settingContainer}>
           <View style={styles.inputWrapper}>
-            <TouchableOpacity style={styles.inputContainer} activeOpacity={0.7}>
+            <View style={styles.inputContainer} activeOpacity={0.7}>
               <Text style={styles.text}>
                 Total entraînements effectués :
                 <Text style={styles.span}> 0</Text>
               </Text>
-            </TouchableOpacity>
+            </View>
+            <View style={styles.inputContainer} activeOpacity={0.7}>
+              <Text style={styles.text}>
+                Dernère séance :<Text style={styles.span}> 12/11/2024</Text>
+              </Text>
+            </View>
+            <View style={styles.inputContainer} activeOpacity={0.7}>
+              <Text style={styles.text}>
+                Exercice le plus fréquenté :
+                <Text style={styles.span}> Bench (15)</Text>
+              </Text>
+            </View>
           </View>
         </View>
       </View>
@@ -113,7 +124,11 @@ export default function StatsScreen({ navigation }) {
         </Text>
         <Underline width={80} />
       </View>
-      <View style={styles.chartContainer}>
+      <TouchableOpacity
+        style={styles.chartContainer}
+        activeOpacity={0.7}
+        onPress={() => navigation.navigate("hystory")}
+      >
         <BarChart
           data={{
             labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"],
@@ -150,7 +165,7 @@ export default function StatsScreen({ navigation }) {
             borderRadius: 16,
           }}
         />
-      </View>
+      </TouchableOpacity>
       <View style={{ alignItems: "center" }}></View>
     </ScrollView>
   );
@@ -186,7 +201,7 @@ const styles = StyleSheet.create({
   settingContainer: {
     width: "100%",
     maxWidth: 500,
-    height: 70,
+    height: 100,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 20,
     alignItems: "center",

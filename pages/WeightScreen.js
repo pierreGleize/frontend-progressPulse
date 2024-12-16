@@ -393,7 +393,7 @@ export default function WeightScreen({ navigation, route }) {
           onPress={() => navigation.navigate("Stats")}
         >
           <FontAwesome name={"chevron-left"} size={24} color={"#3BC95F"} />
-          <Text style={styles.backToText}>Réglages</Text>
+          <Text style={styles.backToText}>Statistiques</Text>
         </TouchableOpacity>
         <Text style={styles.topTitle}>Suivie de poids</Text>
       </View>
