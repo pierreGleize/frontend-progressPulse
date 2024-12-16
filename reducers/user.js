@@ -43,6 +43,9 @@ export const userSlice = createSlice({
     updateEmail: (state, action) => {
       state.value.email = action.payload;
     },
+    updateUsername: (state, action) => {
+      state.value.username = action.payload;
+    },
     updateTarget: (state, action) => {
       state.value.target = action.payload;
     },
@@ -56,5 +59,6 @@ export const {
   addWeight,
   updateEmail,
   updateTarget,
+  updateUsername,
 } = userSlice.actions;
 export default userSlice.reducer;

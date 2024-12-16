@@ -19,10 +19,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { addExerciseSet } from "../reducers/currentWorkout";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 
+import { Audio } from "expo-av";
+import sounds from "../utils/sounds";
+
 export default function TimerScreen({ navigation, route }) {
   const { workoutID, exerciseID } = route.params || {};
+  const [currentSound, setCurrentSound] = useState(null);
 
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+
+  async function playSound() {
+    if (currentSound) {
+      await currentSound.stopAsync();
+      await currentSound.unloadAsync();
+    }
+    const { sound } = await Audio.Sound.createAsync(sounds[user.sound]);
+    setCurrentSound(sound);
+    await sound.playAsync();
+  }
+
+  async function stopSound() {
+    if (currentSound) {
+      await currentSound.stopAsync();
+      await currentSound.unloadAsync();
+    }
+  }
 
   const [reps, setReps] = useState("");
   const [weight, setWeight] = useState("");
@@ -95,7 +117,11 @@ export default function TimerScreen({ navigation, route }) {
     }
   };
 
-  const validateSet = () => {
+  // Je passe un argument à la fonction qui me sert de condition pour savoir où la fonction a été apellé. Parce qu' elle est utilisée 2 fois dans le code. Je veux que le son se joue à la fin du timer et non pas lors de la navigation
+  const validateSet = (endTimer) => {
+    if (endTimer === "onComplete") {
+      playSound();
+    }
     if (input) {
       const restToAdd = parseInt(minutes) * 60 + parseInt(secondes);
       const setToAdd = {
@@ -113,12 +139,14 @@ export default function TimerScreen({ navigation, route }) {
           });
         } else {
           navigation.navigate("startWorkout", { workoutID: workoutID });
+          stopSound();
         }
       } else {
         navigation.navigate("exercice", {
           exerciseID: exerciseID,
           workoutID: workoutID,
         });
+        stopSound();
       }
     } else {
       setEmptyFields(true);
@@ -201,7 +229,7 @@ export default function TimerScreen({ navigation, route }) {
                 duration={time}
                 colors={["#A3FD01", "#850606", "#850606", "#850606", "#850606"]}
                 colorsTime={[5, 3, 2, 1, 0]}
-                onComplete={validateSet}
+                onComplete={() => validateSet("onComplete")}
                 updateInterval={1}
               >
                 {({ remainingTime, color }) => (
@@ -405,7 +433,6 @@ const styles = StyleSheet.create({
 
   inputContainer: {
     alignItems: "center",
-    
   },
 
   input: {

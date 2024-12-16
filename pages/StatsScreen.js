@@ -8,26 +8,29 @@ import {
 } from "react-native";
 import { LineChart, BarChart } from "react-native-chart-kit";
 import Underline from "../components/Underline";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useState, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import moment from "moment";
+import { useState } from "react";
 
 export default function StatsScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
 
-  const dataLimite =
+  // Récupération des 8 dernières entrées de poids à partir de user.weight
+  const lastHeightWeight =
     user.weight.length > 0 &&
     [...user.weight]
       .sort((a, b) => new Date(b.date) - new Date(a.date))
       .slice(0, 8)
       .sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  const weights = dataLimite && dataLimite.map((element) => element.weight);
+  // Liste des poids
+  const weights =
+    lastHeightWeight && lastHeightWeight.map((element) => element.weight);
 
+  // Liste des dates
   const labels =
-    dataLimite &&
-    dataLimite.map((element) => {
+    lastHeightWeight &&
+    lastHeightWeight.map((element) => {
       return moment(element.date).format("DD-MM");
     });
 
@@ -184,11 +187,7 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 500,
     height: 70,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    shadowColor: "#FFFFFF",
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 0 },
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",

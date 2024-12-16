@@ -15,15 +15,18 @@ export default function WorkoutDifficultyScreen({ navigation }) {
   const difficulty = [
     {
       name: "Debutant",
-      source: require("../assets/illustrations/debutant.png"),
+      source: require("../assets/illustrations/debutant.webp"),
+      id: 1,
     },
     {
       name: "Intermediaire",
-      source: require("../assets/illustrations/intermediaire.png"),
+      source: require("../assets/illustrations/intermediaire.webp"),
+      id: 2,
     },
     {
-      name: "Confirme",
-      source: require("../assets/illustrations/confirme.png"),
+      name: "Confirmé",
+      source: require("../assets/illustrations/confirme.webp"),
+      id: 3,
     },
   ];
 
@@ -31,16 +34,16 @@ export default function WorkoutDifficultyScreen({ navigation }) {
     navigation.navigate("workoutChoice", { name: name });
   };
 
-  const button = difficulty.map((data, i) => {
+  const button = difficulty.map((data) => {
     return (
       <TouchableOpacity
-        key={i}
+        key={data.id}
         activeOpacity={0.7}
         style={styles.btn}
         onPress={() => handleNavigateToWorkout(data.name)}
       >
         <LinearGradient
-          colors={["#3BC95F", "#1D632F"]}
+          colors={["#3BC95F", "#1f532c"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.gradiant}

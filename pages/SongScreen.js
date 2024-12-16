@@ -11,11 +11,13 @@ export default function SongScreen({ navigation, route }) {
   const [currentSound, setCurrentSound] = useState(null);
 
   const user = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setSoundChoice(user.sound);
   }, []);
 
+  // Modifier le son dans la BDD collection users et enregistrer les changements dans le reducer user
   const validateSoundAndNavigate = () => {
     if (currentSound) {
       stopSound();
@@ -38,31 +40,34 @@ export default function SongScreen({ navigation, route }) {
       });
   };
 
-  const dispatch = useDispatch();
-
-  const handleChangeSound = (name) => {
-    if (!name) {
+  // Permet d'enregistrer un son dans un état pour qu'il soit sauvegardé, joué et ajouter un icon 'check' avec du conditionning dans le JSX
+  const handleChangeSound = (soundName) => {
+    if (!soundName) {
       return;
     }
-    setSoundChoice(name);
-    playSound(name);
+    setSoundChoice(soundName);
+    playSound(soundName);
   };
 
-  async function playSound(name) {
+  // Jouer un son
+  async function playSound(soundName) {
     if (currentSound) {
       await currentSound.stopAsync();
       await currentSound.unloadAsync();
     }
-    const { sound } = await Audio.Sound.createAsync(sounds[name]);
+    const { sound } = await Audio.Sound.createAsync(sounds[soundName]);
     setCurrentSound(sound);
     await sound.playAsync();
   }
+
+  // Stopper un son
   async function stopSound() {
     if (currentSound) {
       await currentSound.stopAsync();
       await currentSound.unloadAsync();
     }
   }
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -227,12 +232,8 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 500,
     height: 270,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderColor: "rgba(255, 255, 255, 0.2)",
-    shadowColor: "#FFFFFF",
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 0 },
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
@@ -240,7 +241,6 @@ const styles = StyleSheet.create({
   songWrapper: {
     width: "90%",
     height: "90%",
-    borderRadius: 20,
   },
   songContainer: {
     flexDirection: "row",

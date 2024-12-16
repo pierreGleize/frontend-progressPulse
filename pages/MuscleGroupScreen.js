@@ -3,29 +3,33 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
 import Underline from "../components/Underline";
 import { useSelector } from "react-redux";
+import BtnMuscleGroup from "../components/BtnMuscleGroup";
+import muscleGroupIcons from "../utils/muscleGroupIcons";
 
 export default function MuscleGroupScreen({ navigation }) {
-
-  const exercisesLength = useSelector((state) => state.workoutCreation.value.exercises.length)
-  console.log(exercisesLength)
+  console.log(muscleGroupIcons);
+  const exercisesLength = useSelector(
+    (state) => state.workoutCreation.value.exercises.length
+  );
+  console.log(exercisesLength);
   const handleFinish = () => {
     navigation.navigate("workoutSummary", { backTo: "muscleGroup" });
   };
   const handleNavigateToExercice = (name) => {
     navigation.navigate("exercicesChoices", { name: name });
   };
-  const muscularGroup = [
-    "Quadriceps",
-    "Ischio",
-    "Biceps",
-    "Triceps",
-    "Épaules",
-    "Fessiers",
-    "Pectoraux",
-    "Dos",
-    "Abdominaux",
-    "Cardio",
-  ];
+  // const muscularGroup = [
+  //   "Quadriceps",
+  //   "Ischio",
+  //   "Biceps",
+  //   "Triceps",
+  //   "Épaules",
+  //   "Fessiers",
+  //   "Pectoraux",
+  //   "Dos",
+  //   "Abdominaux",
+  //   "Cardio",
+  // ];
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -44,7 +48,7 @@ export default function MuscleGroupScreen({ navigation }) {
 
       <View style={styles.btnContainer}>
         <FlatList
-          data={muscularGroup}
+          data={muscleGroupIcons}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2}
           contentContainerStyle={{
@@ -52,27 +56,22 @@ export default function MuscleGroupScreen({ navigation }) {
             justifyContent: "center",
           }}
           columnWrapperStyle={{
-            justifyContent: "space-around",
+            justifyContent: "center",
             alignItems: "center",
           }}
           renderItem={({ item }) => (
-            <Button
-              background="#A3FD01"
-              borderColor="none"
-              textButton={item}
-              textColor="white"
-              width={150}
-              height={50}
-              onPress={() => handleNavigateToExercice(item)}
-              isLinearGradiant={true}
-              colorsGradiant={["#3BC95F", "#1D632F"]}
+            <BtnMuscleGroup
+              name={item.name}
+              source={item.source}
+              onPress={() => handleNavigateToExercice(item.name)}
             />
           )}
         />
       </View>
       <View style={styles.bottomContainer}>
         <Text style={styles.bottomText}>
-          Exercices sélectionnés : <Text style={styles.bottomSpan}>{exercisesLength}</Text>
+          Exercices sélectionnés :{" "}
+          <Text style={styles.bottomSpan}>{exercisesLength}</Text>
         </Text>
         <View style={styles.bottomBtnContainer}>
           <Button

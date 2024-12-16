@@ -1,7 +1,8 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import Button from "../components/Button";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
+import WorkoutSessionButton from "../components/WorkoutSessionButton";
 
 export default function HomeScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
@@ -37,17 +38,19 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.topContainer}>
         <Text style={styles.title}>Hello {user.username},</Text>
         <Text style={styles.span}>prêt pour un nouvel entrainement ?</Text>
-        <View style={styles.infoContainer}>
-          <FontAwesome
-            name={"info-circle"}
-            size={30}
-            color={"#A3FD01"}
-            style={styles.infoIcon}
-          />
-          <Text style={styles.textInfo}>
-            Crée ta séance et commence l'entrainement
-          </Text>
-        </View>
+        {workouts.length === 0 && (
+          <View style={styles.infoContainer}>
+            <FontAwesome
+              name={"info-circle"}
+              size={30}
+              color={"#A3FD01"}
+              style={styles.infoIcon}
+            />
+            <Text style={styles.textInfo}>
+              Crée ta séance et commence l'entrainement
+            </Text>
+          </View>
+        )}
       </View>
 
       <View style={styles.btnContainer}>
@@ -61,6 +64,7 @@ export default function HomeScreen({ navigation }) {
           onPress={handleAddWorkout}
           isLinearGradiant={false}
         />
+        <WorkoutSessionButton />
         {workoutsToShow}
       </View>
     </View>
@@ -98,6 +102,6 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     alignItems: "center",
-    flex: 2,
+    flex: 4,
   },
 });
