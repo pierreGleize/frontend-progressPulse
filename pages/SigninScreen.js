@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/user";
 import { addAllUserWorkouts } from "../reducers/workouts";
+import { addAllWorkoutsHistory } from "../reducers/workoutsHistory";
 
 export default function SigninScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -54,6 +55,7 @@ export default function SigninScreen({ navigation }) {
               console.log(data.error);
               setSignupError(data.error);
             } else {
+              const userToken = data.userInfos.token
               dispatch(login(data.userInfos));
               fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/${data.userInfos.token}`)
               .then(response => response.json())
@@ -61,7 +63,12 @@ export default function SigninScreen({ navigation }) {
                 if(data.userWorkouts){
                   dispatch(addAllUserWorkouts(data.userWorkouts))
                 }
-                navigation.navigate("TabNavigator", { screen: "Home" });
+                fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/histories/${userToken}`)
+                .then(response => response.json())
+                .then(data => {
+                  dispatch(addAllWorkoutsHistory(data.histories))
+                  navigation.navigate("TabNavigator", { screen: "Home" });
+                })
               })
             }
           });

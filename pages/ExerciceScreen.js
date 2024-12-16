@@ -15,7 +15,7 @@ export default function Exercice({ navigation, route }) {
     // Recherche de la séance avec le workoutID reçu en props
     const workoutSelected = workouts.find(workout => workout._id === workoutID)
     // Recherche de l'exercice avec l'exerciseID reçu en props
-    const exerciseSelected = workoutSelected.exercises.find(exercise => exercise._id === exerciseID)
+    const exerciseSelected = workoutSelected.exercises.find(exercise => exercise.exercise._id === exerciseID)
     // Recherche de l'image correspondant à l'exercice
     const imagePath = images[exerciseSelected.exercise.muscleGroupe.toLowerCase()][exerciseSelected.exercise.image]
     // Transformation du paragraphe de descripiton en tableau
@@ -40,7 +40,7 @@ export default function Exercice({ navigation, route }) {
 
     // Récupération de l'historique de performance pour cette séance et cet exercice
     const workoutsHistory = useSelector(state => state.workoutsHistory.value)
-    const currentWorkoutHistory = workoutsHistory.filter(workout => workout.workout === workoutID)
+    const currentWorkoutHistory = workoutsHistory.filter(workout => workout.workoutID === workoutID)
     let mostRecentWorkout = null
     let mostRecentExercise = null
     let mostRecentSets = []
