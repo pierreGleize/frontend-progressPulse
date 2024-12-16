@@ -39,7 +39,7 @@ const Button = ({
             style={{
               color: textColor,
               fontSize: 22,
-              fontWeight: 600,
+              fontWeight: 400,
             }}
           >
             {textButton}
@@ -67,8 +67,8 @@ const Button = ({
         <Text
           style={{
             color: textColor,
-            fontSize: 22,
-            fontWeight: 600,
+            fontSize: 20,
+            fontWeight: 400,
           }}
         >
           {textButton}

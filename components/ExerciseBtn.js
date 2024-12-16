@@ -48,6 +48,7 @@ const ExerciseBtn = ({ exerciseID, textButton, image, openModal }) => {
             color: "white",
             fontSize: 16,
             fontWeight: 600,
+            width:"65%",
           }}
         >
           {textButton}

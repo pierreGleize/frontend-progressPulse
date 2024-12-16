@@ -78,7 +78,7 @@ const ExerciseCard = ({
               {numberOfReps <= 1
                 ? "Nombre de répétition : "
                 : "Nombre de répétitions : "}
-              <Text style={styles.span}>{numberOfReps}</Text>
+              <Text style={styles.span}>{numberOfReps} </Text>
             </Text>
             <Text style={styles.text}>
               Charge : <Text style={styles.span}>{weight} kg</Text>
