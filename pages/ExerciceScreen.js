@@ -5,6 +5,7 @@ import {
   View,
   Modal,
   ScrollView,
+  Dimensions, 
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
@@ -17,6 +18,9 @@ import { Image } from "expo-image";
 
 export default function Exercice({ navigation, route }) {
   const { workoutID, exerciseID } = route.params || {};
+
+  // Récupération de la largeur de l'écran
+  const screenWidth = Dimensions.get("window").width
 
   // Récupération des l'ensemble des séance
   const workouts = useSelector((state) => state.workouts.value);
@@ -45,7 +49,7 @@ export default function Exercice({ navigation, route }) {
   });
 
   const [currentSet, setCurrentSet] = useState(1);
-  const [noHistory, setNoHistory] = useState(false);
+  const [noHistory, setNoHistory] = useState(true);
 
   // Récupération des performances de la séance en cours
   const currentWorkout = useSelector((state) => state.currentWorkout.value);
@@ -64,44 +68,61 @@ export default function Exercice({ navigation, route }) {
   const currentWorkoutHistory = workoutsHistory.filter(
     (workout) => workout.workoutID === workoutID
   );
+  // Tri de l'historique par date la plus récente à la plus ancienne
+  const sortedCurrentWorkoutHistory = currentWorkoutHistory.sort((a, b) => new Date(b.date) - new Date(a.date))
   let mostRecentWorkout = null;
   let mostRecentExercise = null;
   let mostRecentSets = [];
-  if (currentWorkoutHistory.length > 0) {
-    mostRecentWorkout = currentWorkoutHistory.reduce((latest, current) => {
-      return new Date(current.date) > new Date(latest.date) ? current : latest;
-    });
-    mostRecentExercise = mostRecentWorkout.performances.find(
-      (e) => e.exercise === exerciseID
-    );
-    if (mostRecentExercise) {
-      mostRecentSets = mostRecentExercise.sets;
-    }
-  }
+  
+  const exerciseHistoryToShow = sortedCurrentWorkoutHistory.map((history, i) => {
+    const year = history.date.slice(0, 4)
+    const month = history.date.slice(5, 7)
+    const day = history.date.slice(8, 10)
+    const fullDate = `${day}/${month}/${year}`
+    return (   
+    history.performances.map(performance => {
+        if (performance.exercise._id === exerciseID){
+            
+            return (
+                <ScrollView key={i}>    
+                <Text style={styles.performanceDate}>{fullDate}</Text>
+                <View style={[styles.perfSection, {width: screenWidth}]}>
+                {performance.sets.map((set, j) => {
+                    return (
+                        <LinearGradient
+                          key={j}
+                          colors={["#1C1C45", "#4645AB"]}
+                          start={{ x: 0, y: 0 }}
+                          end={{ x: 1, y: 0 }}
+                          style={styles.linearPerf}
+                        >
+                          <Text style={styles.perf}>
+                            Série {j + 1} : {set.reps} x {set.weight}kg
+                          </Text>
+                        </LinearGradient>
+                      );
+                })}
+                </View>
+                </ScrollView>
+            )
+        }
+        return null;
+        
+    })
+    ).filter(item => item !== null);
+    
+  })
 
-  const mostRecentSetsToShow = mostRecentSets.map((set, i) => {
-    return (
-      <LinearGradient
-        key={i}
-        colors={["#1C1C45", "#4645AB"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.linearPerf}
-      >
-        <Text style={styles.perf}>
-          Série {i + 1} : {set.reps} x {set.weight}kg
-        </Text>
-      </LinearGradient>
-    );
-  });
+
+
 
   useEffect(() => {
-    if (mostRecentSetsToShow.length === 0) {
-      setNoHistory(true);
-    } else {
-      setNoHistory(false);
+    for (let exercise of exerciseHistoryToShow){
+        console.log(exercise.length)
+        if (exercise.length != 0)
+        return setNoHistory(false)
     }
-  }, [mostRecentSetsToShow]);
+  }, [exerciseHistoryToShow]);
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -172,18 +193,26 @@ export default function Exercice({ navigation, route }) {
 
       {!noHistory && (
         <View style={styles.perfContainer}>
-          <Text style={styles.text}>Performances de ta dernière séance</Text>
+          <Text style={styles.text}>Performances de tes dernières séances</Text>
           <Underline width={100} />
-          <ScrollView>
-            <View style={styles.perfcontainer}>
-              {noHistory && (
-                <Text style={styles.noHistory}>
-                  Pas encore de performances enregistrées
-                </Text>
-              )}
+          <ScrollView 
+            horizontal={true}
+            snapToInterval={screenWidth}
+            snapToAlignment="start" // Alignement au début
+            pagingEnabled={false} // Désactive pagingEnabled (parfois redondant avec snapToInterval)
+            decelerationRate="fast"
+          contentContainerStyle={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+         
+          showsHorizontalScrollIndicator={false}
+          >
+            
 
-              {mostRecentSetsToShow}
-            </View>
+              {exerciseHistoryToShow}
+           
           </ScrollView>
         </View>
       )}
@@ -327,6 +356,7 @@ const styles = StyleSheet.create({
     width: "40%",
     marginBottom: 10,
     borderRadius: 10,
+    marginHorizontal: 5
   },
 
   perf: {
@@ -422,4 +452,15 @@ const styles = StyleSheet.create({
   perfContainer: {
     height: "135",
   },
+  performanceDate: {
+    color: "white",
+    textAlign: "center"
+  },
+  perfSection: {
+    marginTop: 5,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: "center",
+    justifyContent: "center",
+  }
 });
