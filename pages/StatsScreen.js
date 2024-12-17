@@ -26,11 +26,11 @@ export default function StatsScreen({ navigation }) {
       .sort((a, b) => new Date(a.date) - new Date(b.date));
 
   // Liste des poids
-  const weights =
+  const weightsLineChart =
     lastHeightWeight && lastHeightWeight.map((element) => element.weight);
 
   // Liste des dates
-  const labels =
+  const labelsLineChart =
     lastHeightWeight &&
     lastHeightWeight.map((element) => {
       return moment(element.date).format("DD-MM");
@@ -38,7 +38,28 @@ export default function StatsScreen({ navigation }) {
 
   const lastWorkoutDate = history.length !== 0 && history.at(-1).date;
 
-  // const
+  const getWorkoutsByMonth = (data) => {
+    const months = {};
+    data.forEach((element) => {
+      console.log(element.date);
+      const month = moment(element.date).format("MMM YY");
+      // console.log(month);
+      if (months[month]) {
+        months[month] += 1;
+      } else {
+        months[month] = 1;
+      }
+    });
+    // console.log(months);
+    return months;
+  };
+  const lastHeightMonth = [...history]
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(0, 8);
+  const trainingData = getWorkoutsByMonth(lastHeightMonth);
+  // console.log(trainingData);
+  const labelsBarChart = Object.keys(trainingData);
+  const dataBarChart = Object.values(trainingData);
 
   return (
     <ScrollView style={styles.container}>
@@ -60,21 +81,20 @@ export default function StatsScreen({ navigation }) {
               </Text>
             </View>
             <View style={styles.inputContainer} activeOpacity={0.7}>
-              <Text style={styles.text}>
-                Dernière séance :
-                <Text style={styles.span}>
-                  {history.length === 0
-                    ? " DD/MM/YYYY"
-                    : moment(lastWorkoutDate).format("Do MMM YYYY")}
+              {history.length === 0 ? (
+                <Text style={styles.text}>
+                  Dernière séance : <Text style={styles.span}> DD/MM/YYYY</Text>
                 </Text>
-              </Text>
+              ) : (
+                <Text style={styles.text}>
+                  Dernière séance faite :{" "}
+                  <Text style={styles.span}>
+                    {/* {moment(lastWorkoutDate).format("DD MM YYYY")} */}
+                    {moment(lastWorkoutDate).fromNow(true)}
+                  </Text>
+                </Text>
+              )}
             </View>
-            {/* <View style={styles.inputContainer} activeOpacity={0.7}>
-              <Text style={styles.text}>
-                Exercice le plus fréquenté :
-                <Text style={styles.span}> Bench (15)</Text>
-              </Text>
-            </View> */}
           </View>
         </View>
       </View>
@@ -91,18 +111,19 @@ export default function StatsScreen({ navigation }) {
         <LineChart
           data={{
             labels:
-              labels.length > 0
-                ? labels
+              labelsLineChart.length > 0
+                ? labelsLineChart
                 : ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"],
             datasets: [
               {
-                data: weights.length > 0 ? weights : [0],
+                data: weightsLineChart.length > 0 ? weightsLineChart : [0],
               },
             ],
           }}
           width={Dimensions.get("window").width}
           withInnerLines={true}
           segments={6}
+          fromZero={true}
           height={220}
           yAxisSuffix="kg"
           yAxisInterval={1}
@@ -138,23 +159,24 @@ export default function StatsScreen({ navigation }) {
       <TouchableOpacity
         style={styles.chartContainer}
         activeOpacity={0.7}
-        onPress={() => navigation.navigate("hystory")}
+        onPress={() => navigation.navigate("history")}
       >
         <BarChart
           data={{
-            labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"],
+            labels:
+              labelsBarChart.length === 0
+                ? ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"]
+                : labelsBarChart,
             datasets: [
               {
-                data: [10, 5, 6, 4, 3, 11],
+                data: dataBarChart,
               },
             ],
           }}
           width={Dimensions.get("window").width}
           withInnerLines={true}
-          segments={6}
+          fromZero={true}
           height={220}
-          // yAxisSuffix="kg"
-          yAxisInterval={1}
           chartConfig={{
             backgroundGradientFrom: "#4645AB",
             backgroundGradientTo: "#1C1C45",
@@ -177,7 +199,6 @@ export default function StatsScreen({ navigation }) {
           }}
         />
       </TouchableOpacity>
-      {/* <View style={{ alignItems: "center" }}></View> */}
     </ScrollView>
   );
 }

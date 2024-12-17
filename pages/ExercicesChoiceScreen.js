@@ -34,15 +34,13 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
   const [restMinutes, setRestMinutes] = useState("1");
   const [restSeconds, setRestSeconds] = useState("00");
   const [emptyFields, setEmptyFields] = useState(false);
-  const [isCardio, setIsCardio] = useState(false)
-
-  
+  const [isCardio, setIsCardio] = useState(false);
 
   useEffect(() => {
-    if(name === 'Cardio'){
-      setIsCardio(true)
+    if (name === "Cardio") {
+      setIsCardio(true);
     } else {
-      setIsCardio(false)
+      setIsCardio(false);
     }
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/exercises/${name}`)
       .then((response) => response.json())
@@ -75,7 +73,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
   };
 
   const addToWorkout = () => {
-    if(!isCardio){
+    if (!isCardio) {
       if (!charge || !nbReps || !nbSets || !restMinutes || !restSeconds) {
         setEmptyFields(true);
       } else {
@@ -84,7 +82,8 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
         for (let i = 0; i < parseInt(nbSets); i++) {
           customSets.push({ weight: parseInt(charge), reps: parseInt(nbReps) });
         }
-        const restConverted = parseInt(restMinutes) * 60 + parseInt(restSeconds);
+        const restConverted =
+          parseInt(restMinutes) * 60 + parseInt(restSeconds);
         const exerciseToAdd = {
           exercise: exerciseID,
           exerciseName: exerciseName,
@@ -93,15 +92,16 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           customSets: customSets,
         };
         dispatch(addExercise(exerciseToAdd));
-        closeModal()
+        closeModal();
       }
     } else {
-      if(!charge || !restMinutes || !restSeconds){
+      if (!charge || !restMinutes || !restSeconds) {
         setEmptyFields(true);
       } else {
         setEmptyFields(false);
-        const customSets = [{weight: charge, reps: 1}]
-        const restConverted = parseInt(restMinutes) * 60 * 60 + parseInt(restSeconds) * 60
+        const customSets = [{ weight: charge, reps: 1 }];
+        const restConverted =
+          parseInt(restMinutes) * 60 * 60 + parseInt(restSeconds) * 60;
         const exerciseToAdd = {
           exercise: exerciseID,
           exerciseName: exerciseName,
@@ -110,25 +110,28 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           customSets: customSets,
         };
         dispatch(addExercise(exerciseToAdd));
-        closeModal()
+        closeModal();
       }
     }
-    
   };
-  console.log(exercisesList)
-  const exercisesToShow = exercisesList.sort((a, b) => a.name.localeCompare(b.name)).map((exercise, i) => {
-    const muscleGroup = exercise.muscleGroupe.toLowerCase();
-    const imagePath = images[muscleGroup][exercise.image];
-    return (
-      <ExerciseBtn
-        key={i}
-        exerciseID={exercise._id}
-        textButton={exercise.name}
-        image={imagePath}
-        openModal={openModal}
-      />
-    );
-  });
+  console.log(exercisesList);
+  const exercisesToShow = exercisesList
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((exercise, i) => {
+      const muscleGroup = exercise.muscleGroupe.toLowerCase();
+      const imagePath = images[muscleGroup][exercise.image];
+      return (
+        <ExerciseBtn
+          key={i}
+          exerciseID={exercise._id}
+          textButton={exercise.name}
+          image={imagePath}
+          openModal={openModal}
+          accessibilityLabel={`Sélectionné l'exercice ${exercise.name}`}
+          accessibilityHint="Une modale va s'ouvir permettant d'entrer des données personalisés pour l'exercice"
+        />
+      );
+    });
 
   return (
     <View style={styles.container}>
@@ -153,6 +156,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
                 color={"white"}
                 onPress={closeModal}
                 style={styles.infoIcon}
+                accessibilityLabel="Fermer la modale"
               />
             </View>
             <View style={styles.modalTitleContainer}>
@@ -164,7 +168,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
                 name={"info-circle"}
                 size={20}
                 color={"#A3FD01"}
-                onPress={() => navigation.navigate("muscleGroup")}
+                // onPress={() => navigation.navigate("muscleGroup")}
                 style={styles.infoIcon}
               />
               <Text style={styles.textInfo}>
@@ -172,51 +176,66 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
               </Text>
             </View>
             <View style={styles.inputsContainer}>
-              {isCardio? <Text style={styles.inputText}>Resistance / Inclinaison</Text> : <Text style={styles.inputText}>Charge (Kg)</Text>}
+              {isCardio ? (
+                <Text style={styles.inputText}>Resistance / Inclinaison</Text>
+              ) : (
+                <Text style={styles.inputText}>Charge (Kg)</Text>
+              )}
               <TextInput
                 style={styles.input}
                 placeholder={isCardio ? "Resistance/Inclinaison" : "Charge"}
                 keyboardType="numeric"
                 onChangeText={(value) => setCharge(value)}
                 value={charge}
+                accessibilityLabel="Entrez la charge ou la résistance pour l'exercice"
               ></TextInput>
-              {!isCardio && <>
-              <Text style={styles.inputText}>Nombre de séries</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nombre de séries"
-                keyboardType="numeric"
-                onChangeText={(value) => setNbSets(value)}
-                value={nbSets}
-              ></TextInput>
-              
-              <Text style={styles.inputText}>Nombre de répétitions</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nombre de répétitions"
-                keyboardType="numeric"
-                onChangeText={(value) => setNbReps(value)}
-                value={nbReps}
-              ></TextInput>
-              </>}
-              {isCardio ? <Text style={styles.inputText}>Durée</Text> : <Text style={styles.inputText}>Temps de repos</Text>}
+              {!isCardio && (
+                <>
+                  <Text style={styles.inputText}>Nombre de séries</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Nombre de séries"
+                    keyboardType="numeric"
+                    onChangeText={(value) => setNbSets(value)}
+                    accessibilityLabel="Entrez le nombres de série pour l'exercice"
+                    value={nbSets}
+                  ></TextInput>
+
+                  <Text style={styles.inputText}>Nombre de répétitions</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Nombre de répétitions"
+                    keyboardType="numeric"
+                    onChangeText={(value) => setNbReps(value)}
+                    accessibilityLabel="Entrez le nombres de répétitions pour l'exercice"
+                    value={nbReps}
+                  ></TextInput>
+                </>
+              )}
+              {isCardio ? (
+                <Text style={styles.inputText}>Durée</Text>
+              ) : (
+                <Text style={styles.inputText}>Temps de repos</Text>
+              )}
               <View style={styles.restTimeContainer}>
                 <TextInput
                   style={styles.restInput}
                   placeholder="Minutes"
                   keyboardType="numeric"
                   onChangeText={(value) => setRestMinutes(value)}
+                  accessibilityLabel="Entrez le nombres de minutes pour l'exercice"
                   value={restMinutes}
                 ></TextInput>
-                <Text style={styles.inputText}>{isCardio ? 'h' : 'min'}</Text>
+                <Text style={styles.inputText}>{isCardio ? "h" : "min"}</Text>
                 <TextInput
                   style={styles.restInput}
                   placeholder="Secondes"
                   keyboardType="numeric"
                   onChangeText={(value) => setRestSeconds(value)}
+                  accessibilityLabel="Entrez le nombres de secondes pour l'exercice"
                   value={restSeconds}
                 ></TextInput>
-                <Text style={styles.inputText}>{isCardio ? 'min' : 'sec'}</Text>
+                <Text style={styles.inputText}>{isCardio ? "min" : "sec"}</Text>
               </View>
             </View>
             {emptyFields && (
@@ -229,6 +248,8 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
               textColor="#A3FD01"
               width="260"
               height="40"
+              accessibilityLabel="Ajouter l'exercice avec les modifications faites à la séance"
+              accessibilityHint="Ferme la modale"
               background="#272D34"
               borderWidth={1}
               borderColor="#A3FD01"
@@ -243,6 +264,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           size={24}
           color={"#3BC95F"}
           onPress={() => navigation.navigate("muscleGroup")}
+          accessibilityLabel="Revenir sur la page pour choisir le groupe musculaire"
           style={{ marginLeft: 15, marginTop: 5 }}
         />
         <View style={{ marginVertical: 20 }}>
@@ -272,6 +294,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           height={50}
           onPress={handleFinish}
           isLinearGradiant={false}
+          accessibilityLabel="Revenir sur la page pour choisir le groupe musculaire"
         />
       </View>
     </View>
@@ -352,7 +375,7 @@ const styles = StyleSheet.create({
   inputText: {
     color: "white",
     marginBottom: 5,
-    marginHorizontal: 5
+    marginHorizontal: 5,
   },
   input: {
     width: "100%",

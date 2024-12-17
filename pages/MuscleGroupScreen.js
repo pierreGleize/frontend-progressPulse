@@ -18,18 +18,6 @@ export default function MuscleGroupScreen({ navigation }) {
   const handleNavigateToExercice = (name) => {
     navigation.navigate("exercicesChoices", { name: name });
   };
-  // const muscularGroup = [
-  //   "Quadriceps",
-  //   "Ischio",
-  //   "Biceps",
-  //   "Triceps",
-  //   "Épaules",
-  //   "Fessiers",
-  //   "Pectoraux",
-  //   "Dos",
-  //   "Abdominaux",
-  //   "Cardio",
-  // ];
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -37,6 +25,7 @@ export default function MuscleGroupScreen({ navigation }) {
           name={"chevron-left"}
           size={24}
           color={"#3BC95F"}
+          accessibilityLabel="Redirection pour choisir le type de séance"
           onPress={() => navigation.navigate("WorkoutType")}
           style={{ marginLeft: 15, marginTop: 5 }}
         />
@@ -64,6 +53,7 @@ export default function MuscleGroupScreen({ navigation }) {
               name={item.name}
               source={item.source}
               onPress={() => handleNavigateToExercice(item.name)}
+              accessibilityLabel={`Choisir le groupe ${item.name}`}
             />
           )}
         />
@@ -83,6 +73,8 @@ export default function MuscleGroupScreen({ navigation }) {
             height={50}
             onPress={handleFinish}
             isLinearGradiant={false}
+            accessibilityLabel="Voir le récapitulatif des exercices"
+            accessibilityHint="Cette action vous redirigera vers la page affichant tous les exercices sélectionnés et vous permettra de valider la séance."
           />
         </View>
       </View>

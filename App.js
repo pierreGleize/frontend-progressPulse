@@ -30,7 +30,8 @@ import TimerScreen from "./pages/TimerScreen";
 import WorkoutEndingScreen from "./pages/WorkoutEndingScreen";
 import SongScreen from "./pages/SongScreen";
 import WeightScreen from "./pages/WeightScreen";
-import HystoryScreen from "./pages/HystoryScreen";
+import HystoryWorkoutScreen from "./pages/HistoryWorkoutsScreen";
+import HistoryScreen from "./pages/HistoryScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -92,7 +93,6 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {/* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */}
           <Stack.Screen name="Signin" component={SigninScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
@@ -117,7 +117,11 @@ export default function App() {
           <Stack.Screen name="exercice" component={ExerciceScreen} />
           <Stack.Screen name="timer" component={TimerScreen} />
           <Stack.Screen name="workoutEnding" component={WorkoutEndingScreen} />
-          <Stack.Screen name="hystory" component={HystoryScreen} />
+          <Stack.Screen
+            name="historyWorkout"
+            component={HystoryWorkoutScreen}
+          />
+          <Stack.Screen name="history" component={HistoryScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
