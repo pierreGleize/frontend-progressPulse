@@ -5,7 +5,7 @@ import ExerciseCard from "../components/ExerciseCard";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Underline from "../components/Underline";
-import { removeWorkout, removeExercise, updateWorkoutSets } from "../reducers/workouts";
+import { removeWorkout, removeExercise, updateWorkoutSets, updateWorkoutName } from "../reducers/workouts";
 import { addWorkoutInformation, resetCurrentWorkout } from "../reducers/currentWorkout";
 
 export default function WorkoutSummaryScreen({ navigation, route }) {
@@ -22,6 +22,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   const [restMinutes, setRestMinutes] = useState("1");
   const [restSeconds, setRestSeconds] = useState("00");
   const [emptyFields, setEmptyFields] = useState(false);
+  const [modalTitleVisible, setModalTitleVisible] = useState(false)
+
 
   const dispatch = useDispatch()
 
@@ -40,6 +42,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     },
     {}
   );
+
+  const [workoutNameInput, setWorkoutNameInput] = useState(workoutSelected.name)
 
   // Récupération de l'historique de la séance en cours
   const currentWorkout = useSelector(state => state.currentWorkout.value)
@@ -64,6 +68,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       }
     })   
   }
+
+
 
   const openModalCustomSets = (
     exerciseName,
@@ -97,6 +103,28 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     setRestSeconds("");
     setMuscleGroup("")
   };
+
+  const handleChangeName = () => {
+    if (workoutNameInput){
+      setEmptyFields(false)
+      fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/updateName`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({workoutID: workoutID, newWorkoutName: workoutNameInput }),
+      }).then(response => response.json())
+      .then(data => {
+        if (data.result){
+          dispatch(updateWorkoutName({workoutID: workoutID, newName: workoutNameInput }))
+          setModalTitleVisible(false)
+        } else {
+          setEmptyFields(true)
+        }
+      })
+    } else {
+      setEmptyFields(true)
+    }
+    
+  }
 
   const handleUpdateExercise = () => {
     if (!charge || !nbSets || !nbReps || !restSeconds || !restMinutes){
@@ -238,6 +266,66 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
+      {/* Modal pour nommer la séance */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalTitleVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalTitleVisible(false);
+        }}
+      >
+        <KeyboardAvoidingView
+          style={styles.modalBackground}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <View style={styles.modalTitleView}>
+            <View style={styles.crossContainer}>
+              <FontAwesome
+                name={"times"}
+                size={30}
+                color={"white"}
+                onPress={() => setModalTitleVisible(false)}
+                style={styles.infoIcon}
+              />
+            </View>
+            <View style={styles.infoContainer}>
+              <FontAwesome
+                name={"info-circle"}
+                size={30}
+                color={"#A3FD01"}
+                style={styles.infoIcon}
+              />
+              <Text style={styles.textInfo}>Nomme ta séance</Text>
+            </View>
+            <View style={styles.inputsContainer}>
+              <Text style={styles.inputText}>Renomme ta séance</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Saisis un nom"
+                onChangeText={(value) => setWorkoutNameInput(value)}
+                value={workoutNameInput}
+              ></TextInput>
+            </View>
+            {emptyFields && (
+              <Text style={styles.errorMessage}>
+                Veuillez saisir un nom de séance
+              </Text>
+            )}
+            <Button
+              textButton="Renommer ma séance"
+              textColor="#A3FD01"
+              width="260"
+              height="40"
+              background="#272D34"
+              borderWidth={1}
+              borderColor="#A3FD01"
+              onPress={handleChangeName}
+            ></Button>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
       {/* Modal pour modifier les objetctifs de l'exercice */}
       <Modal
         animationType="fade"
@@ -346,7 +434,10 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           color={"#3BC95F"}
           onPress={handleGoToHome}
         />
-        <Text style={styles.topTitle}>{workoutSelected.name}</Text>
+        <View style={styles.workoutNameSection}>
+          <Text style={styles.topTitle}>{workoutSelected.name}</Text>
+          <FontAwesome style={styles.pencilLogo} name="pencil" size={18} color={"white"} onPress={() => setModalTitleVisible(!modalTitleVisible)}/>
+        </View>
         <FontAwesome name="trash" size={24} color={"#A3FD01"} onPress={handleDeleteWorkout}/>
       </View>
 
@@ -485,4 +576,25 @@ const styles = StyleSheet.create({
     color: "red",
     textAlign: "center",
   },
+  workoutNameSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  modalTitleView: {
+    width: "80%",
+    height: "350",
+    margin: 20,
+    backgroundColor: "#272D34",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  pencilLogo:{
+    marginLeft: 10
+  }
 });

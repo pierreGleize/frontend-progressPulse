@@ -49,9 +49,19 @@ export const workoutsSlice= createSlice({
                   }
               }
           }
-      }
+      },
+
+      updateWorkoutName: (state,action) => {
+        // Exemple de l'action payload !
+        // {workoutName: "nomSeanceAModifier", exerciseName: "nomExerciceAmodifier", customSets: [{weight:70, reps:8}, ...]}
+        for (let workout of state.value){
+            if (workout._id === action.payload.workoutID){
+                workout.name = action.payload.newName
+            }
+        }
+    }
     }
 });
    
-   export const { addAllUserWorkouts, addWorkout, removeWorkout, updateWorkoutSets, removeExercise} = workoutsSlice.actions;
+   export const { addAllUserWorkouts, addWorkout, removeWorkout, updateWorkoutSets, removeExercise, updateWorkoutName} = workoutsSlice.actions;
    export default workoutsSlice.reducer;
