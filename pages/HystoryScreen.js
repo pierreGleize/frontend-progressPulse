@@ -28,6 +28,8 @@ export default function HystoryScreen({ navigation }) {
       }
 
       const groupedWorkouts = element.performances.map((performance, i) => {
+        const muscleGroupe = performance.exercise.muscleGroupe;
+        console.log(muscleGroupe);
         const name = performance.exercise.name;
         return (
           <View key={i} style={{ width: "100%" }}>
