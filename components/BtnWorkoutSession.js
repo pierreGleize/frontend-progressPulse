@@ -14,6 +14,7 @@ export default function WorkoutSessionButton({
   return (
     <TouchableOpacity
       activeOpacity={0.7}
+      accessibilityLabel={accessibilityLabel}
       onPress={() => onPress(name)}
       style={{
         marginBottom: 20,

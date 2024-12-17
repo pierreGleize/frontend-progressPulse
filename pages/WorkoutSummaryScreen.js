@@ -17,7 +17,7 @@ import {
   updateCustomSets,
   addWorkoutName,
   resetWorkoutCreation,
-  removeExercise
+  removeExercise,
 } from "../reducers/workoutCreation";
 import { addWorkout } from "../reducers/workouts";
 import Underline from "../components/Underline";
@@ -40,9 +40,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   const [restSeconds, setRestSeconds] = useState("00");
   const [emptyFields, setEmptyFields] = useState(false);
   const [workoutName, setWorkoutName] = useState("");
-  const [muscleGroup, setMuscleGroup] = useState("")
+  const [muscleGroup, setMuscleGroup] = useState("");
   const [postError, setPostError] = useState(false);
-
 
   const closeModalCustomSets = () => {
     setmodalCustomSetsVisible(false);
@@ -74,28 +73,28 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     setRestMinutes(restMinutes.toString());
     setRestSeconds(restSeconds.toString());
     setmodalCustomSetsVisible(true);
-    setMuscleGroup(muscleGroup)
+    setMuscleGroup(muscleGroup);
   };
 
   const handleDelete = (exerciseID) => {
-    dispatch(removeExercise(exerciseID))
-  }
+    dispatch(removeExercise(exerciseID));
+  };
 
   const updateExercise = () => {
-    if (!charge || !nbSets || !nbReps || !restSeconds || !restMinutes){
-      setEmptyFields(true)
-      return
+    if (!charge || !nbSets || !nbReps || !restSeconds || !restMinutes) {
+      setEmptyFields(true);
+      return;
     }
-    setEmptyFields(false)
+    setEmptyFields(false);
     let customSets = [];
     for (let i = 0; i < parseInt(nbSets); i++) {
       customSets.push({ weight: parseInt(charge), reps: parseInt(nbReps) });
     }
-    let restConverted
-    if (muscleGroup != "Cardio"){
+    let restConverted;
+    if (muscleGroup != "Cardio") {
       restConverted = parseInt(restMinutes) * 60 + parseInt(restSeconds);
     } else {
-      restConverted = parseInt(restMinutes) * 3600 + parseInt(restSeconds) * 60
+      restConverted = parseInt(restMinutes) * 3600 + parseInt(restSeconds) * 60;
     }
     const exerciseToUpdate = {
       exerciseID: exerciseID,
@@ -130,13 +129,13 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     );
     const newExercisesToAdd = groupedWorkoutExercises[muscleGroup].map(
       (exercise, i) => {
-        let minutes
-        let seconds
-        if (muscleGroup != "Cardio"){
+        let minutes;
+        let seconds;
+        if (muscleGroup != "Cardio") {
           minutes = Math.floor(exercise.rest / 60);
           seconds = exercise.rest % 60;
         } else {
-          minutes = Math.floor(exercise.rest/ 3600);
+          minutes = Math.floor(exercise.rest / 3600);
           seconds = Math.floor((exercise.rest % 3600) / 60);
         }
         return (
@@ -227,6 +226,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
                 color={"white"}
                 onPress={() => setModalTitleVisible(false)}
                 style={styles.infoIcon}
+                accessibilityLabel="Fermer la modale"
               />
             </View>
             <View style={styles.infoContainer}>
@@ -243,6 +243,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               <TextInput
                 style={styles.input}
                 placeholder="Saisis un nom"
+                accessibilityLabel="Donner un nom à la séance"
                 onChangeText={(value) => setWorkoutName(value)}
                 value={workoutName}
               ></TextInput>
@@ -266,6 +267,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               borderWidth={1}
               borderColor="#A3FD01"
               onPress={handleSubmit}
+              accessibilityLabel="Valider le nom donné à la séance"
+              accessibilityHint="Vous serez redirigé vers la d'accueil après la validation. Votre séance crée s'affichera sur cette page"
             ></Button>
           </View>
         </KeyboardAvoidingView>
@@ -287,6 +290,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
                 size={30}
                 color={"white"}
                 onPress={closeModalCustomSets}
+                accessibilityLabel="Fermer la modale"
                 style={styles.infoIcon}
               />
             </View>
@@ -299,7 +303,6 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
                 name={"info-circle"}
                 size={30}
                 color={"#A3FD01"}
-                onPress={() => navigation.navigate("muscleGroup")}
                 style={styles.infoIcon}
               />
               <Text style={styles.textInfo}>
@@ -307,50 +310,69 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               </Text>
             </View>
             <View style={styles.inputsContainer}>
-              <Text style={styles.inputText}>{muscleGroup === "Cardio" ? "Resistance/Inclinaison" : "Charge (Kg)"}</Text>
+              <Text style={styles.inputText}>
+                {muscleGroup === "Cardio"
+                  ? "Resistance/Inclinaison"
+                  : "Charge (Kg)"}
+              </Text>
               <TextInput
                 style={styles.input}
-                placeholder={muscleGroup === "Cardio" ? "Résistance/Inclinaison" : "Charge"}
+                accessibilityLabel="Modifier si besoin la charge ou la résistance de l'exercice"
+                placeholder={
+                  muscleGroup === "Cardio" ? "Résistance/Inclinaison" : "Charge"
+                }
                 keyboardType="numeric"
                 onChangeText={(value) => setCharge(value)}
                 value={charge}
               ></TextInput>
-              { muscleGroup != "Cardio" && <>
-              <Text style={styles.inputText}>Nombre de séries</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nombre de séries"
-                keyboardType="numeric"
-                onChangeText={(value) => setNbSets(value)}
-                value={nbSets}
-              ></TextInput>
-              <Text style={styles.inputText}>Nombre de répétitions</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nombre de répétitions"
-                keyboardType="numeric"
-                onChangeText={(value) => setNbReps(value)}
-                value={nbReps}
-              ></TextInput>
-              </>}
-              <Text style={styles.inputText}>{muscleGroup === "Cardio" ? "Durée" : "Temps de repos"}</Text>
+              {muscleGroup != "Cardio" && (
+                <>
+                  <Text style={styles.inputText}>Nombre de séries</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Nombre de séries"
+                    accessibilityLabel="Modifier si besoin le nombre de série de l'exercice"
+                    keyboardType="numeric"
+                    onChangeText={(value) => setNbSets(value)}
+                    value={nbSets}
+                  ></TextInput>
+                  <Text style={styles.inputText}>Nombre de répétitions</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Nombre de répétitions"
+                    accessibilityLabel="Modifier si besoin le nombre de répétitions de l'exercice"
+                    keyboardType="numeric"
+                    onChangeText={(value) => setNbReps(value)}
+                    value={nbReps}
+                  ></TextInput>
+                </>
+              )}
+              <Text style={styles.inputText}>
+                {muscleGroup === "Cardio" ? "Durée" : "Temps de repos"}
+              </Text>
               <View style={styles.restTimeContainer}>
                 <TextInput
                   style={styles.restInput}
                   placeholder="Minutes"
                   keyboardType="numeric"
+                  accessibilityLabel="Modifier si besoin le temps de repos en minute de l'exercice"
                   onChangeText={(value) => setRestMinutes(value)}
                   value={restMinutes}
                 ></TextInput>
-                <Text style={styles.inputText}>{muscleGroup != "Cardio"?"min" : "h"}</Text>
+                <Text style={styles.inputText}>
+                  {muscleGroup != "Cardio" ? "min" : "h"}
+                </Text>
                 <TextInput
                   style={styles.restInput}
                   placeholder="Secondes"
                   keyboardType="numeric"
+                  accessibilityLabel="Modifier si besoin le temps de repos en seconde de l'exercice"
                   onChangeText={(value) => setRestSeconds(value)}
                   value={restSeconds}
                 ></TextInput>
-                <Text style={styles.inputText}>{muscleGroup != "Cardio"?"sec" : "min"}</Text>
+                <Text style={styles.inputText}>
+                  {muscleGroup != "Cardio" ? "sec" : "min"}
+                </Text>
               </View>
             </View>
             {emptyFields && (
@@ -367,6 +389,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               borderWidth={1}
               borderColor="#A3FD01"
               onPress={updateExercise}
+              accessibilityLabel="Valider les changements apportés à l'exercice"
+              eccessibilityHint="Permet également de fermer la modale, on reste toujours sur la même page après cette action"
             ></Button>
           </View>
         </KeyboardAvoidingView>
@@ -374,6 +398,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       <View>
         <FontAwesome
           name={"chevron-left"}
+          accessibilityLabel={`Permet de revenir sur la page ${backTo}`}
           size={24}
           color={"#3BC95F"}
           style={{ marginLeft: 15, marginTop: 5 }}

@@ -8,6 +8,7 @@ export default function WorkoutTypeScreen({ navigation }) {
       <View style={styles.topContainer}>
         <FontAwesome
           name={"chevron-left"}
+          accessibilityLabel="Redirection vers la page d'accueil"
           size={24}
           color={"#3BC95F"}
           onPress={() => navigation.navigate("Home")}
@@ -28,6 +29,7 @@ export default function WorkoutTypeScreen({ navigation }) {
       </View>
       <View style={styles.btnContainer}>
         <TouchableOpacity
+          accessibilityLabel="Créer une séance personalisée"
           activeOpacity={0.7}
           style={styles.btn}
           onPress={() => navigation.navigate("muscleGroup")}
@@ -49,6 +51,7 @@ export default function WorkoutTypeScreen({ navigation }) {
           </LinearGradient>
         </TouchableOpacity>
         <TouchableOpacity
+          accessibilityLabel="Créer une séance pré-définie"
           activeOpacity={0.7}
           style={styles.btn}
           onPress={() => navigation.navigate("WorkoutDifficulty")}

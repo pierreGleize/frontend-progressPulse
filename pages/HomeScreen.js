@@ -45,7 +45,7 @@ export default function HomeScreen({ navigation }) {
         nbExercise={nbExercises}
         time={time() + " min"}
         onPress={() => handleWorkoutNavigation(element._id)}
-        accessibilityLabel={`Commencer la séance ${element.name} que j'ai crée`}
+        accessibilityLabel={`Commencer la séance ${element.name}`}
       />
     );
   });

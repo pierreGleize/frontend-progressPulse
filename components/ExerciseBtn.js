@@ -5,11 +5,16 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeExercise } from "../reducers/workoutCreation";
-import { Image } from 'expo-image';
+import { Image } from "expo-image";
 
-
-
-const ExerciseBtn = ({ exerciseID, textButton, image, openModal }) => {
+const ExerciseBtn = ({
+  exerciseID,
+  textButton,
+  image,
+  openModal,
+  accessibilityLabel,
+  accessibilityHint,
+}) => {
   const dispatch = useDispatch();
 
   const [isAdded, setIsAdded] = useState(false);
@@ -36,6 +41,8 @@ const ExerciseBtn = ({ exerciseID, textButton, image, openModal }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
       onPress={handlePress}
       style={styles.container}
     >
@@ -51,7 +58,7 @@ const ExerciseBtn = ({ exerciseID, textButton, image, openModal }) => {
             color: "white",
             fontSize: 16,
             fontWeight: 600,
-            width:"65%",
+            width: "65%",
           }}
         >
           {textButton}
