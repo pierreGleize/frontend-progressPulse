@@ -1,10 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeExercise } from "../reducers/workoutCreation";
+import { Image } from 'expo-image';
+
+
 
 const ExerciseBtn = ({ exerciseID, textButton, image, openModal }) => {
   const dispatch = useDispatch();

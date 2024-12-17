@@ -3,9 +3,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ImageBackground,
   Modal,
-  Image,
   ScrollView,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -15,6 +13,7 @@ import { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
 import images from "../utils/images";
+import { Image } from "expo-image";
 
 export default function Exercice({ navigation, route }) {
   const { workoutID, exerciseID } = route.params || {};

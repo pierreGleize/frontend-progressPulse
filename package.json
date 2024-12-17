@@ -17,6 +17,7 @@
     "@reduxjs/toolkit": "^2.4.0",
     "expo": "~52.0.17",
     "expo-av": "^15.0.1",
+    "expo-image": "~2.0.3",
     "expo-linear-gradient": "~14.0.1",
     "expo-status-bar": "~2.0.0",
     "moment": "^2.30.1",
