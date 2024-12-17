@@ -11,11 +11,6 @@ export default function WorkoutSessionButton({name, time, nbExercise, onPress}) 
       onPress={() => onPress(name)}
       style={{
         marginBottom: 20,
-        shadowColor: "#FFF", // Couleur de l'ombre
-        shadowOffset: { width: 0, height: 0 }, // Position X et Y
-        shadowOpacity: 0.5, // Opacité à 50%
-        shadowRadius: 10, // Blur (flou)
-        elevation: 5,
       }}
     >
       <LinearGradient
