@@ -95,7 +95,7 @@ export default function TimerScreen({ navigation, route }) {
     }
   };
 
-  //Retourne le tableau 'timeMinuteParts', qui contiendra la valeur des secondes formatée
+  //Retourne le tableau 'timeSecondsParts', qui contiendra la valeur des secondes formatée
   const formatSecondTime = ({ seconds }) => {
     if (seconds !== undefined) {
       //seconds.toString : convertit la variable seconds en une chaîne de caractères
@@ -136,7 +136,8 @@ export default function TimerScreen({ navigation, route }) {
     
   };
 
-  // Je passe un argument à la fonction qui me sert de condition pour savoir où la fonction a été apellé. Parce qu' elle est utilisée 2 fois dans le code. Je veux que le son se joue à la fin du timer et non pas lors de la navigation
+  // Je passe un argument à la fonction qui me sert de condition pour savoir où la fonction a été apellé. 
+  // Parce qu' elle est utilisée 2 fois dans le code. Je veux que le son se joue à la fin du timer et non pas lors de la navigation
   const validateSet = (endTimer) => {
     if (endTimer === "onComplete") {
       playSound();

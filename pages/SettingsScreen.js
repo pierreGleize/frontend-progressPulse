@@ -10,10 +10,11 @@ import {
 } from "react-native";
 import Underline from "../components/Underline";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import Button from "../components/Button";
-import { updateEmail, updateUsername } from "../reducers/user";
+import { updateEmail, updateUsername, logout } from "../reducers/user";
 
 export default function SettingsScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -135,6 +136,11 @@ export default function SettingsScreen({ navigation }) {
       setModalUsernameVisible(false);
       setUsername("");
     }
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigation.navigate("Signin");
   };
 
   return (
@@ -375,6 +381,12 @@ export default function SettingsScreen({ navigation }) {
                 style={styles.infoIcon}
               />
               <Text style={styles.text}>{user.email}</Text>
+              <FontAwesome
+                name={"pencil"}
+                size={15}
+                color={"white"}
+                style={{ position: "absolute", right: 10 }}
+              />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -389,6 +401,12 @@ export default function SettingsScreen({ navigation }) {
                 style={styles.infoIcon}
               />
               <Text style={styles.text}>*********</Text>
+              <FontAwesome
+                name={"pencil"}
+                size={15}
+                color={"white"}
+                style={{ position: "absolute", right: 10 }}
+              />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -403,6 +421,12 @@ export default function SettingsScreen({ navigation }) {
                 style={styles.infoIcon}
               />
               <Text style={styles.text}>{user.username}</Text>
+              <FontAwesome
+                name={"pencil"}
+                size={15}
+                color={"white"}
+                style={{ position: "absolute", right: 10 }}
+              />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -424,20 +448,22 @@ export default function SettingsScreen({ navigation }) {
                 style={{ position: "absolute", right: 10 }}
               />
             </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.inputContainer}
+              activeOpacity={0.7}
+              onPress={handleLogout}
+            >
+              <FontAwesome6
+                name={"right-to-bracket"}
+                size={20}
+                color={"#A3FD01"}
+                style={styles.infoIcon}
+              />
+              <Text style={styles.text}>Déconnexion</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </View>
-      <View style={styles.infoContainer}>
-        <FontAwesome
-          name={"info-circle"}
-          size={30}
-          color={"#A3FD01"}
-          style={styles.infoIcon}
-        />
-        <Text style={styles.textInfo}>
-          Enregistre ton poids chaque semaine pour suivre tes progrès et rester
-          motivé !
-        </Text>
       </View>
     </View>
   );
@@ -512,7 +538,7 @@ const styles = StyleSheet.create({
   settingContainer: {
     width: "100%",
     maxWidth: 500,
-    height: 190,
+    height: 220,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 20,

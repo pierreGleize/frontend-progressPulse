@@ -9,10 +9,9 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
 import workoutCreation from "./reducers/workoutCreation";
-import currentWorkout from "./reducers/currentWorkout"
+import currentWorkout from "./reducers/currentWorkout";
 import workouts from "./reducers/workouts";
-import workoutsHistory from "./reducers/workoutsHistory"
-
+import workoutsHistory from "./reducers/workoutsHistory";
 
 import SigninScreen from "./pages/SigninScreen";
 import SignupScreen from "./pages/SignupScreen";
@@ -31,6 +30,7 @@ import TimerScreen from "./pages/TimerScreen";
 import WorkoutEndingScreen from "./pages/WorkoutEndingScreen";
 import SongScreen from "./pages/SongScreen";
 import WeightScreen from "./pages/WeightScreen";
+import HystoryScreen from "./pages/HystoryScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -41,7 +41,7 @@ const store = configureStore({
     workouts,
     workoutCreation,
     currentWorkout,
-    workoutsHistory
+    workoutsHistory,
   },
 });
 
@@ -117,6 +117,7 @@ export default function App() {
           <Stack.Screen name="exercice" component={ExerciceScreen} />
           <Stack.Screen name="timer" component={TimerScreen} />
           <Stack.Screen name="workoutEnding" component={WorkoutEndingScreen} />
+          <Stack.Screen name="hystory" component={HystoryScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
