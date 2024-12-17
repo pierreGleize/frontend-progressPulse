@@ -73,7 +73,7 @@ const TabNavigator = () => {
           headerShown: false,
           tabBarShowLabel: false,
           tabBarStyle: {
-            backgroundColor: "transparent",
+            backgroundColor: "rgba(13, 13, 54, 0.7)",
             borderTopWidth: 0,
             height: 80,
           },
