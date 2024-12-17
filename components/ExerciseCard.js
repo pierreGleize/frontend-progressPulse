@@ -9,6 +9,7 @@ import { useEffect } from "react";
 
 const ExerciseCard = ({
   exerciseName,
+  muscleGroup,
   numberOfSets,
   numberOfReps,
   weight,
@@ -27,6 +28,7 @@ const ExerciseCard = ({
   const currentWorkout = useSelector(state => state.currentWorkout.value)
   const currentExercise = currentWorkout.performances.find(e => e.exercise === exerciseID)
 
+
   const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const ExerciseCard = ({
   },[currentExercise])
 
   const handleUpdate = () => {
-    openModalCustomSets(exerciseName, exerciseID, weight, numberOfReps, numberOfSets, restMinutes, restSeconds)
+    openModalCustomSets(exerciseName, exerciseID, weight, numberOfReps, numberOfSets, restMinutes, restSeconds, muscleGroup)
   }
 
   const handlePress = () => {
@@ -70,6 +72,7 @@ const ExerciseCard = ({
       >
         <View style={styles.cardContainer}>
           <View style={styles.textContainer}>
+            { muscleGroup != "Cardio" && <>
             <Text style={styles.text}>
               {numberOfSets <= 1 ? "Nombre de série : " : "Nombre de séries : "}
               <Text style={styles.span}>{numberOfSets}</Text>
@@ -80,11 +83,12 @@ const ExerciseCard = ({
                 : "Nombre de répétitions : "}
               <Text style={styles.span}>{numberOfReps} </Text>
             </Text>
+            </>}
             <Text style={styles.text}>
-              Charge : <Text style={styles.span}>{weight} kg</Text>
+              {muscleGroup === "Cardio" ? "Resistance/Inclinaison:" : "Charge : "} <Text style={styles.span}>{weight} {muscleGroup != "Cardio" && "kg"}</Text>
             </Text>
             <Text style={styles.text}>
-              Temps de repos : <Text style={styles.span}>{restMinutes} min {restSeconds} sec</Text>
+              {muscleGroup === "Cardio" ? "Durée :" : "Temps de repos : "} <Text style={styles.span}>{restMinutes} {muscleGroup != "Cardio" ? "min" : "h"} {restSeconds} {muscleGroup != "Cardio" ? "sec" : "min"}</Text>
             </Text>
           </View>
           {isEditable ? (

@@ -30,7 +30,7 @@ export const workoutsSlice= createSlice({
             if (workout._id === action.payload.workoutID){
                 console.log(workout.exercises[0]._id)
                 console.log(action.payload.exerciseID)
-                workout.exercises = workout.exercises.filter(exercise => exercise._id !== action.payload.exerciseID)
+                workout.exercises = workout.exercises.filter(exercise => exercise.exercise._id !== action.payload.exerciseID)
             }
         }
       },
@@ -41,7 +41,8 @@ export const workoutsSlice= createSlice({
           for (let workout of state.value){
               if (workout._id === action.payload.workoutID){
                   for (let exercise of workout.exercises){
-                      if (exercise._id == action.payload.exerciseID){
+                        console.log(exercise.exercise._id)
+                      if (exercise.exercise._id == action.payload.exerciseID){
                           exercise.customSets = action.payload.customSets
                           exercise.rest = action.payload.rest
                       }
