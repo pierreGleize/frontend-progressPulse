@@ -115,8 +115,8 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
     }
     
   };
-
-  const exercisesToShow = exercisesList.map((exercise, i) => {
+  console.log(exercisesList)
+  const exercisesToShow = exercisesList.sort((a, b) => a.name.localeCompare(b.name)).map((exercise, i) => {
     const muscleGroup = exercise.muscleGroupe.toLowerCase();
     const imagePath = images[muscleGroup][exercise.image];
     return (
