@@ -15,6 +15,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import Button from "../components/Button";
 import { updateEmail, updateUsername, logout } from "../reducers/user";
+import { removeAllWorkout } from "../reducers/workouts";
+import { resetWorkoutsHistory } from "../reducers/workoutsHistory";
 
 export default function SettingsScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -139,6 +141,8 @@ export default function SettingsScreen({ navigation }) {
   };
 
   const handleLogout = () => {
+    dispatch(removeAllWorkout());
+    dispatch(resetWorkoutsHistory());
     dispatch(logout());
     navigation.navigate("Signin");
   };

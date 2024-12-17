@@ -66,6 +66,8 @@ export default function TimerScreen({ navigation, route }) {
   const exerciseSelected = workoutSelected.exercises.find(
     (exercise) => exercise.exercise._id === exerciseID
   );
+  // Stockage du nom du groupe musculaire de l'exercice sélectionné
+  const muscleGroup = exerciseSelected.exercise.muscleGroupe
   // Récupération du nombre de série à faire
   const nbSets = exerciseSelected.customSets.length;
   // Récupération du temps de repos de l'exercice
@@ -114,13 +116,24 @@ export default function TimerScreen({ navigation, route }) {
 
   //Vérifie si les input sont bien remplis et sauvegarde les données rentrées
   const addSet = () => {
-    if (!reps || !weight) {
-      setEmptyFields(true);
-      setInput(false);
+    if(muscleGroup != "Cardio"){
+      if (!reps || !weight) {
+        setEmptyFields(true);
+        setInput(false);
+      } else {
+        setEmptyFields(false);
+        setInput(true);
+      }
     } else {
-      setEmptyFields(false);
-      setInput(true);
+      if (!weight) {
+        setEmptyFields(true);
+        setInput(false);
+      } else {
+        setEmptyFields(false);
+        setInput(true);
+      }
     }
+    
   };
 
   // Je passe un argument à la fonction qui me sert de condition pour savoir où la fonction a été apellé. 
@@ -129,35 +142,53 @@ export default function TimerScreen({ navigation, route }) {
     if (endTimer === "onComplete") {
       playSound();
     }
-    if (input) {
-      const restToAdd = parseInt(minutes) * 60 + parseInt(secondes);
-      const setToAdd = {
-        exerciseID: exerciseID,
-        weight: parseInt(weight),
-        reps: parseInt(reps),
-        rest: restToAdd,
-      };
-      dispatch(addExerciseSet(setToAdd));
-      if (currentExercise) {
-        if (currentExercise.sets.length + 1 < nbSets) {
+    if(muscleGroup != "Cardio"){
+      if (input) {
+        const restToAdd = parseInt(minutes) * 60 + parseInt(secondes);
+        const setToAdd = {
+          exerciseID: exerciseID,
+          weight: parseInt(weight),
+          reps: parseInt(reps),
+          rest: restToAdd,
+        };
+        dispatch(addExerciseSet(setToAdd));
+        if (currentExercise) {
+          if (currentExercise.sets.length + 1 < nbSets) {
+            navigation.navigate("exercice", {
+              exerciseID: exerciseID,
+              workoutID: workoutID,
+            });
+          } else {
+            navigation.navigate("startWorkout", { workoutID: workoutID });
+            stopSound();
+          }
+        } else {
           navigation.navigate("exercice", {
             exerciseID: exerciseID,
             workoutID: workoutID,
           });
-        } else {
-          navigation.navigate("startWorkout", { workoutID: workoutID });
           stopSound();
         }
       } else {
-        navigation.navigate("exercice", {
-          exerciseID: exerciseID,
-          workoutID: workoutID,
-        });
-        stopSound();
+        setEmptyFields(true);
       }
     } else {
-      setEmptyFields(true);
+      if(input){
+        setEmptyFields(false);
+        const restToAdd = parseInt(minutes) * 60 + parseInt(secondes);
+        const setToAdd = {
+          exerciseID: exerciseID,
+          weight: parseInt(weight),
+          reps: 1,
+          rest: restToAdd,
+        };
+        dispatch(addExerciseSet(setToAdd));
+        navigation.navigate("startWorkout", { workoutID: workoutID })
+      }else{
+        setEmptyFields(true);
+      }
     }
+    
   };
 
   const updateSet = () => {
@@ -171,7 +202,7 @@ export default function TimerScreen({ navigation, route }) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <View style={styles.topContainer}>
-          <Text style={styles.title}>Temps de repos</Text>
+          <Text style={styles.title}>{muscleGroup != "Cardio" ? "Temps de repos" : "Cardio"}</Text>
           <Underline width={80} />
         </View>
         {!isTimerVisible && (
@@ -231,7 +262,10 @@ export default function TimerScreen({ navigation, route }) {
                 onComplete={() => validateSet("onComplete")}
                 updateInterval={1}
               >
-                {({ remainingTime, color }) => (
+                {({ remainingTime, color }) => {
+                  const minutes = Math.floor(remainingTime / 60);
+                  const seconds = remainingTime % 60;
+                  return (
                   <View>
                     <Text
                       style={{
@@ -243,7 +277,7 @@ export default function TimerScreen({ navigation, route }) {
                       Restant :
                     </Text>
                     <Text style={{ color, fontSize: 40, textAlign: "center" }}>
-                      {remainingTime}
+                    {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
                     </Text>
                     <Text
                       style={{
@@ -252,15 +286,14 @@ export default function TimerScreen({ navigation, route }) {
                         textAlign: "center",
                       }}
                     >
-                      secondes
                     </Text>
                   </View>
-                )}
+                )}}
               </CountdownCircleTimer>
             </View>
             <View style={styles.btnInput}>
               <Button
-                textButton="Passer à la série suivante"
+                textButton={muscleGroup != "Cardio" ? "Passer à la série suivante" : "Terminer l'exercice"}
                 textColor="black"
                 width="70%"
                 height={50}
@@ -278,6 +311,7 @@ export default function TimerScreen({ navigation, route }) {
               start={{ x: 0, y: 1 }}
               end={{ x: 1, y: 0 }}
             >
+              {muscleGroup != "Cardio" && <>
               <View style={styles.data}>
                 <Text style={styles.text}>
                   Nombre de répétitions effectuées :{" "}
@@ -293,14 +327,15 @@ export default function TimerScreen({ navigation, route }) {
                   value={reps}
                 />
               </View>
+              </>}
               <View style={styles.data}>
-                <Text style={styles.text}>Charge de l'exercice :</Text>
+                <Text style={styles.text}>{muscleGroup != "Cardio" ? "Charge de l'exercice :" : "Résitance/Inclinaison"}</Text>
                 <Underline width={60} />
               </View>
               <View style={styles.inputContainer}>
                 <TextInput
                   style={styles.input}
-                  placeholder="Charge"
+                  placeholder={muscleGroup != "Cardio" ? "Charge" : "Résitance/Inclinaison"}
                   keyboardType="numeric"
                   onChangeText={(value) => setWeight(value)}
                   value={weight}
@@ -339,6 +374,7 @@ export default function TimerScreen({ navigation, route }) {
                     onPress={updateSet}
                   />
                 </View>
+                {muscleGroup != "Cardio" && <>
                 <View style={styles.dataInput}>
                   <Text style={styles.textTitle}>
                     Nombre de répétitions effectuées :{" "}
@@ -346,11 +382,12 @@ export default function TimerScreen({ navigation, route }) {
                   <Underline width={60} />
                 </View>
                 <Text style={styles.textInput}>{reps} répétitions</Text>
+                </>}
                 <View style={styles.dataInput}>
-                  <Text style={styles.textTitle}>Charge de l'exercice :</Text>
+                  <Text style={styles.textTitle}>{muscleGroup != "Cardio" ? "Charge de l'exercice : " : "Résistance/Inclinaison : "}</Text>
                   <Underline width={60} />
                 </View>
-                <Text style={styles.textInput}>{weight} kg</Text>
+                <Text style={styles.textInput}>{weight} {muscleGroup != "Cardio" && "kg"}</Text>
               </LinearGradient>
             </View>
           )}

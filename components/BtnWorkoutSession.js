@@ -11,6 +11,7 @@ export default function WorkoutSessionButton({name, time, nbExercise, onPress}) 
       onPress={() => onPress(name)}
       style={{
         marginBottom: 20,
+        elevation: 5,
       }}
     >
       <LinearGradient

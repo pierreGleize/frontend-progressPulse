@@ -23,7 +23,6 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
   const { name } = route.params;
   const dispatch = useDispatch();
   const value = useSelector((state) => state.workoutCreation.value);
-  console.log(value);
 
   const [exercisesList, setExercisesList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -35,12 +34,19 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
   const [restMinutes, setRestMinutes] = useState("1");
   const [restSeconds, setRestSeconds] = useState("00");
   const [emptyFields, setEmptyFields] = useState(false);
+  const [isCardio, setIsCardio] = useState(false)
+
+  
 
   useEffect(() => {
+    if(name === 'Cardio'){
+      setIsCardio(true)
+    } else {
+      setIsCardio(false)
+    }
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/exercises/${name}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data) {
           setExercisesList(data.data);
         }
@@ -55,7 +61,6 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
     setModalVisible(!modalVisible);
     setExerciseName(textButton);
     setExerciseID(exerciseID);
-    console.log(exerciseID);
   };
 
   const closeModal = () => {
@@ -70,37 +75,49 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
   };
 
   const addToWorkout = () => {
-    if (!charge || !nbReps || !nbSets || !restMinutes || !restSeconds) {
-      setEmptyFields(true);
-    } else {
-      setEmptyFields(false);
-      let customSets = [];
-      for (let i = 0; i < parseInt(nbSets); i++) {
-        customSets.push({ weight: parseInt(charge), reps: parseInt(nbReps) });
+    if(!isCardio){
+      if (!charge || !nbReps || !nbSets || !restMinutes || !restSeconds) {
+        setEmptyFields(true);
+      } else {
+        setEmptyFields(false);
+        let customSets = [];
+        for (let i = 0; i < parseInt(nbSets); i++) {
+          customSets.push({ weight: parseInt(charge), reps: parseInt(nbReps) });
+        }
+        const restConverted = parseInt(restMinutes) * 60 + parseInt(restSeconds);
+        const exerciseToAdd = {
+          exercise: exerciseID,
+          exerciseName: exerciseName,
+          muscleGroup: name,
+          rest: restConverted,
+          customSets: customSets,
+        };
+        dispatch(addExercise(exerciseToAdd));
+        closeModal()
       }
-      const restConverted = parseInt(restMinutes) * 60 + parseInt(restSeconds);
-      const exerciseToAdd = {
-        exercise: exerciseID,
-        exerciseName: exerciseName,
-        muscleGroup: name,
-        rest: restConverted,
-        customSets: customSets,
-      };
-      dispatch(addExercise(exerciseToAdd));
-      setCharge("");
-      setExerciseID("");
-      setExerciseName("");
-      setNbReps("");
-      setNbSets("");
-      setRestMinutes("1");
-      setRestSeconds("00");
-      setModalVisible(false);
+    } else {
+      if(!charge || !restMinutes || !restSeconds){
+        setEmptyFields(true);
+      } else {
+        setEmptyFields(false);
+        const customSets = [{weight: charge, reps: 1}]
+        const restConverted = parseInt(restMinutes) * 60 * 60 + parseInt(restSeconds) * 60
+        const exerciseToAdd = {
+          exercise: exerciseID,
+          exerciseName: exerciseName,
+          muscleGroup: name,
+          rest: restConverted,
+          customSets: customSets,
+        };
+        dispatch(addExercise(exerciseToAdd));
+        closeModal()
+      }
     }
+    
   };
 
   const exercisesToShow = exercisesList.map((exercise, i) => {
     const muscleGroup = exercise.muscleGroupe.toLowerCase();
-    console.log(muscleGroup);
     const imagePath = images[muscleGroup][exercise.image];
     return (
       <ExerciseBtn
@@ -155,14 +172,15 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
               </Text>
             </View>
             <View style={styles.inputsContainer}>
-              <Text style={styles.inputText}>Charge (Kg)</Text>
+              {isCardio? <Text style={styles.inputText}>Resistance / Inclinaison</Text> : <Text style={styles.inputText}>Charge (Kg)</Text>}
               <TextInput
                 style={styles.input}
-                placeholder="Charge"
+                placeholder={isCardio ? "Resistance/Inclinaison" : "Charge"}
                 keyboardType="numeric"
                 onChangeText={(value) => setCharge(value)}
                 value={charge}
               ></TextInput>
+              {!isCardio && <>
               <Text style={styles.inputText}>Nombre de séries</Text>
               <TextInput
                 style={styles.input}
@@ -171,6 +189,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
                 onChangeText={(value) => setNbSets(value)}
                 value={nbSets}
               ></TextInput>
+              
               <Text style={styles.inputText}>Nombre de répétitions</Text>
               <TextInput
                 style={styles.input}
@@ -179,7 +198,8 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
                 onChangeText={(value) => setNbReps(value)}
                 value={nbReps}
               ></TextInput>
-              <Text style={styles.inputText}>Temps de repos</Text>
+              </>}
+              {isCardio ? <Text style={styles.inputText}>Durée</Text> : <Text style={styles.inputText}>Temps de repos</Text>}
               <View style={styles.restTimeContainer}>
                 <TextInput
                   style={styles.restInput}
@@ -188,7 +208,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
                   onChangeText={(value) => setRestMinutes(value)}
                   value={restMinutes}
                 ></TextInput>
-                <Text style={styles.inputText}>min</Text>
+                <Text style={styles.inputText}>{isCardio ? 'h' : 'min'}</Text>
                 <TextInput
                   style={styles.restInput}
                   placeholder="Secondes"
@@ -196,7 +216,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
                   onChangeText={(value) => setRestSeconds(value)}
                   value={restSeconds}
                 ></TextInput>
-                <Text style={styles.inputText}>sec</Text>
+                <Text style={styles.inputText}>{isCardio ? 'min' : 'sec'}</Text>
               </View>
             </View>
             {emptyFields && (
@@ -332,6 +352,7 @@ const styles = StyleSheet.create({
   inputText: {
     color: "white",
     marginBottom: 5,
+    marginHorizontal: 5
   },
   input: {
     width: "100%",
@@ -344,6 +365,7 @@ const styles = StyleSheet.create({
   restTimeContainer: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
   },
   restInput: {
     width: "35%",

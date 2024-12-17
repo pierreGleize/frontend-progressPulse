@@ -40,12 +40,15 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   const [restSeconds, setRestSeconds] = useState("00");
   const [emptyFields, setEmptyFields] = useState(false);
   const [workoutName, setWorkoutName] = useState("");
+  const [muscleGroup, setMuscleGroup] = useState("")
   const [postError, setPostError] = useState(false);
+
 
   const closeModalCustomSets = () => {
     setmodalCustomSetsVisible(false);
     setExerciseName("");
     setExerciseID("");
+    setMuscleGroup("");
     setCharge("");
     setNbReps("");
     setNbSets("");
@@ -60,9 +63,9 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     nbReps,
     nbSets,
     restMinutes,
-    restSeconds
+    restSeconds,
+    muscleGroup
   ) => {
-    console.log(exerciseName, charge, nbReps, nbSets, restMinutes, restSeconds);
     setExerciseName(exerciseName);
     setExerciseID(exerciseID);
     setCharge(charge.toString());
@@ -71,6 +74,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     setRestMinutes(restMinutes.toString());
     setRestSeconds(restSeconds.toString());
     setmodalCustomSetsVisible(true);
+    setMuscleGroup(muscleGroup)
   };
 
   const handleDelete = (exerciseID) => {
@@ -87,7 +91,12 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     for (let i = 0; i < parseInt(nbSets); i++) {
       customSets.push({ weight: parseInt(charge), reps: parseInt(nbReps) });
     }
-    const restConverted = parseInt(restMinutes) * 60 + parseInt(restSeconds);
+    let restConverted
+    if (muscleGroup != "Cardio"){
+      restConverted = parseInt(restMinutes) * 60 + parseInt(restSeconds);
+    } else {
+      restConverted = parseInt(restMinutes) * 3600 + parseInt(restSeconds) * 60
+    }
     const exerciseToUpdate = {
       exerciseID: exerciseID,
       newSets: customSets,
@@ -121,12 +130,20 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     );
     const newExercisesToAdd = groupedWorkoutExercises[muscleGroup].map(
       (exercise, i) => {
-        const minutes = Math.floor(exercise.rest / 60);
-        const seconds = exercise.rest % 60;
+        let minutes
+        let seconds
+        if (muscleGroup != "Cardio"){
+          minutes = Math.floor(exercise.rest / 60);
+          seconds = exercise.rest % 60;
+        } else {
+          minutes = Math.floor(exercise.rest/ 3600);
+          seconds = Math.floor((exercise.rest % 3600) / 60);
+        }
         return (
           <ExerciseCard
             key={i}
             exerciseName={exercise.exerciseName}
+            muscleGroup={muscleGroup}
             numberOfSets={exercise.customSets.length}
             numberOfReps={exercise.customSets[0].reps}
             weight={exercise.customSets[0].weight}
@@ -237,7 +254,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             )}
             {postError && (
               <Text style={styles.errorMessage}>
-                Erreur lors de l'engistrement, réessayez plus tard
+                Ce nom est déjà attribué à l'une de vos séances. Choissisez un autre nom
               </Text>
             )}
             <Button
@@ -290,14 +307,15 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               </Text>
             </View>
             <View style={styles.inputsContainer}>
-              <Text style={styles.inputText}>Charge (Kg)</Text>
+              <Text style={styles.inputText}>{muscleGroup === "Cardio" ? "Resistance/Inclinaison" : "Charge (Kg)"}</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Charge"
+                placeholder={muscleGroup === "Cardio" ? "Résistance/Inclinaison" : "Charge"}
                 keyboardType="numeric"
                 onChangeText={(value) => setCharge(value)}
                 value={charge}
               ></TextInput>
+              { muscleGroup != "Cardio" && <>
               <Text style={styles.inputText}>Nombre de séries</Text>
               <TextInput
                 style={styles.input}
@@ -314,7 +332,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
                 onChangeText={(value) => setNbReps(value)}
                 value={nbReps}
               ></TextInput>
-              <Text style={styles.inputText}>Temps de repos</Text>
+              </>}
+              <Text style={styles.inputText}>{muscleGroup === "Cardio" ? "Durée" : "Temps de repos"}</Text>
               <View style={styles.restTimeContainer}>
                 <TextInput
                   style={styles.restInput}
@@ -323,7 +342,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
                   onChangeText={(value) => setRestMinutes(value)}
                   value={restMinutes}
                 ></TextInput>
-                <Text style={styles.inputText}>min</Text>
+                <Text style={styles.inputText}>{muscleGroup != "Cardio"?"min" : "h"}</Text>
                 <TextInput
                   style={styles.restInput}
                   placeholder="Secondes"
@@ -331,7 +350,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
                   onChangeText={(value) => setRestSeconds(value)}
                   value={restSeconds}
                 ></TextInput>
-                <Text style={styles.inputText}>sec</Text>
+                <Text style={styles.inputText}>{muscleGroup != "Cardio"?"sec" : "min"}</Text>
               </View>
             </View>
             {emptyFields && (
@@ -340,7 +359,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               </Text>
             )}
             <Button
-              textButton="Modifier les séries"
+              textButton="Modifier les objectifs"
               textColor="#A3FD01"
               width="260"
               height="40"

@@ -1,4 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View, Modal, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Modal,
+  ScrollView,
+} from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
 import Underline from "../components/Underline";
@@ -6,8 +13,7 @@ import { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
 import images from "../utils/images";
-import { Image } from 'expo-image';
-
+import { Image } from "expo-image";
 
 export default function Exercice({ navigation, route }) {
   const { workoutID, exerciseID } = route.params || {};
@@ -16,10 +22,12 @@ export default function Exercice({ navigation, route }) {
   const workouts = useSelector((state) => state.workouts.value);
   // Recherche de la séance avec le workoutID reçu en props
   const workoutSelected = workouts.find((workout) => workout._id === workoutID);
-  // Recherche de l'exercice avec l'exerciseID reçu en props
+  // Recherche de l'exercice avec l'exerciseID reçu en propsd
   const exerciseSelected = workoutSelected.exercises.find(
     (exercise) => exercise.exercise._id === exerciseID
   );
+  // Stockage du nom du groupe musculaire de l'exercice sélectionné
+  const muscleGroup = exerciseSelected.exercise.muscleGroupe;
   // Recherche de l'image correspondant à l'exercice
   const imagePath =
     images[exerciseSelected.exercise.muscleGroupe.toLowerCase()][
@@ -186,6 +194,18 @@ export default function Exercice({ navigation, route }) {
           Série {currentSet} sur {exerciseSelected.customSets.length}
         </Text>
         <View style={styles.objContainer}>
+          {muscleGroup != "Cardio" && (
+            <LinearGradient
+              colors={["#1C1C45", "#4645AB"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.linearObj}
+            >
+              <Text style={styles.obj}>
+                Nombre de répétitons : {exerciseSelected.customSets[0].reps}
+              </Text>
+            </LinearGradient>
+          )}
           <LinearGradient
             colors={["#1C1C45", "#4645AB"]}
             start={{ x: 0, y: 0 }}
@@ -193,25 +213,36 @@ export default function Exercice({ navigation, route }) {
             style={styles.linearObj}
           >
             <Text style={styles.obj}>
-              Nombre de répétitons : {exerciseSelected.customSets[0].reps}
+              {muscleGroup != "Cardio"
+                ? "Charge :"
+                : "Résistance / Inclinaison : "}{" "}
+              {exerciseSelected.customSets[0].weight}{" "}
+              {muscleGroup != "Cardio" && "kg"}
             </Text>
           </LinearGradient>
-          <LinearGradient
-            colors={["#1C1C45", "#4645AB"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.linearObj}
-          >
-            <Text style={styles.obj}>
-              Charge : {exerciseSelected.customSets[0].weight} kg
-            </Text>
-          </LinearGradient>
+          {muscleGroup === "Cardio" && (
+            <LinearGradient
+              colors={["#1C1C45", "#4645AB"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.linearObj}
+            >
+              <Text style={styles.obj}>
+                Durée : {Math.floor(exerciseSelected.rest / 3600)} h{" "}
+                {Math.floor((exerciseSelected.rest % 3600) / 60)} min
+              </Text>
+            </LinearGradient>
+          )}
         </View>
       </View>
 
       <View style={styles.button}>
         <Button
-          textButton="Valider la série"
+          textButton={
+            muscleGroup != "Cardio"
+              ? "Valider la série"
+              : "Commencer l'exercice"
+          }
           textColor="black"
           background="#A3FD01"
           width={300}

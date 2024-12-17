@@ -1,3 +1,6 @@
+//82472213086-2covqgqt1fnfqpeuck07sajk15llsu9i.apps.googleusercontent.com : ios
+//
+
 import {
   StyleSheet,
   Text,
@@ -121,7 +124,7 @@ export default function SigninScreen({ navigation }) {
         <View style={styles.line}></View>
       </View>
       <Button
-        textButton="Signup with Google"
+        textButton="Signin with Google"
         textColor="black"
         width="80%"
         height="40"
