@@ -13,12 +13,14 @@ const Button = ({
   onPress,
   isLinearGradiant,
   colorsGradiant = null,
+  accessibilityLabel,
 }) => {
   if (isLinearGradiant) {
     return (
       <TouchableOpacity
         onPress={onPress}
         activeOpacity={0.8}
+        accessibilityLabel={accessibilityLabel}
         style={{
           width: width,
         }}
@@ -52,6 +54,7 @@ const Button = ({
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={onPress}
+        accessibilityLabel={accessibilityLabel}
         style={{
           backgroundColor: background,
           width: width,

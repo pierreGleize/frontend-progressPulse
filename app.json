@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "frontend",
-    "slug": "frontend",
+    "name": "ProgressPulse",
+    "slug": "progresspule",
+    "description": "Une application de suivi d'entraînement pour les sportifs.",
     "version": "1.0.0",
     "extra": {
       "SERVER_IP": "http://192.168.1.18:3000"

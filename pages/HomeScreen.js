@@ -45,6 +45,7 @@ export default function HomeScreen({ navigation }) {
         nbExercise={nbExercises}
         time={time() + " min"}
         onPress={() => handleWorkoutNavigation(element._id)}
+        accessibilityLabel={`Commencer la séance ${element.name} que j'ai crée`}
       />
     );
   });
@@ -80,6 +81,7 @@ export default function HomeScreen({ navigation }) {
             height={50}
             onPress={handleAddWorkout}
             isLinearGradiant={false}
+            accessibilityLabel="Ajouter une séance d'entrainement"
           />
         </View>
         {workouts.length === 0 && (
