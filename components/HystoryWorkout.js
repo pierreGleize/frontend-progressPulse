@@ -7,10 +7,14 @@ import {
   Animated,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { LinearGradient } from "expo-linear-gradient";
-import Underline from "./Underline";
 
-export default function HystoryWorkout() {
+export default function HystoryWorkout({
+  name,
+  date,
+  stars,
+  ressenti,
+  workouts,
+}) {
   const [expanded, setExpanded] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
@@ -37,7 +41,6 @@ export default function HystoryWorkout() {
         useNativeDriver: false,
       }).start(() => setExpanded(false));
     } else if (isReady) {
-      // Agrandir la carte (si la hauteur a déjà été mesurée)
       setExpanded(true);
     }
   };
@@ -50,8 +53,8 @@ export default function HystoryWorkout() {
     >
       <Animated.View style={[styles.card, { height: cardHeight }]}>
         <View>
-          <Text style={styles.text}>Full body</Text>
-          <Text style={styles.text}>16/12/2024</Text>
+          <Text style={styles.text}>{name}</Text>
+          <Text style={styles.text}>{date}</Text>
         </View>
         <FontAwesome
           name={expanded ? "minus-circle" : "plus-circle"}
@@ -59,13 +62,9 @@ export default function HystoryWorkout() {
           color={"#3BC95F"}
           style={{ position: "absolute", right: 10, top: 10 }}
         />
-        <View style={styles.starContainer}>
-          <FontAwesome name={"star"} size={15} color={"#3BC95F"} />
-          <FontAwesome name={"star"} size={15} color={"#3BC95F"} />
-          <FontAwesome name={"star"} size={15} color={"#3BC95F"} />
-        </View>
+        <View style={styles.starContainer}>{stars}</View>
         <View
-          style={{ opacity: expanded ? 1 : 0 }}
+          style={{ opacity: expanded ? 1 : 0, width: "100%" }}
           onLayout={(event) => {
             if (contentHeight.current === 0) {
               contentHeight.current = event.nativeEvent.layout.height; // Mesure la hauteur
@@ -73,37 +72,8 @@ export default function HystoryWorkout() {
             }
           }}
         >
-          <Text style={styles.muscleGroupText}>Développé couché :</Text>
-          <Underline width={60} />
-          <View style={styles.perfcontainer}>
-            <LinearGradient
-              colors={["#1C1C45", "#4645AB"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.linearPerf}
-            >
-              <Text style={styles.perf}>Série 1 : 4 x 50 kg</Text>
-            </LinearGradient>
-            <LinearGradient
-              colors={["#1C1C45", "#4645AB"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.linearPerf}
-            >
-              <Text style={styles.perf}>Série 2 : 4 x 55 kg</Text>
-            </LinearGradient>
-            <LinearGradient
-              colors={["#1C1C45", "#4645AB"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.linearPerf}
-            >
-              <Text style={styles.perf}>Série 3 : 4 x 60 kg</Text>
-            </LinearGradient>
-          </View>
-          <Text style={styles.textRessenti}>
-            Ressenti : Petite douleur à l'épaule
-          </Text>
+          {workouts}
+          <Text style={styles.textRessenti}>Ressenti : {ressenti}</Text>
         </View>
       </Animated.View>
     </TouchableOpacity>
@@ -153,6 +123,6 @@ const styles = StyleSheet.create({
   textRessenti: {
     color: "white",
     fontSize: 16,
-    marginBottom: 10,
+    // marginBottom: 10,
   },
 });

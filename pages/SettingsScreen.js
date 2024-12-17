@@ -465,18 +465,6 @@ export default function SettingsScreen({ navigation }) {
           </View>
         </View>
       </View>
-      <View style={styles.infoContainer}>
-        <FontAwesome
-          name={"info-circle"}
-          size={30}
-          color={"#A3FD01"}
-          style={styles.infoIcon}
-        />
-        <Text style={styles.textInfo}>
-          Enregistre ton poids chaque semaine pour suivre tes progrès et rester
-          motivé !
-        </Text>
-      </View>
     </View>
   );
 }

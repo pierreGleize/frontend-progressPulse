@@ -14,6 +14,8 @@ import { useState } from "react";
 
 export default function StatsScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
+  const history = useSelector((state) => state.workoutsHistory.value);
+  // console.log(history[0].performances);
 
   // Récupération des 8 dernières entrées de poids à partir de user.weight
   const lastHeightWeight =
@@ -34,36 +36,45 @@ export default function StatsScreen({ navigation }) {
       return moment(element.date).format("DD-MM");
     });
 
+  const lastWorkoutDate = history.length !== 0 && history.at(-1).date;
+
+  // const
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Statistiques</Text>
         <Underline width={100} />
       </View>
-      <View style={styles.secondTtitleContainer}>
-        {/* <Text style={styles.secondTitle}>Global</Text> */}
-        {/* <Underline width={30} /> */}
-      </View>
+      <View style={styles.secondTtitleContainer}></View>
       <View style={styles.settingWrapper}>
         <View style={styles.settingContainer}>
           <View style={styles.inputWrapper}>
             <View style={styles.inputContainer} activeOpacity={0.7}>
               <Text style={styles.text}>
-                Total entraînements effectués :
-                <Text style={styles.span}> 0</Text>
+                {history.length <= 1
+                  ? "Total entraînement effectué : "
+                  : "Total entraînements effectués :"}
+
+                <Text style={styles.span}> {history.length}</Text>
               </Text>
             </View>
             <View style={styles.inputContainer} activeOpacity={0.7}>
               <Text style={styles.text}>
-                Dernère séance :<Text style={styles.span}> 12/11/2024</Text>
+                Dernière séance :
+                <Text style={styles.span}>
+                  {history.length === 0
+                    ? " DD/MM/YYYY"
+                    : moment(lastWorkoutDate).format("Do MMM YYYY")}
+                </Text>
               </Text>
             </View>
-            <View style={styles.inputContainer} activeOpacity={0.7}>
+            {/* <View style={styles.inputContainer} activeOpacity={0.7}>
               <Text style={styles.text}>
                 Exercice le plus fréquenté :
                 <Text style={styles.span}> Bench (15)</Text>
               </Text>
-            </View>
+            </View> */}
           </View>
         </View>
       </View>
@@ -166,7 +177,7 @@ export default function StatsScreen({ navigation }) {
           }}
         />
       </TouchableOpacity>
-      <View style={{ alignItems: "center" }}></View>
+      {/* <View style={{ alignItems: "center" }}></View> */}
     </ScrollView>
   );
 }
@@ -201,7 +212,7 @@ const styles = StyleSheet.create({
   settingContainer: {
     width: "100%",
     maxWidth: 500,
-    height: 100,
+    height: 90,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 20,
     alignItems: "center",
