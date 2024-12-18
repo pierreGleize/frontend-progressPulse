@@ -56,7 +56,7 @@ const TabNavigator = () => {
     >
       <Tab.Navigator
         screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size, focused }) => {
+          tabBarIcon: ({ color }) => {
             let iconName = "";
 
             if (route.name === "Stats") {
@@ -127,5 +127,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({});

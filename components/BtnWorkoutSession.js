@@ -10,11 +10,14 @@ export default function WorkoutSessionButton({
   nbExercise,
   onPress,
   accessibilityLabel,
+  accessibilityHint,
+  image,
 }) {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
       onPress={() => onPress(name)}
       style={{
         marginBottom: 20,
@@ -30,7 +33,11 @@ export default function WorkoutSessionButton({
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}
-            source={require("../assets/illustrations/workout.png")}
+            source={
+              !image
+                ? require("../assets/imagesWorkout/Coaches-amico.png")
+                : image[0].source
+            }
           />
         </View>
 

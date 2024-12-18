@@ -4,6 +4,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useSelector } from "react-redux";
 import BtnWorkoutSession from "../components/BtnWorkoutSession";
 import Underline from "../components/Underline";
+import imagesWorkout from "../utils/imagesWorkout";
 
 export default function HomeScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
@@ -18,6 +19,13 @@ export default function HomeScreen({ navigation }) {
   };
 
   const workoutsToShow = workouts.map((element, index) => {
+    const imageSource = imagesWorkout.filter((imageWorkout) => {
+      console.log(imageWorkout.name, element.image);
+      if (imageWorkout.name === element.image) {
+        return imageWorkout.source;
+      }
+    });
+
     let nbExercises = "";
     if (element.exercises.length === 1) {
       nbExercises = element.exercises.length + " exercice";
@@ -46,6 +54,7 @@ export default function HomeScreen({ navigation }) {
         time={time() + " min"}
         onPress={() => handleWorkoutNavigation(element._id)}
         accessibilityLabel={`Commencer la séance ${element.name}`}
+        image={imageSource}
       />
     );
   });
@@ -92,7 +101,12 @@ export default function HomeScreen({ navigation }) {
             />
           </View>
         )}
-        {workouts.length > 0 && (
+        {workouts.length === 1 ? (
+          <View style={styles.seances}>
+            <Text style={styles.text}>Ma séance :</Text>
+            <Underline width={50} />
+          </View>
+        ) : (
           <View style={styles.seances}>
             <Text style={styles.text}>Mes séances :</Text>
             <Underline width={50} />

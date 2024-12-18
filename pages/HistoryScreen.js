@@ -45,7 +45,7 @@ export default function HistoryScreen({ navigation }) {
           <FontAwesome name={"chevron-left"} size={24} color={"#3BC95F"} />
           <Text style={styles.backToText}>Statisques</Text>
         </TouchableOpacity>
-        <Text style={styles.topTitle}>Suivie de séance</Text>
+        <Text style={styles.topTitle}>Suivi de séance</Text>
       </View>
       <ScrollView style={styles.weightContainer}>
         {history.length === 0 ? (

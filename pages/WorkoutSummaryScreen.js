@@ -21,13 +21,10 @@ import {
 } from "../reducers/workoutCreation";
 import { addWorkout } from "../reducers/workouts";
 import Underline from "../components/Underline";
+import imagesWorkout from "../utils/imagesWorkout";
 
 export default function WorkoutSummaryScreen({ navigation, route }) {
-  const { backTo, categorie = {} } = route.params || {};
-
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
-  const workouts = useSelector((state) => state.workouts.value);
+  const { backTo, categorie = {}, name } = route.params || {};
 
   const [modalCustomSetsVisible, setmodalCustomSetsVisible] = useState(false);
   const [modalTitleVisible, setModalTitleVisible] = useState(false);
@@ -42,6 +39,12 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   const [workoutName, setWorkoutName] = useState("");
   const [muscleGroup, setMuscleGroup] = useState("");
   const [postError, setPostError] = useState(false);
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+  const workout = useSelector((state) => state.workoutCreation.value);
+
+  const randomImage = Math.floor(Math.random() * imagesWorkout.length);
 
   const closeModalCustomSets = () => {
     setmodalCustomSetsVisible(false);
@@ -105,7 +108,6 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     closeModalCustomSets();
   };
 
-  const workout = useSelector((state) => state.workoutCreation.value);
   const groupedWorkoutExercises = workout.exercises.reduce(
     (groups, exercise) => {
       const { muscleGroup } = exercise;
@@ -176,6 +178,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         userToken: user.token,
         name: workoutName,
         exercices: exercices,
+        image: imagesWorkout[randomImage].name,
       };
       fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addWorkout`, {
         method: "POST",
@@ -190,6 +193,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               _id: data.userWorkout._id,
               name: data.userWorkout.name,
               exercises: data.userWorkout.exercises,
+              image: data.userWorkout.image,
             };
             dispatch(addWorkout(workoutToAddToStore));
             setModalTitleVisible(false);
@@ -255,7 +259,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             )}
             {postError && (
               <Text style={styles.errorMessage}>
-                Erreur lors de l'engistrement, réessayez plus tard
+                Ce nom est déjà attribué à l'une de vos séances. Choissisez un
+                autre nom
               </Text>
             )}
             <Button
@@ -396,14 +401,14 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         </KeyboardAvoidingView>
       </Modal>
       {/* Fin Modal pour modifier les objetctifs de l'exercice */}
-      <View>
+      <View style={{ marginBottom: 20 }}>
         <FontAwesome
           name={"chevron-left"}
           accessibilityLabel={`Permet de revenir sur la page ${backTo}`}
           size={24}
           color={"#3BC95F"}
           style={{ marginLeft: 15, marginTop: 5 }}
-          onPress={() => navigation.navigate(backTo, { categorie: categorie })}
+          onPress={() => navigation.navigate(backTo, { name: name })}
         />
       </View>
       <View style={styles.mainContainer}>
@@ -420,17 +425,18 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           height={50}
           onPress={() => setModalTitleVisible(true)}
           isLinearGradiant={false}
+          accessibilityLabel="Valider la et accepter si des changements ont été apporté sur la séance"
+          accessibilityHint="Redirection sur la page d'accueil, votre séance si affichera"
         />
         <FontAwesome
           name={"plus-circle"}
           accessibilityLabel={`Permet de revenir sur la page ${backTo}`}
           size={45}
           color={"white"}
-          style={{marginRight: 15}}
-          onPress={() => navigation.navigate('muscleGroup')}
+          style={{ marginRight: 15 }}
+          onPress={() => navigation.navigate("muscleGroup")}
         />
       </View>
-      
     </View>
   );
 }

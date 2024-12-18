@@ -15,6 +15,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import Button from "../components/Button";
 import { updateEmail, updateUsername, logout } from "../reducers/user";
+import { removeAllWorkout } from "../reducers/workouts";
+import { resetWorkoutsHistory } from "../reducers/workoutsHistory";
 
 export default function SettingsScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -139,6 +141,8 @@ export default function SettingsScreen({ navigation }) {
   };
 
   const handleLogout = () => {
+    dispatch(removeAllWorkout());
+    dispatch(resetWorkoutsHistory());
     dispatch(logout());
     navigation.navigate("Signin");
   };
@@ -185,7 +189,7 @@ export default function SettingsScreen({ navigation }) {
             <View style={styles.bottomModal}>
               <TextInput
                 style={styles.input}
-                placeholder={"Entrée votre nouvelle adresse email"}
+                placeholder={"Entrer votre nouvelle adresse email"}
                 placeholderTextColor={"#272D34"}
                 onChangeText={(value) => setEmail(value)}
                 value={email}
@@ -252,7 +256,7 @@ export default function SettingsScreen({ navigation }) {
             <View style={styles.bottomModal}>
               <TextInput
                 style={styles.input}
-                placeholder={"Entrée votre adresse email"}
+                placeholder={"Entrer votre adresse email"}
                 placeholderTextColor={"#272D34"}
                 onChangeText={(value) => setEmail(value)}
                 value={email}
@@ -328,7 +332,7 @@ export default function SettingsScreen({ navigation }) {
             <View style={styles.bottomModal}>
               <TextInput
                 style={styles.input}
-                placeholder={"Entrée votre adresse email"}
+                placeholder={"Entrer votre adresse email"}
                 placeholderTextColor={"#272D34"}
                 onChangeText={(value) => setEmail(value)}
                 value={email}
@@ -344,7 +348,7 @@ export default function SettingsScreen({ navigation }) {
               <TextInput
                 style={styles.input}
                 // secureTextEntry={true}
-                placeholder={"Entrée votre nouveau nom d'utilisateur"}
+                placeholder={"Entrer votre nouveau nom d'utilisateur"}
                 placeholderTextColor={"#272D34"}
                 onChangeText={(value) => setUsername(value)}
                 value={username}

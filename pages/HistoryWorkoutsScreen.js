@@ -16,8 +16,6 @@ export default function HistoryWorkoutsScreen({ navigation, route }) {
   const { workoutName } = route.params;
   const history = useSelector((state) => state.workoutsHistory.value);
 
-  // const workoutToMap = workoutName ? filetredWorkout : [...history];
-
   const filetredWorkout = history.filter((element) => {
     if (workoutName === "Toutes les séances") {
       return element;
@@ -27,100 +25,97 @@ export default function HistoryWorkoutsScreen({ navigation, route }) {
   });
   console.log(filetredWorkout);
 
-  const hystories =
-    //  [...history]
-    //   .sort((a, b) => new Date(b.date) - new Date(a.date))
-    filetredWorkout
-      .sort((a, b) => new Date(b.date) - new Date(a.date))
-      .map((element, i) => {
-        const date = moment(element.date).format("Do MMM YYYY");
+  const hystories = filetredWorkout
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .map((element, i) => {
+      const date = moment(element.date).format("Do MMM YYYY");
 
-        let stars = [];
-        for (let i = 0; i < element.note; i++) {
-          stars.push(
-            <FontAwesome key={i} name={"star"} size={15} color={"#3BC95F"} />
-          );
-        }
+      let stars = [];
+      for (let i = 0; i < element.note; i++) {
+        stars.push(
+          <FontAwesome key={i} name={"star"} size={15} color={"#3BC95F"} />
+        );
+      }
 
-        const groupedWorkouts = element.performances.map((performance, i) => {
-          const muscleGroupe = performance.exercise.muscleGroupe;
-          const name = performance.exercise.name;
-          return (
-            <View key={i} style={{ width: "100%" }}>
-              <Text style={{ color: "white", fontSize: 16 }}>{name} :</Text>
-              <Underline width={40} />
-              <View
-                style={{
-                  flexDirection: "row",
-                  width: "100%",
-                  flexWrap: "wrap",
-                  alignItems: "center",
-                  marginBottom: 10,
-                }}
-              >
-                {performance.sets.map((set, i) => {
-                  const setHours = Math.floor(set.rest / 3600);
-                  const setMinutes = Math.floor(set.rest % 3600) / 60;
-                  const durée =
-                    setHours > 0
-                      ? `Durée : ${setHours}h ${setMinutes}min - Résistance : ${set.weight}`
-                      : `Durée : ${setMinutes}min - Résistance : ${set.weight}`;
-                  return muscleGroupe !== "Cardio" ? (
-                    <LinearGradient
-                      key={i}
-                      colors={["#1C1C45", "#4645AB"]}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 0 }}
-                      style={{
-                        height: 23,
-                        width: "45%",
-                        marginBottom: 10,
-                        marginRight: 10,
-                        borderRadius: 10,
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Text style={{ color: "#ffffff", textAlign: "center" }}>
-                        Série {i + 1} : {set.reps} x {set.weight} kg
-                      </Text>
-                    </LinearGradient>
-                  ) : (
-                    <LinearGradient
-                      key={i}
-                      colors={["#1C1C45", "#4645AB"]}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 0 }}
-                      style={{
-                        height: 23,
-                        width: "75%",
-                        marginBottom: 10,
-                        marginRight: 10,
-                        borderRadius: 10,
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Text style={{ color: "#ffffff", textAlign: "center" }}>
-                        {durée}
-                      </Text>
-                    </LinearGradient>
-                  );
-                })}
-              </View>
-            </View>
-          );
-        });
-
+      const groupedWorkouts = element.performances.map((performance, i) => {
+        const muscleGroupe = performance.exercise.muscleGroupe;
+        const name = performance.exercise.name;
         return (
-          <HystoryWorkouts
-            key={i}
-            name={element.workoutName}
-            date={date}
-            stars={stars}
-            ressenti={element.ressenti}
-            workouts={groupedWorkouts}
-          />
+          <View key={i} style={{ width: "100%" }}>
+            <Text style={{ color: "white", fontSize: 16 }}>{name} :</Text>
+            <Underline width={40} />
+            <View
+              style={{
+                flexDirection: "row",
+                width: "100%",
+                flexWrap: "wrap",
+                alignItems: "center",
+                marginBottom: 10,
+              }}
+            >
+              {performance.sets.map((set, i) => {
+                const setHours = Math.floor(set.rest / 3600);
+                const setMinutes = Math.floor(set.rest % 3600) / 60;
+                const durée =
+                  setHours > 0
+                    ? `Durée : ${setHours}h ${setMinutes}min - Résistance : ${set.weight}`
+                    : `Durée : ${setMinutes}min - Résistance : ${set.weight}`;
+                return muscleGroupe !== "Cardio" ? (
+                  <LinearGradient
+                    key={i}
+                    colors={["#1C1C45", "#4645AB"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={{
+                      height: 23,
+                      width: "45%",
+                      marginBottom: 10,
+                      marginRight: 10,
+                      borderRadius: 10,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ color: "#ffffff", textAlign: "center" }}>
+                      Série {i + 1} : {set.reps} x {set.weight} kg
+                    </Text>
+                  </LinearGradient>
+                ) : (
+                  <LinearGradient
+                    key={i}
+                    colors={["#1C1C45", "#4645AB"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={{
+                      height: 23,
+                      width: "75%",
+                      marginBottom: 10,
+                      marginRight: 10,
+                      borderRadius: 10,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ color: "#ffffff", textAlign: "center" }}>
+                      {durée}
+                    </Text>
+                  </LinearGradient>
+                );
+              })}
+            </View>
+          </View>
         );
       });
+
+      return (
+        <HystoryWorkouts
+          key={i}
+          name={element.workoutName}
+          date={date}
+          stars={stars}
+          ressenti={element.ressenti}
+          workouts={groupedWorkouts}
+        />
+      );
+    });
 
   return (
     <View style={styles.container}>
@@ -130,7 +125,7 @@ export default function HistoryWorkoutsScreen({ navigation, route }) {
           onPress={() => navigation.navigate("history")}
         >
           <FontAwesome name={"chevron-left"} size={24} color={"#3BC95F"} />
-          <Text style={styles.backToText}>Suivie</Text>
+          <Text style={styles.backToText}>Suivi</Text>
         </TouchableOpacity>
         <Text style={styles.topTitle}>{workoutName}</Text>
       </View>
@@ -169,13 +164,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 600,
   },
-  // nameTitle: {
-  //   color: "white",
-  //   fontSize: 24,
-  //   fontWeight: 600,
-  //   textAlign: "center",
-  //   marginBottom: 20,
-  // },
   weightContainer: {
     backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: 16,

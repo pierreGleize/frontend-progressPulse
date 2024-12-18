@@ -1,12 +1,31 @@
-import { StyleSheet, Text, View, ScrollView, Modal, KeyboardAvoidingView, Platform, TextInput, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Modal,
+  KeyboardAvoidingView,
+  Platform,
+  TextInput,
+  Alert,
+} from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
 import ExerciseCard from "../components/ExerciseCard";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Underline from "../components/Underline";
-import { removeWorkout, removeExercise, updateWorkoutSets, updateWorkoutName } from "../reducers/workouts";
-import { addWorkoutInformation, resetCurrentWorkout } from "../reducers/currentWorkout";
+import {
+  removeWorkout,
+  removeExercise,
+  updateWorkoutSets,
+  updateWorkoutName,
+} from "../reducers/workouts";
+import {
+  addWorkoutInformation,
+  resetCurrentWorkout,
+} from "../reducers/currentWorkout";
+import { updateNameWorkoutHistory } from "../reducers/workoutsHistory";
 
 export default function WorkoutSummaryScreen({ navigation, route }) {
   const { workoutID } = route.params || {};
@@ -15,61 +34,66 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   const [modalCustomSetsVisible, setmodalCustomSetsVisible] = useState(false);
   const [exerciseName, setExerciseName] = useState("");
   const [exerciseID, setExerciseID] = useState("");
-  const [muscleGroup, setMuscleGroup] = useState("")
+  const [muscleGroup, setMuscleGroup] = useState("");
   const [charge, setCharge] = useState("");
   const [nbSets, setNbSets] = useState("");
   const [nbReps, setNbReps] = useState("");
   const [restMinutes, setRestMinutes] = useState("1");
   const [restSeconds, setRestSeconds] = useState("00");
   const [emptyFields, setEmptyFields] = useState(false);
-  const [modalTitleVisible, setModalTitleVisible] = useState(false)
+  const [modalTitleVisible, setModalTitleVisible] = useState(false);
 
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   // Récupération des séances dans le reducer puis sélection de la séance sélectionnée
-  const workouts = useSelector((state) => state.workouts.value)
-  const workoutSelected = workouts.find(workout => workout._id === workoutID)
+  const workouts = useSelector((state) => state.workouts.value);
+  const workoutSelected = workouts.find((workout) => workout._id === workoutID);
   // Récupération de tous les exercices de la séance et tri par groupe musculaire
+  //groupedWorkoutExercises` contient un objet où chaque clé est un groupe musculaire et chaque valeur est un tableau des exercices correspondant à ce groupe musculaire.
   const groupedWorkoutExercises = workoutSelected.exercises.reduce(
+    //groups c'est l'accumulateur, l'objet contenant le résultat du regroupement, au départ c'est un objet vide.
     (groups, exercise) => {
       const { muscleGroupe } = exercise.exercise;
+      // Si le groupe musculaire n'existe pas encore dans l'accumulateur, on l'initialise comme un tableau vide
       if (!groups[muscleGroupe]) {
         groups[muscleGroupe] = [];
       }
+      // On ajoute l'exercice au groupe musculaire correspondant
       groups[muscleGroupe].push(exercise);
       return groups;
     },
+    //accumulateur initial est un objet vide
     {}
   );
 
-  const [workoutNameInput, setWorkoutNameInput] = useState(workoutSelected.name)
+  const [workoutNameInput, setWorkoutNameInput] = useState(
+    workoutSelected.name
+  );
 
   // Récupération de l'historique de la séance en cours
-  const currentWorkout = useSelector(state => state.currentWorkout.value)
-  // console.log(currentWorkout.performances[0].sets)
-  
+  const currentWorkout = useSelector((state) => state.currentWorkout.value);
+
   // Récupération de l'utilisateur connecté
-  const user = useSelector(state => state.user.value)
- 
+  const user = useSelector((state) => state.user.value);
+
+  //Permet de supprimer un exercice
   const handleDeleteExercise = (exerciseID) => {
     const exerciseToRemove = {
-      workoutID : workoutID,
-      exerciseID : exerciseID
-    }
+      workoutID: workoutID,
+      exerciseID: exerciseID,
+    };
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/deleteExercise`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(exerciseToRemove),
-    }).then(response => response.json())
-    .then(data => {
-      if(data.result === true){
-        dispatch(removeExercise(exerciseToRemove))
-      }
-    })   
-  }
-
-
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result === true) {
+          dispatch(removeExercise(exerciseToRemove));
+        }
+      });
+  };
 
   const openModalCustomSets = (
     exerciseName,
@@ -81,9 +105,10 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     restSeconds,
     muscleGroup
   ) => {
+    // Mise à jour des états locaux avec les valeurs des arguments passés
     setExerciseName(exerciseName);
     setExerciseID(exerciseID);
-    setMuscleGroup(muscleGroup)
+    setMuscleGroup(muscleGroup);
     setCharge(charge.toString());
     setNbReps(nbReps.toString());
     setNbSets(nbSets.toString());
@@ -101,89 +126,105 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     setNbSets("");
     setRestMinutes("");
     setRestSeconds("");
-    setMuscleGroup("")
+    setMuscleGroup("");
   };
 
   const handleChangeName = () => {
-    if (workoutNameInput){
-      setEmptyFields(false)
+    if (workoutNameInput) {
+      setEmptyFields(false);
       fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/updateName`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({workoutID: workoutID, newWorkoutName: workoutNameInput }),
-      }).then(response => response.json())
-      .then(data => {
-        if (data.result){
-          dispatch(updateWorkoutName({workoutID: workoutID, newName: workoutNameInput }))
-          setModalTitleVisible(false)
-        } else {
-          setEmptyFields(true)
-        }
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          workoutID: workoutID,
+          newWorkoutName: workoutNameInput,
+          token: user.token,
+        }),
       })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.result) {
+            dispatch(
+              updateWorkoutName({
+                workoutID: workoutID,
+                newName: workoutNameInput,
+              })
+            );
+            dispatch(
+              updateNameWorkoutHistory({
+                workoutID: workoutID,
+                newName: workoutNameInput,
+              })
+            );
+            setModalTitleVisible(false);
+          } else {
+            setEmptyFields(true);
+          }
+        });
     } else {
-      setEmptyFields(true)
+      setEmptyFields(true);
     }
-    
-  }
+  };
 
   const handleUpdateExercise = () => {
-    if (!charge || !nbSets || !nbReps || !restSeconds || !restMinutes){
-      setEmptyFields(true)
-      return
+    if (!charge || !nbSets || !nbReps || !restSeconds || !restMinutes) {
+      setEmptyFields(true);
+      return;
     }
-    setEmptyFields(false)
+    setEmptyFields(false);
     let customSets = [];
     for (let i = 0; i < parseInt(nbSets); i++) {
       customSets.push({ weight: parseInt(charge), reps: parseInt(nbReps) });
     }
-    let restConverted
-    if (muscleGroup != "Cardio"){
+    let restConverted;
+    if (muscleGroup != "Cardio") {
       restConverted = parseInt(restMinutes) * 60 + parseInt(restSeconds);
     } else {
       restConverted = parseInt(restMinutes) * 3600 + parseInt(restSeconds) * 60;
     }
     const updateExerciseSets = {
-      workoutID : workoutID,
-      exerciseID : exerciseID,
-      customSets : customSets,
-      rest : restConverted
-    }
+      workoutID: workoutID,
+      exerciseID: exerciseID,
+      customSets: customSets,
+      rest: restConverted,
+    };
 
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/updateSets`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updateExerciseSets),
-    }).then(response => response.json())
-    .then(data => {
-      if(data.result === true){
-        dispatch(updateWorkoutSets(updateExerciseSets))
-        closeModalCustomSets()
-      }
-    }) 
-  }
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result === true) {
+          dispatch(updateWorkoutSets(updateExerciseSets));
+          closeModalCustomSets();
+        }
+      });
+  };
 
   const startExercise = (exerciseID) => {
     navigation.navigate("exercice", {
       exerciseID: exerciseID,
-      workoutID: workoutID
-    })
-  }
+      workoutID: workoutID,
+    });
+  };
 
   const handlePressButton = () => {
-    if (isEditable){
-      setIsEditable(false)
+    if (isEditable) {
+      setIsEditable(false);
       const informationToAdd = {
-        userToken : user.token,
-        workoutID : workoutID,
-      }
-      dispatch(addWorkoutInformation(informationToAdd))
+        userToken: user.token,
+        workoutID: workoutID,
+      };
+      dispatch(addWorkoutInformation(informationToAdd));
     } else {
-      navigation.navigate("workoutEnding")
+      navigation.navigate("workoutEnding");
     }
-  }
+  };
 
   const handleGoToHome = () => {
-    if (currentWorkout.workout){
+    if (currentWorkout.workout) {
       Alert.alert(
         "Attention", // Titre
         "La séance est démarée, en quittant cette page vous perdrez votre progression.", // Message
@@ -195,18 +236,17 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           {
             text: "Abandonner ma séance",
             onPress: () => {
-              dispatch(resetCurrentWorkout())
-              navigation.navigate("Home")
+              dispatch(resetCurrentWorkout());
+              navigation.navigate("Home");
             },
           },
         ]
       );
     } else {
-      navigation.navigate("Home")
+      navigation.navigate("Home");
     }
-  }
-  
-  
+  };
+
   let exercisesToShow = [];
 
   for (let muscleGroup in groupedWorkoutExercises) {
@@ -218,16 +258,16 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     );
     const newExercisesToAdd = groupedWorkoutExercises[muscleGroup].map(
       (exercise, i) => {
-        let minutes
-        let seconds
-        if(muscleGroup != "Cardio"){
+        let minutes;
+        let seconds;
+        if (muscleGroup != "Cardio") {
           minutes = Math.floor(exercise.rest / 60);
           seconds = exercise.rest % 60;
         } else {
           minutes = Math.floor(exercise.rest / 3600);
-          seconds = Math.floor((exercise.rest % 3600) / 60)
+          seconds = Math.floor((exercise.rest % 3600) / 60);
         }
-        
+
         return (
           <ExerciseCard
             key={i}
@@ -243,26 +283,30 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             openModalCustomSets={openModalCustomSets}
             isEditable={isEditable}
             startExercise={startExercise}
+            accessibilityLabel={`Commencer l'exercice ${exercise.exercise.name}`}
           />
         );
       }
     );
     exercisesToShow.push(newExercisesToAdd);
   }
-  
-  const handleDeleteWorkout = () => {
-    fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/deleteWorkout/${workoutID}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    }).then(response => response.json())
-    .then(data => {
-      if(data.deleted > 0){
-        dispatch(removeWorkout(workoutID))
-      navigation.navigate('Home')
-      }
-    })
-  }
 
+  const handleDeleteWorkout = () => {
+    fetch(
+      `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/deleteWorkout/${workoutID}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.deleted > 0) {
+          dispatch(removeWorkout(workoutID));
+          navigation.navigate("Home");
+        }
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -342,6 +386,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
                 name={"times"}
                 size={30}
                 color={"white"}
+                accessibilityLabel="Fermer la modale"
                 onPress={closeModalCustomSets}
                 style={styles.infoIcon}
               />
@@ -355,7 +400,6 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
                 name={"info-circle"}
                 size={30}
                 color={"#A3FD01"}
-                onPress={() => navigation.navigate("muscleGroup")}
                 style={styles.infoIcon}
               />
               <Text style={styles.textInfo}>
@@ -363,50 +407,69 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               </Text>
             </View>
             <View style={styles.inputsContainer}>
-              <Text style={styles.inputText}>{muscleGroup === "Cardio" ? "Résistance/Inclinaison" : "Charge (Kg)"}</Text>
+              <Text style={styles.inputText}>
+                {muscleGroup === "Cardio"
+                  ? "Résistance/Inclinaison"
+                  : "Charge (Kg)"}
+              </Text>
               <TextInput
                 style={styles.input}
-                placeholder={muscleGroup === "Cardio" ? "Résistance/Inclinaison" : "Charge"}
+                accessibilityLabel="Permet de modfier la charge ou l'inclinaison de l'exercice"
+                placeholder={
+                  muscleGroup === "Cardio" ? "Résistance/Inclinaison" : "Charge"
+                }
                 keyboardType="numeric"
                 onChangeText={(value) => setCharge(value)}
                 value={charge}
               ></TextInput>
-              {muscleGroup != "Cardio" && <>
-              <Text style={styles.inputText}>Nombre de séries</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nombre de séries"
-                keyboardType="numeric"
-                onChangeText={(value) => setNbSets(value)}
-                value={nbSets}
-              ></TextInput>
-              <Text style={styles.inputText}>Nombre de répétitions</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nombre de répétitions"
-                keyboardType="numeric"
-                onChangeText={(value) => setNbReps(value)}
-                value={nbReps}
-              ></TextInput>
-              </>}
+              {muscleGroup != "Cardio" && (
+                <>
+                  <Text style={styles.inputText}>Nombre de séries</Text>
+                  <TextInput
+                    style={styles.input}
+                    accessibilityLabel="Permet de modifier le nombres de séries de l'exercice"
+                    placeholder="Nombre de séries"
+                    keyboardType="numeric"
+                    onChangeText={(value) => setNbSets(value)}
+                    value={nbSets}
+                  ></TextInput>
+                  <Text style={styles.inputText}>Nombre de répétitions</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Nombre de répétitions"
+                    accessibilityLabel="Permet de modifier le nombre de répétitions de l'exercice"
+                    keyboardType="numeric"
+                    onChangeText={(value) => setNbReps(value)}
+                    value={nbReps}
+                  ></TextInput>
+                </>
+              )}
               <Text style={styles.inputText}>Temps de repos</Text>
               <View style={styles.restTimeContainer}>
                 <TextInput
                   style={styles.restInput}
                   placeholder="Minutes"
                   keyboardType="numeric"
+                  accessibilityLabel="Permet de modifier le temps de repos en minutes"
+                  accessibilityHint="Si c'est un exercice cardio, modifier l'heure de l'exercice"
                   onChangeText={(value) => setRestMinutes(value)}
                   value={restMinutes}
                 ></TextInput>
-                <Text style={styles.inputText}>{muscleGroup != "Cardio"? "min": "h"}</Text>
+                <Text style={styles.inputText}>
+                  {muscleGroup != "Cardio" ? "min" : "h"}
+                </Text>
                 <TextInput
                   style={styles.restInput}
                   placeholder="Secondes"
                   keyboardType="numeric"
+                  accessibilityLabel="Permet de modifier le temps de repos en secondes"
+                  accessibilityHint="Si c'est un exercice cardio, modifier les minutes de l'exercice"
                   onChangeText={(value) => setRestSeconds(value)}
                   value={restSeconds}
                 ></TextInput>
-                <Text style={styles.inputText}>{muscleGroup != "Cardio"? "sec": "min"}</Text>
+                <Text style={styles.inputText}>
+                  {muscleGroup != "Cardio" ? "sec" : "min"}
+                </Text>
               </View>
             </View>
             {emptyFields && (
@@ -423,6 +486,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               borderWidth={1}
               borderColor="#A3FD01"
               onPress={handleUpdateExercise}
+              accessibilityLabel="Valider les modifications apportés"
+              accessibilityHint="Ferme également la modale"
             ></Button>
           </View>
         </KeyboardAvoidingView>
@@ -433,18 +498,28 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           size={24}
           color={"#3BC95F"}
           onPress={handleGoToHome}
+          accessibilityLabel="Redirection vers la page d'accueil"
         />
         <View style={styles.workoutNameSection}>
           <Text style={styles.topTitle}>{workoutSelected.name}</Text>
-          <FontAwesome style={styles.pencilLogo} name="pencil" size={18} color={"white"} onPress={() => setModalTitleVisible(!modalTitleVisible)}/>
+          <FontAwesome
+            style={styles.pencilLogo}
+            name="pencil"
+            size={18}
+            color={"white"}
+            onPress={() => setModalTitleVisible(!modalTitleVisible)}
+          />
         </View>
-        <FontAwesome name="trash" size={24} color={"#A3FD01"} onPress={handleDeleteWorkout}/>
+        <FontAwesome
+          name="trash"
+          size={24}
+          color={"#A3FD01"}
+          onPress={handleDeleteWorkout}
+        />
       </View>
 
       <View style={styles.mainContainer}>
-        <ScrollView>
-          {exercisesToShow}
-        </ScrollView>
+        <ScrollView>{exercisesToShow}</ScrollView>
       </View>
       <View style={styles.bottomContainer}>
         <Button
@@ -456,14 +531,28 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           height={50}
           onPress={handlePressButton}
           isLinearGradiant={false}
+          accessibilityLabel={
+            isEditable
+              ? "Permet de commencer la séance"
+              : "Permet de terminer la séance"
+          }
+          accessibilityHint={
+            isEditable &&
+            "Redirection vers la page pour donner son avis sur la séance"
+          }
         />
         <FontAwesome
-                  name={"plus-circle"}
-                  accessibilityLabel={`Permet de revenir sur la page précédente`}
-                  size={45}
-                  color={"white"}
-                  style={{marginRight: 15}}
-                  onPress={() => navigation.navigate('muscleGroup', {isWorkoutAlreadyCreated:true, workoutID: workoutID})}
+          name={"plus-circle"}
+          accessibilityLabel={`Permet de revenir sur la page précédente`}
+          size={45}
+          color={"white"}
+          style={{ marginRight: 15 }}
+          onPress={() =>
+            navigation.navigate("muscleGroup", {
+              isWorkoutAlreadyCreated: true,
+              workoutID: workoutID,
+            })
+          }
         />
       </View>
     </View>
@@ -589,7 +678,7 @@ const styles = StyleSheet.create({
   workoutNameSection: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   modalTitleView: {
     width: "80%",
@@ -604,7 +693,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  pencilLogo:{
-    marginLeft: 10
-  }
+  pencilLogo: {
+    marginLeft: 10,
+  },
 });

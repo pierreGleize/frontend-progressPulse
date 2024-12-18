@@ -1,36 +1,38 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   value: { name: null, exercises: [] },
 };
 
 export const workoutCreationSlice = createSlice({
-  name: 'workoutCreation',
+  name: "workoutCreation",
   initialState,
   reducers: {
     addExercise: (state, action) => {
-      state.value.exercises.push(action.payload)
+      state.value.exercises.push(action.payload);
     },
-    
+
     removeExercise: (state, action) => {
-      state.value.exercises = state.value.exercises.filter(exercise => exercise.exercise != action.payload)
+      state.value.exercises = state.value.exercises.filter(
+        (exercise) => exercise.exercise != action.payload
+      );
     },
 
     updateCustomSets: (state, action) => {
       for (let exercise of state.value.exercises) {
         if (exercise.exercise === action.payload.exerciseID) {
-          exercise.customSets = action.payload.newSets
-          exercise.rest = action.payload.rest
+          exercise.customSets = action.payload.newSets;
+          exercise.rest = action.payload.rest;
         }
       }
     },
 
     addWorkoutName: (state, action) => {
-      state.value.name = action.payload
+      state.value.name = action.payload;
     },
 
-    resetWorkoutCreation: (state, action) => {
-      state.value = { name: null, exercises: [] }
+    resetWorkoutCreation: (state) => {
+      state.value = { name: null, exercises: [] };
     },
 
     addAllExercise: (state, action) => {
@@ -40,13 +42,20 @@ export const workoutCreationSlice = createSlice({
           exerciseName: exercice.exerciseName,
           muscleGroup: exercice.muscleGroup,
           rest: exercice.rest,
-          customSets: exercice.customSets
-        }
-        state.value.exercises.push(exerciseToAdd)
+          customSets: exercice.customSets,
+        };
+        state.value.exercises.push(exerciseToAdd);
       }
-    }
-  }
+    },
+  },
 });
 
-export const { addExercise, addWorkoutName, resetWorkoutCreation, removeExercise, updateCustomSets, addAllExercise } = workoutCreationSlice.actions;
+export const {
+  addExercise,
+  addWorkoutName,
+  resetWorkoutCreation,
+  removeExercise,
+  updateCustomSets,
+  addAllExercise,
+} = workoutCreationSlice.actions;
 export default workoutCreationSlice.reducer;

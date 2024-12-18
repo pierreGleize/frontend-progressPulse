@@ -4,22 +4,24 @@ import Underline from "../components/Underline";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import BtnWorkoutSession from "../components/BtnWorkoutSession";
-
 import {
   addAllExercise,
   resetWorkoutCreation,
 } from "../reducers/workoutCreation";
+import imagesWorkout from "../utils/imagesWorkout";
 
 export default function WorkoutChoiceScreen({ navigation, route }) {
-  const dispatch = useDispatch();
   const { name } = route.params;
+  const dispatch = useDispatch();
+
   const handleNavigateToSummary = (data) => {
     dispatch(resetWorkoutCreation());
+
     let exercisesToAdd = [];
-    console.log(data)
+
     for (let exercise of data) {
-      console.log(exercise.sets);
       let customSets = [];
+
       for (let set of exercise.sets) {
         customSets.push({
           weight: set.weight,
@@ -35,7 +37,10 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
       });
     }
     dispatch(addAllExercise(exercisesToAdd));
-    navigation.navigate("workoutSummary", { backTo: "workoutChoice" });
+    navigation.navigate("workoutSummary", {
+      backTo: "workoutChoice",
+      name: name,
+    });
   };
 
   const [addWorkout, setAddWorkout] = useState([]);
@@ -49,34 +54,47 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
   }, []);
 
   const nameWorkout = addWorkout.map((data, i) => {
-    const nbExercises = data.exercices.length + ' exercices'
+    const imageSource = imagesWorkout.filter((imageWorkout) => {
+      if (imageWorkout.name === data.image) {
+        return imageWorkout.source;
+      }
+    });
+    const nbExercises = data.exercices.length + " exercices";
     let time = () => {
       for (let i = 0; i < data.exercices.length; i++) {
         let times = 0;
         //Pour chaque exercice : (nombre de série * temps de repos + nombre de série * 45s) / 60 pour l'avoir en minutes
         //Pour le temps complet : ((nombre de série * temps de repos + nombre de série * 45s) / 60) * nombre d'exercices dans le workout
-        times = ((data.exercices[i].sets.length * data.exercices[i].rest + data.exercices[i].sets.length * 45) / 60) * data.exercices.length
-        return Math.round(times)
+        times =
+          ((data.exercices[i].sets.length * data.exercices[i].rest +
+            data.exercices[i].sets.length * 45) /
+            60) *
+          data.exercices.length;
+        return Math.round(times);
       }
-    }
+    };
     return (
       <BtnWorkoutSession
         key={i}
         name={data.name}
-        time={time() + ' min'}
+        time={time() + " min"}
         nbExercise={nbExercises}
         onPress={() => handleNavigateToSummary(data.exercices)}
+        accessibilityLabel={`Choisir la séance ${data.name}`}
+        accessibilityHint="Vous serez redirigé vers le résumé de cette séance"
+        image={imageSource}
       />
     );
   });
 
   return (
     <View style={styles.container}>
-      <View style={styles.topContainer}>
+      <View>
         <FontAwesome
           name={"chevron-left"}
           size={24}
           color={"#3BC95F"}
+          accessibilityLabel="Redirection vers la page pour choisir la difficultée d'une séance"
           style={{ marginLeft: 15, marginTop: 5 }}
           onPress={() => navigation.navigate("WorkoutDifficulty")}
         />
@@ -151,7 +169,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 5,
     marginLeft: 10,
-    marginTop: 10
+    marginTop: 10,
   },
 
   gradiant: {
@@ -180,12 +198,10 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
 
-
   btnContainer: {
     flex: 1,
     gap: 20,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
   },
-
 });

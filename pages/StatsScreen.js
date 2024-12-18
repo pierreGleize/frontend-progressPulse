@@ -10,12 +10,11 @@ import { LineChart, BarChart } from "react-native-chart-kit";
 import Underline from "../components/Underline";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import { useState } from "react";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function StatsScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const history = useSelector((state) => state.workoutsHistory.value);
-  // console.log(history[0].performances);
 
   // Récupération des 8 dernières entrées de poids à partir de user.weight
   const lastHeightWeight =
@@ -43,21 +42,19 @@ export default function StatsScreen({ navigation }) {
     data.forEach((element) => {
       console.log(element.date);
       const month = moment(element.date).format("MMM YY");
-      // console.log(month);
+
       if (months[month]) {
         months[month] += 1;
       } else {
         months[month] = 1;
       }
     });
-    // console.log(months);
     return months;
   };
   const lastHeightMonth = [...history]
     .sort((a, b) => new Date(a.date) - new Date(b.date))
     .slice(0, 8);
   const trainingData = getWorkoutsByMonth(lastHeightMonth);
-  // console.log(trainingData);
   const labelsBarChart = Object.keys(trainingData);
   const dataBarChart = Object.values(trainingData);
 
@@ -89,7 +86,6 @@ export default function StatsScreen({ navigation }) {
                 <Text style={styles.text}>
                   Dernière séance faite :{" "}
                   <Text style={styles.span}>
-                    {/* {moment(lastWorkoutDate).format("DD MM YYYY")} */}
                     {moment(lastWorkoutDate).fromNow(true)}
                   </Text>
                 </Text>
@@ -102,7 +98,17 @@ export default function StatsScreen({ navigation }) {
         <Text style={styles.secondTitle}>Ton suivi de poids</Text>
         <Underline width={80} />
       </View>
-
+      <View style={styles.infoContainer}>
+        <FontAwesome
+          name={"info-circle"}
+          size={20}
+          color={"#A3FD01"}
+          style={styles.infoIcon}
+        />
+        <Text style={styles.textInfo}>
+          Clique sur le graphique pour ajouter ton poids !
+        </Text>
+      </View>
       <TouchableOpacity
         style={styles.chartContainer}
         activeOpacity={0.7}
@@ -155,6 +161,17 @@ export default function StatsScreen({ navigation }) {
           Ton nombre d'entraînements par mois
         </Text>
         <Underline width={80} />
+      </View>
+      <View style={styles.infoContainer}>
+        <FontAwesome
+          name={"info-circle"}
+          size={20}
+          color={"#A3FD01"}
+          style={styles.infoIcon}
+        />
+        <Text style={styles.textInfo}>
+          Clique sur le graphique pour accéder au suivi de tes séances !
+        </Text>
       </View>
       <TouchableOpacity
         style={styles.chartContainer}
@@ -219,7 +236,7 @@ const styles = StyleSheet.create({
     fontWeight: 600,
   },
   secondTtitleContainer: {
-    marginBottom: 20,
+    marginBottom: 10,
   },
   secondTitle: {
     fontSize: 24,
@@ -277,5 +294,18 @@ const styles = StyleSheet.create({
   chartContainer: {
     alignItems: "center",
     marginBottom: 20,
+  },
+  infoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    marginRight: 10,
+  },
+  infoIcon: {
+    marginRight: 10,
+  },
+
+  textInfo: {
+    color: "white",
   },
 });

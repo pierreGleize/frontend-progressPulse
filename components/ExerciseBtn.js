@@ -15,7 +15,7 @@ const ExerciseBtn = ({
   accessibilityLabel,
   accessibilityHint,
   isWorkoutAlreadyCreated,
-  workoutID
+  workoutID,
 }) => {
   const dispatch = useDispatch();
   const [isAdded, setIsAdded] = useState(false);
@@ -24,20 +24,21 @@ const ExerciseBtn = ({
     (state) => state.workoutCreation.value.exercises
   );
 
-  const workoutSelected = useSelector(state => state.workouts.value.find(e => e._id === workoutID))
+  const workoutSelected = useSelector((state) =>
+    state.workouts.value.find((e) => e._id === workoutID)
+  );
 
   useEffect(() => {
-    let exerciseAlreadyAdded
-    if(!isWorkoutAlreadyCreated){
+    let exerciseAlreadyAdded;
+    if (!isWorkoutAlreadyCreated) {
       exerciseAlreadyAdded = workoutCreationExercises.some(
         (exercise) => exercise.exercise === exerciseID
       );
       setIsAdded(exerciseAlreadyAdded);
     } else {
-      exerciseAlreadyAdded = workoutSelected.exercises.some(
-        (exercise) => { 
-          return exercise.exercise._id === exerciseID}
-      );
+      exerciseAlreadyAdded = workoutSelected.exercises.some((exercise) => {
+        return exercise.exercise._id === exerciseID;
+      });
       setIsAdded(exerciseAlreadyAdded);
     }
   }, [workoutCreationExercises, workoutSelected]);
@@ -98,7 +99,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-    // borderColor: "red",
     padding: 10,
   },
   picture: {

@@ -18,14 +18,14 @@ export default function HystoryWorkout({
   const [expanded, setExpanded] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
-  const cardHeight = useRef(new Animated.Value(110)).current;
+  const cardHeight = useRef(new Animated.Value(90)).current;
   const contentHeight = useRef(0);
 
   useEffect(() => {
     if (isReady && expanded) {
       // Lance l'animation d'agrandissement une fois la hauteur mesurée
       Animated.timing(cardHeight, {
-        toValue: contentHeight.current + 110,
+        toValue: contentHeight.current + 90,
         duration: 300,
         useNativeDriver: false,
       }).start();
@@ -36,7 +36,7 @@ export default function HystoryWorkout({
     if (expanded) {
       // Réduire la carte
       Animated.timing(cardHeight, {
-        toValue: 110,
+        toValue: 90,
         duration: 300,
         useNativeDriver: false,
       }).start(() => setExpanded(false));
@@ -63,7 +63,7 @@ export default function HystoryWorkout({
           style={{ position: "absolute", right: 10, top: 10 }}
         />
         <View style={styles.starContainer}>{stars}</View>
-        <Text style={styles.textRessenti}>Ressenti : {ressenti}</Text>
+
         <View
           style={{ opacity: expanded ? 1 : 0, width: "100%" }}
           onLayout={(event) => {
@@ -73,6 +73,7 @@ export default function HystoryWorkout({
             }
           }}
         >
+          <Text style={styles.textRessenti}>Ressenti : {ressenti}</Text>
           {workouts}
         </View>
       </Animated.View>
