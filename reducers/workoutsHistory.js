@@ -21,7 +21,7 @@ export const workoutsHistorySlice = createSlice({
 
     updateNameWorkoutHistory: (state, action) => {
       for (let workout of state.value) {
-        // console.log(workout.workoutID, action.payload.workoutID);
+        console.log(workout.workoutID, action.payload.workoutID);
         if (workout.workoutID === action.payload.workoutID) {
           workout.workoutName = action.payload.newName;
         }

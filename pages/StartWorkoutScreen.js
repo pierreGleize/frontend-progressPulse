@@ -144,7 +144,9 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       })
         .then((response) => response.json())
         .then((data) => {
+          console.log(data);
           if (data.result) {
+            console.log("true");
             dispatch(
               updateWorkoutName({
                 workoutID: workoutID,
@@ -159,6 +161,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             );
             setModalTitleVisible(false);
           } else {
+            console.log("false");
             setEmptyFields(true);
           }
         });
@@ -543,12 +546,17 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           }
         />
         <FontAwesome
-                  name={"plus-circle"}
-                  accessibilityLabel={`Permet de revenir sur la page précédente`}
-                  size={45}
-                  color={"white"}
-                  style={{marginRight: 15}}
-                  onPress={() => navigation.navigate('muscleGroup', {isWorkoutAlreadyCreated:true, workoutID: workoutID})}
+          name={"plus-circle"}
+          accessibilityLabel={`Permet de revenir sur la page précédente`}
+          size={45}
+          color={"white"}
+          style={{ marginRight: 15 }}
+          onPress={() =>
+            navigation.navigate("muscleGroup", {
+              isWorkoutAlreadyCreated: true,
+              workoutID: workoutID,
+            })
+          }
         />
       </View>
     </View>
