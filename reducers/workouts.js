@@ -83,5 +83,6 @@ export const {
   removeExercise,
   updateWorkoutName,
   updateExercises,
+  removeAllWorkout,
 } = workoutsSlice.actions;
 export default workoutsSlice.reducer;
