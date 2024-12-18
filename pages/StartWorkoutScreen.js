@@ -72,7 +72,6 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
 
   // Récupération de l'historique de la séance en cours
   const currentWorkout = useSelector((state) => state.currentWorkout.value);
-  // console.log(currentWorkout.performances[0].sets)
 
   // Récupération de l'utilisateur connecté
   const user = useSelector((state) => state.user.value);
@@ -144,9 +143,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           if (data.result) {
-            console.log("true");
             dispatch(
               updateWorkoutName({
                 workoutID: workoutID,
@@ -161,7 +158,6 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             );
             setModalTitleVisible(false);
           } else {
-            console.log("false");
             setEmptyFields(true);
           }
         });

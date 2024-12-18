@@ -25,14 +25,6 @@ import imagesWorkout from "../utils/imagesWorkout";
 
 export default function WorkoutSummaryScreen({ navigation, route }) {
   const { backTo, categorie = {}, name } = route.params || {};
-  console.log(backTo, categorie, name);
-
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
-  const workouts = useSelector((state) => state.workouts.value);
-
-  const randomImage = Math.floor(Math.random() * imagesWorkout.length);
-  console.log(imagesWorkout[randomImage].name);
 
   const [modalCustomSetsVisible, setmodalCustomSetsVisible] = useState(false);
   const [modalTitleVisible, setModalTitleVisible] = useState(false);
@@ -47,6 +39,12 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   const [workoutName, setWorkoutName] = useState("");
   const [muscleGroup, setMuscleGroup] = useState("");
   const [postError, setPostError] = useState(false);
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+  const workout = useSelector((state) => state.workoutCreation.value);
+
+  const randomImage = Math.floor(Math.random() * imagesWorkout.length);
 
   const closeModalCustomSets = () => {
     setmodalCustomSetsVisible(false);
@@ -110,7 +108,6 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     closeModalCustomSets();
   };
 
-  const workout = useSelector((state) => state.workoutCreation.value);
   const groupedWorkoutExercises = workout.exercises.reduce(
     (groups, exercise) => {
       const { muscleGroup } = exercise;
@@ -412,7 +409,6 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           color={"#3BC95F"}
           style={{ marginLeft: 15, marginTop: 5 }}
           onPress={() => navigation.navigate(backTo, { name: name })}
-          // onPress={() => navigation.navigate(backTo, { categorie: categorie })}
         />
       </View>
       <View style={styles.mainContainer}>

@@ -185,7 +185,8 @@ export default function SongScreen({ navigation, route }) {
           style={styles.infoIcon}
         />
         <Text style={styles.textInfo}>
-          Choisis la sonnerie que tu veux entendre à la fin de chaque exercice.
+          Choisis la sonnerie que tu souhaites entendre à la fin de chaque
+          exercice
         </Text>
       </View>
     </View>

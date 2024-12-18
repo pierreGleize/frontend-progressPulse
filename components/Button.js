@@ -85,5 +85,3 @@ const Button = ({
 };
 
 export default Button;
-
-const styles = StyleSheet.create({});

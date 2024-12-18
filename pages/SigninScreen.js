@@ -18,8 +18,6 @@ import { addAllWorkoutsHistory } from "../reducers/workoutsHistory";
 export default function SigninScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  const valeurDuReducer = useSelector((state) => state.user.value);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [wrongEmail, setWrongEmail] = useState(false);
@@ -55,21 +53,25 @@ export default function SigninScreen({ navigation }) {
               console.log(data.error);
               setSignupError(data.error);
             } else {
-              const userToken = data.userInfos.token
+              const userToken = data.userInfos.token;
               dispatch(login(data.userInfos));
-              fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/${data.userInfos.token}`)
-              .then(response => response.json())
-              .then(data => {
-                if(data.userWorkouts){
-                  dispatch(addAllUserWorkouts(data.userWorkouts))
-                }
-                fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/histories/${userToken}`)
-                .then(response => response.json())
-                .then(data => {
-                  dispatch(addAllWorkoutsHistory(data.histories))
-                  navigation.navigate("TabNavigator", { screen: "Home" });
-                })
-              })
+              fetch(
+                `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/${data.userInfos.token}`
+              )
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.userWorkouts) {
+                    dispatch(addAllUserWorkouts(data.userWorkouts));
+                  }
+                  fetch(
+                    `${process.env.EXPO_PUBLIC_SERVER_IP}/histories/${userToken}`
+                  )
+                    .then((response) => response.json())
+                    .then((data) => {
+                      dispatch(addAllWorkoutsHistory(data.histories));
+                      navigation.navigate("TabNavigator", { screen: "Home" });
+                    });
+                });
             }
           });
       }
@@ -142,7 +144,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0D0D36",
-    // backgroundColor: "#0D0D36",
     alignItems: "center",
     justifyContent: "flex-start",
     paddingTop: 40,

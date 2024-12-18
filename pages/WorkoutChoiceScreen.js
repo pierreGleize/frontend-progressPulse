@@ -16,11 +16,12 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
 
   const handleNavigateToSummary = (data) => {
     dispatch(resetWorkoutCreation());
+
     let exercisesToAdd = [];
-    console.log(data);
+
     for (let exercise of data) {
-      console.log(exercise.sets);
       let customSets = [];
+
       for (let set of exercise.sets) {
         customSets.push({
           weight: set.weight,
@@ -51,12 +52,9 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
         setAddWorkout(data.data);
       });
   }, []);
-  // console.log(addWorkout);
 
   const nameWorkout = addWorkout.map((data, i) => {
-    // console.log(data.image);
     const imageSource = imagesWorkout.filter((imageWorkout) => {
-      // console.log(imageWorkout.name, element.image);
       if (imageWorkout.name === data.image) {
         return imageWorkout.source;
       }

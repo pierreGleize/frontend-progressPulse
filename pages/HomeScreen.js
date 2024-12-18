@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import BtnWorkoutSession from "../components/BtnWorkoutSession";
 import Underline from "../components/Underline";
 import imagesWorkout from "../utils/imagesWorkout";
+
 export default function HomeScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const workouts = useSelector((state) => state.workouts.value);
@@ -24,6 +25,7 @@ export default function HomeScreen({ navigation }) {
         return imageWorkout.source;
       }
     });
+
     let nbExercises = "";
     if (element.exercises.length === 1) {
       nbExercises = element.exercises.length + " exercice";
@@ -99,7 +101,12 @@ export default function HomeScreen({ navigation }) {
             />
           </View>
         )}
-        {workouts.length > 0 && (
+        {workouts.length === 1 ? (
+          <View style={styles.seances}>
+            <Text style={styles.text}>Ma séance :</Text>
+            <Underline width={50} />
+          </View>
+        ) : (
           <View style={styles.seances}>
             <Text style={styles.text}>Mes séances :</Text>
             <Underline width={50} />
@@ -162,9 +169,9 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   seances: {
     marginHorizontal: 15,

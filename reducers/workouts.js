@@ -69,7 +69,7 @@ export const workoutsSlice = createSlice({
       }
     },
 
-    removeAllWorkout: (state, action) => {
+    removeAllWorkout: (state) => {
       state.value = [];
     },
   },
@@ -83,5 +83,6 @@ export const {
   removeExercise,
   updateWorkoutName,
   updateExercises,
+  removeAllWorkout,
 } = workoutsSlice.actions;
 export default workoutsSlice.reducer;

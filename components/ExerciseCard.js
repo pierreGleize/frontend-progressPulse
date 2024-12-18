@@ -4,7 +4,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeExercise } from "../reducers/workoutCreation";
 import { useEffect } from "react";
 
 const ExerciseCard = ({
