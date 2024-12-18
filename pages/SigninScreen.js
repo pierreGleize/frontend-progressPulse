@@ -1,6 +1,3 @@
-//82472213086-2covqgqt1fnfqpeuck07sajk15llsu9i.apps.googleusercontent.com : ios
-//
-
 import {
   StyleSheet,
   Text,

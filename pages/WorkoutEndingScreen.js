@@ -32,6 +32,7 @@ export default function WorkoutEndingScreen({ navigation }) {
     }
 
     const handlePress = () => {
+        //currentWorkoutToAdd correspond à la valeur du reduceur currentWorkout
         let currentWorkoutToAdd = {...currentWorkout}
         currentWorkoutToAdd.note = personnalNote
         currentWorkoutToAdd.ressenti = ressenti

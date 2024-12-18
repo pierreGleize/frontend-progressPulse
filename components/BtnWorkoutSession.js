@@ -4,10 +4,19 @@ import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-export default function WorkoutSessionButton({name, time, nbExercise, onPress}) {
+export default function WorkoutSessionButton({
+  name,
+  time,
+  nbExercise,
+  onPress,
+  accessibilityLabel,
+  accessibilityHint,
+}) {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
       onPress={() => onPress(name)}
       style={{
         marginBottom: 20,
@@ -102,7 +111,7 @@ const styles = StyleSheet.create({
     gap: 5,
     marginRight: 5,
     alignItems: "center",
-    marginLeft : 10,
+    marginLeft: 10,
   },
 
   iconTimeContainer: {
