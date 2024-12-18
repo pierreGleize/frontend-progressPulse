@@ -4,15 +4,16 @@ import Underline from "../components/Underline";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import BtnWorkoutSession from "../components/BtnWorkoutSession";
-
 import {
   addAllExercise,
   resetWorkoutCreation,
 } from "../reducers/workoutCreation";
+import imagesWorkout from "../utils/imagesWorkout";
 
 export default function WorkoutChoiceScreen({ navigation, route }) {
-  const dispatch = useDispatch();
   const { name } = route.params;
+  const dispatch = useDispatch();
+
   const handleNavigateToSummary = (data) => {
     dispatch(resetWorkoutCreation());
     let exercisesToAdd = [];
@@ -35,7 +36,10 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
       });
     }
     dispatch(addAllExercise(exercisesToAdd));
-    navigation.navigate("workoutSummary", { backTo: "workoutChoice" });
+    navigation.navigate("workoutSummary", {
+      backTo: "workoutChoice",
+      name: name,
+    });
   };
 
   const [addWorkout, setAddWorkout] = useState([]);
@@ -47,8 +51,16 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
         setAddWorkout(data.data);
       });
   }, []);
+  // console.log(addWorkout);
 
   const nameWorkout = addWorkout.map((data, i) => {
+    // console.log(data.image);
+    const imageSource = imagesWorkout.filter((imageWorkout) => {
+      // console.log(imageWorkout.name, element.image);
+      if (imageWorkout.name === data.image) {
+        return imageWorkout.source;
+      }
+    });
     const nbExercises = data.exercices.length + " exercices";
     let time = () => {
       for (let i = 0; i < data.exercices.length; i++) {
@@ -72,6 +84,7 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
         onPress={() => handleNavigateToSummary(data.exercices)}
         accessibilityLabel={`Choisir la séance ${data.name}`}
         accessibilityHint="Vous serez redirigé vers le résumé de cette séance"
+        image={imageSource}
       />
     );
   });

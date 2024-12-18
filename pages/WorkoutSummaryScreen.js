@@ -21,13 +21,18 @@ import {
 } from "../reducers/workoutCreation";
 import { addWorkout } from "../reducers/workouts";
 import Underline from "../components/Underline";
+import imagesWorkout from "../utils/imagesWorkout";
 
 export default function WorkoutSummaryScreen({ navigation, route }) {
-  const { backTo, categorie = {} } = route.params || {};
+  const { backTo, categorie = {}, name } = route.params || {};
+  console.log(backTo, categorie, name);
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   const workouts = useSelector((state) => state.workouts.value);
+
+  const randomImage = Math.floor(Math.random() * imagesWorkout.length);
+  console.log(imagesWorkout[randomImage].name);
 
   const [modalCustomSetsVisible, setmodalCustomSetsVisible] = useState(false);
   const [modalTitleVisible, setModalTitleVisible] = useState(false);
@@ -176,6 +181,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         userToken: user.token,
         name: workoutName,
         exercices: exercices,
+        image: imagesWorkout[randomImage].name,
       };
       fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addWorkout`, {
         method: "POST",
@@ -190,6 +196,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               _id: data.userWorkout._id,
               name: data.userWorkout.name,
               exercises: data.userWorkout.exercises,
+              image: data.userWorkout.image,
             };
             dispatch(addWorkout(workoutToAddToStore));
             setModalTitleVisible(false);
@@ -396,14 +403,15 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         </KeyboardAvoidingView>
       </Modal>
       {/* Fin Modal pour modifier les objetctifs de l'exercice */}
-      <View>
+      <View style={{ marginBottom: 20 }}>
         <FontAwesome
           name={"chevron-left"}
           accessibilityLabel={`Permet de revenir sur la page ${backTo}`}
           size={24}
           color={"#3BC95F"}
           style={{ marginLeft: 15, marginTop: 5 }}
-          onPress={() => navigation.navigate(backTo, { categorie: categorie })}
+          onPress={() => navigation.navigate(backTo, { name: name })}
+          // onPress={() => navigation.navigate(backTo, { categorie: categorie })}
         />
       </View>
       <View style={styles.mainContainer}>
@@ -424,14 +432,6 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           accessibilityHint="Redirection sur la page d'accueil, votre séance si affichera"
         />
       </View>
-      <FontAwesome
-          name={"chevron-left"}
-          accessibilityLabel={`Permet de revenir sur la page ${backTo}`}
-          size={24}
-          color={"white"}
-          style={{ position: "absolute", top: 85, right: 50}}
-          onPress={() => navigation.navigate(backTo, { categorie: categorie })}
-        />
     </View>
   );
 }

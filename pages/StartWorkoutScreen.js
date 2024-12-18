@@ -15,20 +15,17 @@ import ExerciseCard from "../components/ExerciseCard";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Underline from "../components/Underline";
-<<<<<<< HEAD
 import {
   removeWorkout,
   removeExercise,
   updateWorkoutSets,
+  updateWorkoutName,
 } from "../reducers/workouts";
 import {
   addWorkoutInformation,
   resetCurrentWorkout,
 } from "../reducers/currentWorkout";
-=======
-import { removeWorkout, removeExercise, updateWorkoutSets, updateWorkoutName } from "../reducers/workouts";
-import { addWorkoutInformation, resetCurrentWorkout } from "../reducers/currentWorkout";
->>>>>>> a3a8293a86975cb81ef35919f7ab0ad85182a748
+import { updateNameWorkoutHistory } from "../reducers/workoutsHistory";
 
 export default function WorkoutSummaryScreen({ navigation, route }) {
   const { workoutID } = route.params || {};
@@ -44,8 +41,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   const [restMinutes, setRestMinutes] = useState("1");
   const [restSeconds, setRestSeconds] = useState("00");
   const [emptyFields, setEmptyFields] = useState(false);
-  const [modalTitleVisible, setModalTitleVisible] = useState(false)
-
+  const [modalTitleVisible, setModalTitleVisible] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -65,7 +61,9 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     {}
   );
 
-  const [workoutNameInput, setWorkoutNameInput] = useState(workoutSelected.name)
+  const [workoutNameInput, setWorkoutNameInput] = useState(
+    workoutSelected.name
+  );
 
   // Récupération de l'historique de la séance en cours
   const currentWorkout = useSelector((state) => state.currentWorkout.value);
@@ -91,8 +89,6 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         }
       });
   };
-
-
 
   const openModalCustomSets = (
     exerciseName,
@@ -128,26 +124,41 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   };
 
   const handleChangeName = () => {
-    if (workoutNameInput){
-      setEmptyFields(false)
+    if (workoutNameInput) {
+      setEmptyFields(false);
       fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/updateName`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({workoutID: workoutID, newWorkoutName: workoutNameInput }),
-      }).then(response => response.json())
-      .then(data => {
-        if (data.result){
-          dispatch(updateWorkoutName({workoutID: workoutID, newName: workoutNameInput }))
-          setModalTitleVisible(false)
-        } else {
-          setEmptyFields(true)
-        }
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          workoutID: workoutID,
+          newWorkoutName: workoutNameInput,
+          token: user.token,
+        }),
       })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.result) {
+            dispatch(
+              updateWorkoutName({
+                workoutID: workoutID,
+                newName: workoutNameInput,
+              })
+            );
+            dispatch(
+              updateNameWorkoutHistory({
+                workoutID: workoutID,
+                newName: workoutNameInput,
+              })
+            );
+            setModalTitleVisible(false);
+          } else {
+            setEmptyFields(true);
+          }
+        });
     } else {
-      setEmptyFields(true)
+      setEmptyFields(true);
     }
-    
-  }
+  };
 
   const handleUpdateExercise = () => {
     if (!charge || !nbSets || !nbReps || !restSeconds || !restMinutes) {
@@ -485,9 +496,20 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         />
         <View style={styles.workoutNameSection}>
           <Text style={styles.topTitle}>{workoutSelected.name}</Text>
-          <FontAwesome style={styles.pencilLogo} name="pencil" size={18} color={"white"} onPress={() => setModalTitleVisible(!modalTitleVisible)}/>
+          <FontAwesome
+            style={styles.pencilLogo}
+            name="pencil"
+            size={18}
+            color={"white"}
+            onPress={() => setModalTitleVisible(!modalTitleVisible)}
+          />
         </View>
-        <FontAwesome name="trash" size={24} color={"#A3FD01"} onPress={handleDeleteWorkout}/>
+        <FontAwesome
+          name="trash"
+          size={24}
+          color={"#A3FD01"}
+          onPress={handleDeleteWorkout}
+        />
       </View>
 
       <View style={styles.mainContainer}>
@@ -635,7 +657,7 @@ const styles = StyleSheet.create({
   workoutNameSection: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   modalTitleView: {
     width: "80%",
@@ -650,7 +672,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  pencilLogo:{
-    marginLeft: 10
-  }
+  pencilLogo: {
+    marginLeft: 10,
+  },
 });

@@ -6,12 +6,12 @@ import { LinearGradient } from "expo-linear-gradient";
 export default function WorkoutDifficultyScreen({ navigation }) {
   const difficulty = [
     {
-      name: "Debutant",
+      name: "Débutant",
       source: require("../assets/illustrations/debutant.webp"),
       id: 1,
     },
     {
-      name: "Intermediaire",
+      name: "Intermédiaire",
       source: require("../assets/illustrations/intermediaire.webp"),
       id: 2,
     },

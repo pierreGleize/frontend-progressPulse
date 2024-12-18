@@ -180,21 +180,23 @@ export default function WeightScreen({ navigation, route }) {
     : moment(user.target.date).format("Do MMM YYYY");
 
   // Liste de toutes les entrées de poids
-  const weights = user.weight.map((element, index) => (
-    <View
-      key={index}
-      style={{
-        flexDirection: "row",
-        justifyContent: "space-around",
-        marginBottom: 10,
-      }}
-    >
-      <Text style={styles.text}>{element.weight} kg</Text>
-      <Text style={styles.text}>
-        {moment(element.date).format("Do MMM YYYY")}
-      </Text>
-    </View>
-  ));
+  const weights = [...user.weight]
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .map((element, index) => (
+      <View
+        key={index}
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-around",
+          marginBottom: 10,
+        }}
+      >
+        <Text style={styles.text}>{element.weight} kg</Text>
+        <Text style={styles.text}>
+          {moment(element.date).format("Do MMM YYYY")}
+        </Text>
+      </View>
+    ));
 
   // Logique pour décocher une case lorque une case est cochée
   const handleCheckbox = (name) => {
