@@ -395,6 +395,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           </View>
         </KeyboardAvoidingView>
       </Modal>
+      {/* Fin Modal pour modifier les objetctifs de l'exercice */}
       <View>
         <FontAwesome
           name={"chevron-left"}
@@ -421,6 +422,14 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           isLinearGradiant={false}
         />
       </View>
+      <FontAwesome
+          name={"chevron-left"}
+          accessibilityLabel={`Permet de revenir sur la page ${backTo}`}
+          size={24}
+          color={"white"}
+          style={{ position: "absolute", top: 85, right: 50}}
+          onPress={() => navigation.navigate(backTo, { categorie: categorie })}
+        />
     </View>
   );
 }
