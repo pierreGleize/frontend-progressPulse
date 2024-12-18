@@ -10,11 +10,13 @@ export default function WorkoutSessionButton({
   nbExercise,
   onPress,
   accessibilityLabel,
+  accessibilityHint,
 }) {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
       onPress={() => onPress(name)}
       style={{
         marginBottom: 20,

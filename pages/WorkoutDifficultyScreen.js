@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Underline from "../components/Underline";
 import { LinearGradient } from "expo-linear-gradient";
@@ -38,6 +32,8 @@ export default function WorkoutDifficultyScreen({ navigation }) {
         key={data.id}
         activeOpacity={0.7}
         style={styles.btn}
+        accessibilityLabel={`Niveau de séance ${data.name}`}
+        accessibilityHint="En cliquant sur ce bouton vous serez redirigé vers les exercices à la difficultée associé"
         onPress={() => handleNavigateToWorkout(data.name)}
       >
         <LinearGradient
@@ -55,12 +51,13 @@ export default function WorkoutDifficultyScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topContainer}>
+      <View>
         <FontAwesome
           name={"chevron-left"}
           size={24}
           color={"#3BC95F"}
           style={{ marginLeft: 15, marginTop: 5 }}
+          accessibilityLabel="Revenir sur la page pour sélectionné le type de séance"
           onPress={() => navigation.navigate("WorkoutType")}
         />
         <View>

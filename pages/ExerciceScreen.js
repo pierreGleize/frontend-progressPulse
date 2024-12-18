@@ -5,7 +5,7 @@ import {
   View,
   Modal,
   ScrollView,
-  Dimensions, 
+  Dimensions,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
@@ -20,7 +20,7 @@ export default function Exercice({ navigation, route }) {
   const { workoutID, exerciseID } = route.params || {};
 
   // Récupération de la largeur de l'écran
-  const screenWidth = Dimensions.get("window").width
+  const screenWidth = Dimensions.get("window").width;
 
   // Récupération des l'ensemble des séance
   const workouts = useSelector((state) => state.workouts.value);
@@ -69,58 +69,55 @@ export default function Exercice({ navigation, route }) {
     (workout) => workout.workoutID === workoutID
   );
   // Tri de l'historique par date la plus récente à la plus ancienne
-  const sortedCurrentWorkoutHistory = currentWorkoutHistory.sort((a, b) => new Date(b.date) - new Date(a.date))
+  const sortedCurrentWorkoutHistory = currentWorkoutHistory.sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
   let mostRecentWorkout = null;
   let mostRecentExercise = null;
   let mostRecentSets = [];
-  
-  const exerciseHistoryToShow = sortedCurrentWorkoutHistory.map((history, i) => {
-    const year = history.date.slice(0, 4)
-    const month = history.date.slice(5, 7)
-    const day = history.date.slice(8, 10)
-    const fullDate = `${day}/${month}/${year}`
-    return (   
-    history.performances.map(performance => {
-        if (performance.exercise._id === exerciseID){
-            
+
+  const exerciseHistoryToShow = sortedCurrentWorkoutHistory.map(
+    (history, i) => {
+      const year = history.date.slice(0, 4);
+      const month = history.date.slice(5, 7);
+      const day = history.date.slice(8, 10);
+      const fullDate = `${day}/${month}/${year}`;
+      return history.performances
+        .map((performance) => {
+          if (performance.exercise._id === exerciseID) {
             return (
-                <ScrollView key={i}>    
+              <ScrollView key={i}>
                 <Text style={styles.performanceDate}>{fullDate}</Text>
-                <View style={[styles.perfSection, {width: screenWidth}]}>
-                {performance.sets.map((set, j) => {
+                <View style={[styles.perfSection, { width: screenWidth }]}>
+                  {performance.sets.map((set, j) => {
                     return (
-                        <LinearGradient
-                          key={j}
-                          colors={["#1C1C45", "#4645AB"]}
-                          start={{ x: 0, y: 0 }}
-                          end={{ x: 1, y: 0 }}
-                          style={styles.linearPerf}
-                        >
-                          <Text style={styles.perf}>
-                            Série {j + 1} : {set.reps} x {set.weight}kg
-                          </Text>
-                        </LinearGradient>
-                      );
-                })}
+                      <LinearGradient
+                        key={j}
+                        colors={["#1C1C45", "#4645AB"]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        style={styles.linearPerf}
+                      >
+                        <Text style={styles.perf}>
+                          Série {j + 1} : {set.reps} x {set.weight}kg
+                        </Text>
+                      </LinearGradient>
+                    );
+                  })}
                 </View>
-                </ScrollView>
-            )
-        }
-        return null;
-        
-    })
-    ).filter(item => item !== null);
-    
-  })
-
-
-
+              </ScrollView>
+            );
+          }
+          return null;
+        })
+        .filter((item) => item !== null);
+    }
+  );
 
   useEffect(() => {
-    for (let exercise of exerciseHistoryToShow){
-        console.log(exercise.length)
-        if (exercise.length != 0)
-        return setNoHistory(false)
+    for (let exercise of exerciseHistoryToShow) {
+      console.log(exercise.length);
+      if (exercise.length != 0) return setNoHistory(false);
     }
   }, [exerciseHistoryToShow]);
 
@@ -145,6 +142,7 @@ export default function Exercice({ navigation, route }) {
               color={"white"}
               onPress={closeModal}
               style={styles.infoIcon}
+              accessibilityLabel="Permet de fermer la modale"
             />
           </View>
           <View style={styles.titleModal}>
@@ -158,6 +156,7 @@ export default function Exercice({ navigation, route }) {
             activeOpacity={0.7}
             style={styles.btn}
             onPress={closeModal}
+            accessibilityLabel="Permet de fermer la modale"
           >
             <Text style={styles.textButton}>OK</Text>
           </TouchableOpacity>
@@ -170,6 +169,7 @@ export default function Exercice({ navigation, route }) {
               name={"chevron-left"}
               size={24}
               color={"#3BC95F"}
+              accessibilityLabel="Redirection vers la page pour choisir un exercice"
               onPress={() =>
                 navigation.navigate("startWorkout", { workoutID: workoutID })
               }
@@ -185,6 +185,8 @@ export default function Exercice({ navigation, route }) {
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.btn}
+          accessibilityLabel="Voir les informations sur l'exécution de l'exercice"
+          accessibilityHint="Ouvre une modale"
           onPress={openModal}
         >
           <Text style={styles.textButton}>Voir les instructions</Text>
@@ -195,24 +197,20 @@ export default function Exercice({ navigation, route }) {
         <View style={styles.perfContainer}>
           <Text style={styles.text}>Performances de tes dernières séances</Text>
           <Underline width={100} />
-          <ScrollView 
+          <ScrollView
             horizontal={true}
             snapToInterval={screenWidth}
             snapToAlignment="start" // Alignement au début
             pagingEnabled={false} // Désactive pagingEnabled (parfois redondant avec snapToInterval)
             decelerationRate="fast"
-          contentContainerStyle={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center"
-          }}
-         
-          showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            showsHorizontalScrollIndicator={false}
           >
-            
-
-              {exerciseHistoryToShow}
-           
+            {exerciseHistoryToShow}
           </ScrollView>
         </View>
       )}
@@ -277,6 +275,7 @@ export default function Exercice({ navigation, route }) {
           width={300}
           height={60}
           borderColor="none"
+          accessibilityLabel="Aller à la page du minuteur"
           onPress={() =>
             navigation.navigate("timer", {
               exerciseID: exerciseID,
@@ -356,7 +355,7 @@ const styles = StyleSheet.create({
     width: "40%",
     marginBottom: 10,
     borderRadius: 10,
-    marginHorizontal: 5
+    marginHorizontal: 5,
   },
 
   perf: {
@@ -454,13 +453,13 @@ const styles = StyleSheet.create({
   },
   performanceDate: {
     color: "white",
-    textAlign: "center"
+    textAlign: "center",
   },
   perfSection: {
     marginTop: 5,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     justifyContent: "center",
-  }
+  },
 });

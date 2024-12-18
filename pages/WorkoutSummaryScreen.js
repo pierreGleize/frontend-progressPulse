@@ -419,6 +419,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           height={50}
           onPress={() => setModalTitleVisible(true)}
           isLinearGradiant={false}
+          accessibilityLabel="Valider la et accepter si des changements ont été apporté sur la séance"
+          accessibilityHint="Redirection sur la page d'accueil, votre séance si affichera"
         />
       </View>
     </View>
