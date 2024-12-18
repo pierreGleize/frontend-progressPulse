@@ -153,6 +153,7 @@ export default function TimerScreen({ navigation, route }) {
         };
         dispatch(addExerciseSet(setToAdd));
         if (currentExercise) {
+          console.log("Current : " + currentExercise.sets.length+  "NbSets : " + nbSets)
           if (currentExercise.sets.length + 1 < nbSets) {
             navigation.navigate("exercice", {
               exerciseID: exerciseID,
@@ -163,11 +164,17 @@ export default function TimerScreen({ navigation, route }) {
             stopSound();
           }
         } else {
-          navigation.navigate("exercice", {
-            exerciseID: exerciseID,
-            workoutID: workoutID,
-          });
-          stopSound();
+          if(nbSets === 1){
+            navigation.navigate("startWorkout", { workoutID: workoutID });
+            stopSound();
+          } else {
+            navigation.navigate("exercice", {
+              exerciseID: exerciseID,
+              workoutID: workoutID,
+            });
+            stopSound();
+          }
+          
         }
       } else {
         setEmptyFields(true);
