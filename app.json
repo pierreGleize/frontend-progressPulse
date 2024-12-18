@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "frontend",
-    "slug": "frontend",
+    "name": "ProgressPulse",
+    "slug": "ProgreesPulse",
     "version": "1.0.0",
     "extra": {
       "SERVER_IP": "http://192.168.1.18:3000"

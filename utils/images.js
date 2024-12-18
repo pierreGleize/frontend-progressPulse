@@ -79,7 +79,7 @@ const images = {
     developpecouchehalteres: require("../assets/pectoraux/developpecouchehalteres.gif"),
     developpeincline: require("../assets/pectoraux/developpeincline.gif"),
     ecartepoulie: require("../assets/pectoraux/ecartepoulie.gif"),
-    developpeCouche: require("../assets/pectoraux/developpeCouche.gif"),
+    developpeCouche: require("../assets/pectoraux/developpecouche.gif"),
     ecarteCoucheHaltere: require("../assets/pectoraux/ecarteCoucheHaltere.gif"),
     developpeInclineMachineConvergente: require("../assets/pectoraux/developpeInclineMachineConvergente.gif"),
     developpeDeclineBarre: require("../assets/pectoraux/developpeDeclineBarre.gif"),
