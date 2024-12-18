@@ -262,7 +262,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             )}
             {postError && (
               <Text style={styles.errorMessage}>
-                Ce nom est déjà attribué à l'une de vos séances. Choissisez un autre nom
+                Ce nom est déjà attribué à l'une de vos séances. Choissisez un
+                autre nom
               </Text>
             )}
             <Button
@@ -431,6 +432,14 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           accessibilityLabel="Valider la et accepter si des changements ont été apporté sur la séance"
           accessibilityHint="Redirection sur la page d'accueil, votre séance si affichera"
         />
+        <FontAwesome
+          name={"plus-circle"}
+          accessibilityLabel={`Permet de revenir sur la page ${backTo}`}
+          size={45}
+          color={"white"}
+          style={{ marginRight: 15 }}
+          onPress={() => navigation.navigate("muscleGroup")}
+        />
       </View>
     </View>
   );
@@ -450,9 +459,11 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   bottomContainer: {
-    flex: 0.5,
+    flex: 0.4,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
+    width: "100%",
   },
   mainContainer: {
     flex: 4,
@@ -471,7 +482,7 @@ const styles = StyleSheet.create({
 
   modalView: {
     width: "80%",
-    height: "570",
+    height: "600",
     margin: 20,
     backgroundColor: "#272D34",
     borderRadius: 20,

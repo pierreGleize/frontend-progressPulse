@@ -6,21 +6,39 @@ import { useSelector } from "react-redux";
 import BtnMuscleGroup from "../components/BtnMuscleGroup";
 import muscleGroupIcons from "../utils/muscleGroupIcons";
 
-export default function MuscleGroupScreen({ navigation }) {
-  console.log(muscleGroupIcons);
-  const exercisesLength = useSelector(
-    (state) => state.workoutCreation.value.exercises.length
-  );
+export default function MuscleGroupScreen({ navigation, route }) {
+
+  const { isWorkoutAlreadyCreated = false, workoutID = null } = route.params || {};
+
+  let exercisesLength = 0
+  if (!isWorkoutAlreadyCreated){
+    exercisesLength = useSelector(
+      (state) => state.workoutCreation.value.exercises.length
+    );  
+  } else {
+    const workouts = useSelector((state) => state.workouts.value)
+    const workoutSelected = workouts.find(e => e._id === workoutID)
+    exercisesLength = workoutSelected.exercises.length
+  }
+  
+
   console.log(exercisesLength);
   const handleFinish = () => {
-    navigation.navigate("workoutSummary", { backTo: "muscleGroup" });
+    if(!isWorkoutAlreadyCreated){
+      navigation.navigate("workoutSummary", { backTo: "muscleGroup" });
+    } else {
+      navigation.navigate("startWorkout", {
+        workoutID: workoutID,
+      });
+    }
+    
   };
   const handleNavigateToExercice = (name) => {
-    navigation.navigate("exercicesChoices", { name: name });
+    navigation.navigate("exercicesChoices", { name: name, isWorkoutAlreadyCreated, workoutID });
   };
   return (
     <View style={styles.container}>
-      <View style={styles.topContainer}>
+      {!isWorkoutAlreadyCreated && <View style={styles.topContainer}>
         <FontAwesome
           name={"chevron-left"}
           size={24}
@@ -33,7 +51,7 @@ export default function MuscleGroupScreen({ navigation }) {
           <Text style={styles.title}>Exercices </Text>
           <Underline width={60} />
         </View>
-      </View>
+      </View>}
 
       <View style={styles.btnContainer}>
         <FlatList
@@ -67,9 +85,9 @@ export default function MuscleGroupScreen({ navigation }) {
           <Button
             background="#A3FD01"
             borderColor="none"
-            textButton="Voir le récap"
+            textButton={isWorkoutAlreadyCreated ? "Retourner à ma séance":"Voir le récap"}
             textColor="black"
-            width={150}
+            width={isWorkoutAlreadyCreated ? 280 : 150}
             height={50}
             onPress={handleFinish}
             isLinearGradiant={false}

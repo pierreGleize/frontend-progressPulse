@@ -102,11 +102,22 @@ export default function Exercice({ navigation, route }) {
                         colors={["#1C1C45", "#4645AB"]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}
-                        style={styles.linearPerf}
+                        style={
+                          muscleGroup != "Cardio"
+                            ? [styles.linearPerf]
+                            : [styles.linearPerf, { width: "60%" }]
+                        }
                       >
-                        <Text style={styles.perf}>
-                          Série {j + 1} : {set.reps} x {set.weight}kg
-                        </Text>
+                        {muscleGroup != "Cardio" ? (
+                          <Text style={styles.perf}>
+                            Série {j + 1} : {set.reps} x {set.weight}kg
+                          </Text>
+                        ) : (
+                          <Text style={styles.perf}>
+                            Durée {set.rest / 60} min - Resistance/Inclinaison:{" "}
+                            {set.weight}
+                          </Text>
+                        )}
                       </LinearGradient>
                     );
                   })}

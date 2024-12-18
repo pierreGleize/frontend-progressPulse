@@ -1,8 +1,13 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
+import { useDispatch } from "react-redux";
+import { resetWorkoutCreation } from "../reducers/workoutCreation";
 
 export default function WorkoutTypeScreen({ navigation }) {
+
+  const dispatch = useDispatch()
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -32,7 +37,10 @@ export default function WorkoutTypeScreen({ navigation }) {
           accessibilityLabel="Créer une séance personalisée"
           activeOpacity={0.7}
           style={styles.btn}
-          onPress={() => navigation.navigate("muscleGroup")}
+          onPress={() => {
+            dispatch(resetWorkoutCreation())
+            navigation.navigate("muscleGroup")
+          }}
         >
           <LinearGradient
             colors={["#3BC95F", "#1f532c"]}

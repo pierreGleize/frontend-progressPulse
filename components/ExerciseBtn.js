@@ -14,21 +14,33 @@ const ExerciseBtn = ({
   openModal,
   accessibilityLabel,
   accessibilityHint,
+  isWorkoutAlreadyCreated,
+  workoutID
 }) => {
   const dispatch = useDispatch();
-
   const [isAdded, setIsAdded] = useState(false);
 
   const workoutCreationExercises = useSelector(
     (state) => state.workoutCreation.value.exercises
   );
 
+  const workoutSelected = useSelector(state => state.workouts.value.find(e => e._id === workoutID))
+
   useEffect(() => {
-    const exerciseAlreadyAdded = workoutCreationExercises.some(
-      (exercise) => exercise.exercise === exerciseID
-    );
-    setIsAdded(exerciseAlreadyAdded);
-  }, [workoutCreationExercises]);
+    let exerciseAlreadyAdded
+    if(!isWorkoutAlreadyCreated){
+      exerciseAlreadyAdded = workoutCreationExercises.some(
+        (exercise) => exercise.exercise === exerciseID
+      );
+      setIsAdded(exerciseAlreadyAdded);
+    } else {
+      exerciseAlreadyAdded = workoutSelected.exercises.some(
+        (exercise) => { 
+          return exercise.exercise._id === exerciseID}
+      );
+      setIsAdded(exerciseAlreadyAdded);
+    }
+  }, [workoutCreationExercises, workoutSelected]);
 
   const handlePress = () => {
     if (!isAdded) {
