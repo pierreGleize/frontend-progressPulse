@@ -262,7 +262,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             )}
             {postError && (
               <Text style={styles.errorMessage}>
-                Erreur lors de l'engistrement, réessayez plus tard
+                Ce nom est déjà attribué à l'une de vos séances. Choissisez un autre nom
               </Text>
             )}
             <Button

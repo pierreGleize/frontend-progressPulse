@@ -162,9 +162,9 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: "#ffffff",
+    color: '#ffffff',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   seances: {
     marginHorizontal: 15,

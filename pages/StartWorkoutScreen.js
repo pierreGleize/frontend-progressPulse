@@ -49,15 +49,20 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   const workouts = useSelector((state) => state.workouts.value);
   const workoutSelected = workouts.find((workout) => workout._id === workoutID);
   // Récupération de tous les exercices de la séance et tri par groupe musculaire
+  //groupedWorkoutExercises` contient un objet où chaque clé est un groupe musculaire et chaque valeur est un tableau des exercices correspondant à ce groupe musculaire.
   const groupedWorkoutExercises = workoutSelected.exercises.reduce(
+    //groups c'est l'accumulateur, l'objet contenant le résultat du regroupement, au départ c'est un objet vide.
     (groups, exercise) => {
       const { muscleGroupe } = exercise.exercise;
+      // Si le groupe musculaire n'existe pas encore dans l'accumulateur, on l'initialise comme un tableau vide
       if (!groups[muscleGroupe]) {
         groups[muscleGroupe] = [];
       }
+      // On ajoute l'exercice au groupe musculaire correspondant
       groups[muscleGroupe].push(exercise);
       return groups;
     },
+    //accumulateur initial est un objet vide
     {}
   );
 
@@ -72,6 +77,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   // Récupération de l'utilisateur connecté
   const user = useSelector((state) => state.user.value);
 
+  //Permet de supprimer un exercice
   const handleDeleteExercise = (exerciseID) => {
     const exerciseToRemove = {
       workoutID: workoutID,
@@ -100,6 +106,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     restSeconds,
     muscleGroup
   ) => {
+    // Mise à jour des états locaux avec les valeurs des arguments passés
     setExerciseName(exerciseName);
     setExerciseID(exerciseID);
     setMuscleGroup(muscleGroup);

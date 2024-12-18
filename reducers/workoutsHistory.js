@@ -27,9 +27,16 @@ export const workoutsHistorySlice = createSlice({
         }
       }
     },
+    resetWorkoutsHistory: (state, action) => {
+      state.value = [];
+    },
   },
 });
 
-export const { addWorkout, addAllWorkoutsHistory, updateNameWorkoutHistory } =
-  workoutsHistorySlice.actions;
+export const {
+  addWorkout,
+  addAllWorkoutsHistory,
+  updateNameWorkoutHistory,
+  resetWorkoutsHistory,
+} = workoutsHistorySlice.actions;
 export default workoutsHistorySlice.reducer;

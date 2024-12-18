@@ -24,19 +24,24 @@ export default function Exercice({ navigation, route }) {
 
   // Récupération des l'ensemble des séance
   const workouts = useSelector((state) => state.workouts.value);
+
   // Recherche de la séance avec le workoutID reçu en props
   const workoutSelected = workouts.find((workout) => workout._id === workoutID);
-  // Recherche de l'exercice avec l'exerciseID reçu en propsd
+
+  // Recherche de l'exercice avec l'exerciseID reçu en props
   const exerciseSelected = workoutSelected.exercises.find(
     (exercise) => exercise.exercise._id === exerciseID
   );
+
   // Stockage du nom du groupe musculaire de l'exercice sélectionné
   const muscleGroup = exerciseSelected.exercise.muscleGroupe;
+
   // Recherche de l'image correspondant à l'exercice
   const imagePath =
     images[exerciseSelected.exercise.muscleGroupe.toLowerCase()][
       exerciseSelected.exercise.image
     ];
+
   // Transformation du paragraphe de descripiton en tableau
   const descriptionSentences =
     exerciseSelected.exercise.description.split(/(?<=[.!?])\s+/);
@@ -53,6 +58,7 @@ export default function Exercice({ navigation, route }) {
 
   // Récupération des performances de la séance en cours
   const currentWorkout = useSelector((state) => state.currentWorkout.value);
+
   // Vérification si l'exercice est présent dans le reducers et combien de sets ont été enregistrés
   useEffect(() => {
     const exerciseExist = currentWorkout.performances.find(
@@ -400,7 +406,7 @@ const styles = StyleSheet.create({
 
   button: {
     position: "absolute",
-    bottom: 30,
+    bottom: -5,
     alignItems: "center",
     width: "100%",
     marginHorizontal: 10,
