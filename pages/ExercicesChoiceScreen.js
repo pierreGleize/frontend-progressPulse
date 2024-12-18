@@ -18,9 +18,10 @@ import { useEffect, useState } from "react";
 import images from "../utils/images";
 import { useDispatch, useSelector } from "react-redux";
 import { addExercise } from "../reducers/workoutCreation";
+import { updateExercises } from "../reducers/workouts";
 
 export default function ExercicesChoicesScreen({ navigation, route }) {
-  const { name } = route.params;
+  const { name, isWorkoutAlreadyCreated, workoutID } = route.params;
   const dispatch = useDispatch();
   const value = useSelector((state) => state.workoutCreation.value);
 
@@ -52,7 +53,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
   }, []);
 
   const handleFinish = () => {
-    navigation.navigate("muscleGroup");
+    navigation.navigate("muscleGroup", {workoutID, isWorkoutAlreadyCreated});
   };
 
   const openModal = (textButton, exerciseID) => {
@@ -99,7 +100,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
         setEmptyFields(true);
       } else {
         setEmptyFields(false);
-        const customSets = [{ weight: charge, reps: 1 }];
+        const customSets = [{ weight: parseInt(charge), reps: 1 }];
         const restConverted =
           parseInt(restMinutes) * 60 * 60 + parseInt(restSeconds) * 60;
         const exerciseToAdd = {
@@ -114,7 +115,60 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
       }
     }
   };
-  console.log(exercisesList);
+
+  const addToExistingWorkout = () => {
+    if (!isCardio) {
+      if (!charge || !nbReps || !nbSets || !restMinutes || !restSeconds) {
+        setEmptyFields(true);
+      } else {
+        setEmptyFields(false);
+        let customSets = [];
+        for (let i = 0; i < parseInt(nbSets); i++) {
+          customSets.push({ weight: parseInt(charge), reps: parseInt(nbReps) });
+        }
+        const restConverted =
+          parseInt(restMinutes) * 60 + parseInt(restSeconds);
+        const exerciseToAdd = {
+          exercise: exerciseID,
+          rest: restConverted,
+          customSets: customSets,
+        };
+        fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addExercise`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({workoutID, exerciseToAdd}),
+        }).then(response => response.json())
+        .then(data => {
+          dispatch(updateExercises({workoutID: workoutID, exercisesToUpdate: data.updatedWorkout.exercises}))
+          closeModal();
+        })
+      }
+    } else {
+      if (!charge || !restMinutes || !restSeconds) {
+        setEmptyFields(true);
+      } else {
+        setEmptyFields(false);
+        const customSets = [{ weight: parseInt(charge), reps: 1 }];
+        const restConverted =
+          parseInt(restMinutes) * 60 * 60 + parseInt(restSeconds) * 60;
+        const exerciseToAdd = {
+          exercise: exerciseID,
+          rest: restConverted,
+          customSets: customSets,
+        };
+        fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addExercise`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({workoutID, exerciseToAdd}),
+        }).then(response => response.json())
+        .then(data => {
+          dispatch(updateExercises({workoutID: workoutID, exercisesToUpdate: data.updatedWorkout.exercises}))
+          closeModal();
+        })
+      }
+    }
+  }
+
   const exercisesToShow = exercisesList
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((exercise, i) => {
@@ -129,6 +183,9 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           openModal={openModal}
           accessibilityLabel={`Sélectionné l'exercice ${exercise.name}`}
           accessibilityHint="Une modale va s'ouvir permettant d'entrer des données personalisés pour l'exercice"
+          workoutID={workoutID}
+          isWorkoutAlreadyCreated={isWorkoutAlreadyCreated}
+
         />
       );
     });
@@ -253,7 +310,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
               background="#272D34"
               borderWidth={1}
               borderColor="#A3FD01"
-              onPress={addToWorkout}
+              onPress={!isWorkoutAlreadyCreated ? addToWorkout : addToExistingWorkout}
             ></Button>
           </View>
         </KeyboardAvoidingView>
@@ -263,7 +320,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           name={"chevron-left"}
           size={24}
           color={"#3BC95F"}
-          onPress={() => navigation.navigate("muscleGroup")}
+          onPress={() => navigation.navigate("muscleGroup", {isWorkoutAlreadyCreated, workoutID})}
           accessibilityLabel="Revenir sur la page pour choisir le groupe musculaire"
           style={{ marginLeft: 15, marginTop: 5 }}
         />
@@ -334,7 +391,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: "80%",
-    height: "570",
+    height: "600",
     margin: 20,
     backgroundColor: "#272D34",
     borderRadius: 20,

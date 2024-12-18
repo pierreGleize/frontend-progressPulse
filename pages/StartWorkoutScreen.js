@@ -457,6 +457,14 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           onPress={handlePressButton}
           isLinearGradiant={false}
         />
+        <FontAwesome
+                  name={"plus-circle"}
+                  accessibilityLabel={`Permet de revenir sur la page précédente`}
+                  size={45}
+                  color={"white"}
+                  style={{marginRight: 15}}
+                  onPress={() => navigation.navigate('muscleGroup', {isWorkoutAlreadyCreated:true, workoutID: workoutID})}
+        />
       </View>
     </View>
   );
@@ -494,9 +502,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   bottomContainer: {
-    flex: 1,
+    flex: 0.8,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
+    width: "100%",
   },
   groupTitleSection: {
     justifyContent: "flex-start",
@@ -509,7 +519,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: "80%",
-    height: "570",
+    height: "600",
     margin: 20,
     backgroundColor: "#272D34",
     borderRadius: 20,

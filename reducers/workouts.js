@@ -18,7 +18,6 @@ export const workoutsSlice= createSlice({
       addWorkout: (state,action) => {
           // Exemple de l'action payload reçu {séanceToAdd}
           state.value.push(action.payload)
-          console.log(state.value[0].exercises)
       },
 
       removeWorkout: (state,action) =>{
@@ -28,9 +27,15 @@ export const workoutsSlice= createSlice({
       removeExercise: (state, action) => {
         for (let workout of state.value){
             if (workout._id === action.payload.workoutID){
-                console.log(workout.exercises[0]._id)
-                console.log(action.payload.exerciseID)
                 workout.exercises = workout.exercises.filter(exercise => exercise.exercise._id !== action.payload.exerciseID)
+            }
+        }
+      },
+
+      updateExercises : (state, action) => {
+        for (let workout of state.value){
+            if (workout._id === action.payload.workoutID){
+                workout.exercises = action.payload.exercisesToUpdate
             }
         }
       },
@@ -63,5 +68,5 @@ export const workoutsSlice= createSlice({
     }
 });
    
-   export const { addAllUserWorkouts, addWorkout, removeWorkout, updateWorkoutSets, removeExercise, updateWorkoutName} = workoutsSlice.actions;
+   export const { addAllUserWorkouts, addWorkout, removeWorkout, updateWorkoutSets, removeExercise, updateWorkoutName, updateExercises} = workoutsSlice.actions;
    export default workoutsSlice.reducer;

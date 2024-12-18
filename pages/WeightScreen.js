@@ -40,11 +40,17 @@ export default function WeightScreen({ navigation, route }) {
   useEffect(() => {
     if (currentWeight && targetWeight && user.target.objectif === "Gain") {
       // Calcul en pourcentage l'objectif de l'utilisateur si il veut prendre du poids
-      const newProgressValuePourcent = Math.floor(
-        (currentWeight / targetWeight) * 100
+      let newProgressValuePourcent = Math.floor(
+        ((user.weight[0].weight - currentWeight) * 100) / (user.weight[0].weight - targetWeight)
       );
+      console.log(newProgressValuePourcent)
+      if (newProgressValuePourcent < 0){
+        newProgressValuePourcent= 0
+      } else if (newProgressValuePourcent > 100){
+        newProgressValuePourcent=100
+      }
       // Même chose pour passer la valeur à Progress.Bar, Proggres.Circle qui accepte une valeure sur une  échelle de 0 à 1
-      const newProgressValue = currentWeight / targetWeight;
+      const newProgressValue = (user.weight[0].weight - currentWeight) / (user.weight[0].weight - targetWeight);
 
       setProgressValue(newProgressValue);
       setProgressValuePourcent(newProgressValuePourcent);
@@ -58,10 +64,16 @@ export default function WeightScreen({ navigation, route }) {
       user.target.objectif === "Loss"
     ) {
       // Calcul inversé pour objectif de perte de poids
-      const newProgressValue = targetWeight / currentWeight;
-      const newProgressValuePourcent = Math.floor(
-        (targetWeight / currentWeight) * 100
+      const newProgressValue = (user.weight[0].weight - currentWeight) / (user.weight[0].weight - targetWeight)
+      console.log(currentWeight, targetWeight, user.weight[0].weight)
+      let newProgressValuePourcent = Math.floor(
+        ((user.weight[0].weight - currentWeight) * 100) / (user.weight[0].weight - targetWeight)
       );
+      if (newProgressValuePourcent<0){
+        newProgressValuePourcent = 0
+      } else if (newProgressValuePourcent > 100){
+        newProgressValuePourcent=100
+      }
       setProgressValue(newProgressValue);
       setProgressValuePourcent(newProgressValuePourcent);
       if (newProgressValue === 1) {
