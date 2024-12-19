@@ -168,6 +168,7 @@ export default function SettingsScreen({ navigation }) {
                     size={25}
                     color={"#A3FD01"}
                     style={styles.infoIcon}
+                    accessibilityLabel="Message d'attention lorsque vous voulez changer vos coordonnées"
                   />
                   <Text style={styles.span}>ATTENTION</Text>
                 </View>
@@ -177,6 +178,7 @@ export default function SettingsScreen({ navigation }) {
                   color={"white"}
                   onPress={() => closeModal("email")}
                   style={styles.infoIcon}
+                  accessibilityLabel="Permet de fermer la modale"
                 />
               </View>
 
@@ -193,6 +195,7 @@ export default function SettingsScreen({ navigation }) {
                 placeholderTextColor={"#272D34"}
                 onChangeText={(value) => setEmail(value)}
                 value={email}
+                accessibilityLabel="Entrez votre nouvelle adress mail"
               />
               <TextInput
                 style={styles.input}
@@ -201,6 +204,7 @@ export default function SettingsScreen({ navigation }) {
                 placeholderTextColor={"#272D34"}
                 onChangeText={(value) => setPassword(value)}
                 value={password}
+                accessibilityLabel="Entrez votre mot de passe"
               />
               {error && <Text style={styles.errorText}>{errorMessage}</Text>}
               <Button
@@ -212,6 +216,8 @@ export default function SettingsScreen({ navigation }) {
                 borderWidth={1}
                 borderColor="#A3FD01"
                 onPress={changeEmail}
+                accessibilityLabel={"Permet de fermer la modale avec les coordonnées modifié"}
+                accessibilityHint={"Vous allez être redirigé vers la page réglages avec vos nouvelles coordonnées"}
               />
             </View>
           </View>
@@ -237,6 +243,7 @@ export default function SettingsScreen({ navigation }) {
                     size={25}
                     color={"#A3FD01"}
                     style={styles.infoIcon}
+                    accessibilityLabel="Message d'attention lorsque vous voulez changer vos coordonnées"
                   />
                   <Text style={styles.span}>ATTENTION</Text>
                 </View>
@@ -246,6 +253,7 @@ export default function SettingsScreen({ navigation }) {
                   color={"white"}
                   onPress={() => closeModal("password")}
                   style={styles.infoIcon}
+                  accessibilityLabel="Permet de fermer la modale"
                 />
               </View>
               <Text style={styles.textInfo}>
@@ -260,6 +268,7 @@ export default function SettingsScreen({ navigation }) {
                 placeholderTextColor={"#272D34"}
                 onChangeText={(value) => setEmail(value)}
                 value={email}
+                accessibilityLabel="Entrez votre adresse mail"
               />
               <TextInput
                 style={styles.input}
@@ -268,6 +277,7 @@ export default function SettingsScreen({ navigation }) {
                 placeholderTextColor={"#272D34"}
                 onChangeText={(value) => setPassword(value)}
                 value={password}
+                accessibilityLabel="Entrez votre mot de passe"
               />
               <TextInput
                 style={styles.input}
@@ -276,6 +286,7 @@ export default function SettingsScreen({ navigation }) {
                 placeholderTextColor={"#272D34"}
                 onChangeText={(value) => setNewPassword(value)}
                 value={newPassword}
+                accessibilityLabel="Entrez votre nouveau mot de passe"
               />
               {error && <Text style={styles.errorText}>{errorMessage}</Text>}
               <Button
@@ -287,6 +298,8 @@ export default function SettingsScreen({ navigation }) {
                 borderWidth={1}
                 borderColor="#A3FD01"
                 onPress={changePassword}
+                accessibilityLabel={"Permet de fermer la modale avec les coordonnées modifié"}
+                accessibilityHint={"Vous allez être redirigé vers la page réglages avec vos nouvelles coordonnées"}
               />
             </View>
           </View>
@@ -312,6 +325,7 @@ export default function SettingsScreen({ navigation }) {
                     size={25}
                     color={"#A3FD01"}
                     style={styles.infoIcon}
+                    accessibilityLabel="Message d'attention lorsque vous voulez changer vos coordonnées"
                   />
                   <Text style={styles.span}>ATTENTION</Text>
                 </View>
@@ -321,6 +335,7 @@ export default function SettingsScreen({ navigation }) {
                   color={"white"}
                   onPress={() => closeModal("username")}
                   style={styles.infoIcon}
+                  accessibilityLabel="Permet de fermer la modale"
                 />
               </View>
 
@@ -336,6 +351,7 @@ export default function SettingsScreen({ navigation }) {
                 placeholderTextColor={"#272D34"}
                 onChangeText={(value) => setEmail(value)}
                 value={email}
+                accessibilityLabel="Entrez votre adresse mail"
               />
               <TextInput
                 style={styles.input}
@@ -344,14 +360,15 @@ export default function SettingsScreen({ navigation }) {
                 placeholderTextColor={"#272D34"}
                 onChangeText={(value) => setPassword(value)}
                 value={password}
+                accessibilityLabel="Entrez votre mot de passe"
               />
               <TextInput
                 style={styles.input}
-                // secureTextEntry={true}
                 placeholder={"Entrer votre nouveau nom d'utilisateur"}
                 placeholderTextColor={"#272D34"}
                 onChangeText={(value) => setUsername(value)}
                 value={username}
+                accessibilityLabel="Entrez votre nouveau nom d'utilisateur"
               />
               {error && <Text style={styles.errorText}>{errorMessage}</Text>}
               <Button
@@ -363,6 +380,8 @@ export default function SettingsScreen({ navigation }) {
                 borderWidth={1}
                 borderColor="#A3FD01"
                 onPress={changeUsername}
+                accessibilityLabel={"Permet de fermer la modale avec les coordonnées modifié"}
+                accessibilityHint={"Vous allez être redirigé vers la page réglages avec vos nouvelles coordonnées"}
               />
             </View>
           </View>
@@ -377,6 +396,8 @@ export default function SettingsScreen({ navigation }) {
               style={styles.inputContainer}
               activeOpacity={0.7}
               onPress={() => setModalEmailVisible(true)}
+              accessibilityLabel="Permet d'afficher la modale pour changer son mail"
+              accessibilityHint="Une modale va s'ouvrir où vous pourrez changer votre mail"
             >
               <FontAwesome
                 name={"envelope"}
@@ -397,6 +418,8 @@ export default function SettingsScreen({ navigation }) {
               style={styles.inputContainer}
               activeOpacity={0.7}
               onPress={() => setModalPasswordVisible(true)}
+              accessibilityLabel="Permet d'afficher la modale pour changer son mot de passe"
+              accessibilityHint="Une modale va s'ouvrir où vous pourrez changer votre mot de passe"
             >
               <FontAwesome
                 name={"lock"}
@@ -417,6 +440,8 @@ export default function SettingsScreen({ navigation }) {
               style={styles.inputContainer}
               activeOpacity={0.7}
               onPress={() => setModalUsernameVisible(true)}
+              accessibilityLabel="Permet d'afficher la modale pour changer son nom"
+              accessibilityHint="Une modale va s'ouvrir où vous pourrez changer votre nom"
             >
               <FontAwesome
                 name={"user"}
@@ -437,6 +462,8 @@ export default function SettingsScreen({ navigation }) {
               style={styles.inputContainer}
               activeOpacity={0.7}
               onPress={() => navigation.navigate("song")}
+              accessibilityLabel="Permet d'aller sur la page Son"
+              accessibilityHint="Vous allez être rediriger vers la page Son pour changer le son du minuteur"
             >
               <FontAwesome
                 name={"music"}
@@ -457,6 +484,8 @@ export default function SettingsScreen({ navigation }) {
               style={styles.inputContainer}
               activeOpacity={0.7}
               onPress={handleLogout}
+              accessibilityLabel="Permet de se déconnecter"
+              accessibilityHint="Vous allez être rediriger vers la page de connexion"
             >
               <FontAwesome6
                 name={"right-to-bracket"}

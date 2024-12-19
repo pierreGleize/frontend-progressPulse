@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import Button from "../components/Button";
 import { useState } from "react";
-
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 export default function PasswordForgottenScreen({ navigation }) {
 
     const [email, setEmail] = useState("");
@@ -27,7 +27,7 @@ export default function PasswordForgottenScreen({ navigation }) {
     const [errorToken, setErrorToken] = useState(false);
     const [noMatchPassword, setNoMatchPassword] = useState(false)
     const [isDoneVisible, setIsDoneVisible] = useState(false)
-    
+
 
     const EMAIL_REGEX =
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -61,7 +61,7 @@ export default function PasswordForgottenScreen({ navigation }) {
                         } else {
                             console.log("c'est bon")
                             setValidEmail(false),
-                            setCodeMail(true)
+                                setCodeMail(true)
                             setIsLoading(false)
 
                         }
@@ -75,7 +75,7 @@ export default function PasswordForgottenScreen({ navigation }) {
         fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/verifyResetToken`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({email: email, token: code}),
+            body: JSON.stringify({ email: email, token: code }),
         })
             .then((response) => response.json())
             .then((data) => {
@@ -93,20 +93,20 @@ export default function PasswordForgottenScreen({ navigation }) {
 
     const handlePassword = () => {
 
-        if(password === confirmPassword){
+        if (password === confirmPassword) {
             setNoMatchPassword(false)
             const obj = {
-                email : email,
-                token : code,
-                newPassword : password
+                email: email,
+                token: code,
+                newPassword: password
             }
             setIsLoading(true)
             fetch(
                 `${process.env.EXPO_PUBLIC_SERVER_IP}/users/changeForgottenPassword`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(obj),
-                }
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(obj),
+            }
             )
                 .then((response) => response.json())
                 .then((data) => {
@@ -118,7 +118,7 @@ export default function PasswordForgottenScreen({ navigation }) {
             setNoMatchPassword(true)
             setIsLoading(false)
         }
-        
+
     };
 
     return (
@@ -126,10 +126,24 @@ export default function PasswordForgottenScreen({ navigation }) {
             style={styles.container}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
-            <Image
-                source={require("../assets/illustrations/imageSigninSignup.webp")}
-                style={styles.image}
-            />
+            <View style={styles.imageContainer}>
+                <View>
+                    <FontAwesome
+                        name={"chevron-left"}
+                        size={24}
+                        color={"#3BC95F"}
+                        accessibilityLabel="Redirection vers la page pour se connecter"
+                        style={{ marginLeft: 15, marginTop: 0 }}
+                        onPress={() => navigation.navigate("Signin")}
+                    />
+                    <Image
+                        source={require("../assets/illustrations/imageSigninSignup.webp")}
+                        style={styles.image}
+                    />
+                </View>
+            </View>
+
+
             <Text style={styles.mainTitle}>Réinitialise ton mot de passe</Text>
             {validEmail && (
                 <View style={styles.modifyPassword}>
@@ -139,6 +153,7 @@ export default function PasswordForgottenScreen({ navigation }) {
                         onChangeText={(value) => setEmail(value)}
                         value={email}
                         autoCapitalize="none"
+                        accessibilityLabel="Entrez votre email"
                     />
                     {emptyFields && (
                         <Text style={styles.error}>Veuillez remplir tous les champs</Text>
@@ -154,6 +169,8 @@ export default function PasswordForgottenScreen({ navigation }) {
                         height="40"
                         background="#A3FD01"
                         onPress={handleEmail}
+                        accessibilityLabel={"Envoyer le code sur votre boîte mail"}
+                        accessibilityHint={"Vous allez recevoir un email avec un code pour changer votre mot de passe"}
                     />
                 </View>
             )}
@@ -165,6 +182,7 @@ export default function PasswordForgottenScreen({ navigation }) {
                         onChangeText={(value) => setCode(value)}
                         value={code}
                         autoCapitalize="none"
+                        accessibilityLabel="Entrez le code que vous avez reçu dans votre boîte mail"
                     />
                     {errorToken && <Text style={styles.error}>Token invalide</Text>}
                     <Button
@@ -174,6 +192,8 @@ export default function PasswordForgottenScreen({ navigation }) {
                         height="40"
                         background="#A3FD01"
                         onPress={handleCode}
+                        accessibilityLabel={"Valider le code reçu"}
+                        accessibilityHint={"Vous allez pouvoir changer votre mot de passe après avoir écrit le code reçu dans vos mails"}
                     />
                 </View>
             )}
@@ -186,6 +206,7 @@ export default function PasswordForgottenScreen({ navigation }) {
                         onChangeText={(value) => setPassword(value)}
                         value={password}
                         autoCapitalize="none"
+                        accessibilityLabel="Entrez votre nouveau mot de passe"
                     />
                     <TextInput
                         style={styles.input}
@@ -194,6 +215,7 @@ export default function PasswordForgottenScreen({ navigation }) {
                         onChangeText={(value) => setConfirmPassword(value)}
                         value={confirmPassword}
                         autoCapitalize="none"
+                        accessibilityLabel="Confirmer votre mot de passe"
                     />
                     {noMatchPassword && <Text style={styles.error}>Les mots de passe ne correspondent pas</Text>}
                     <Button
@@ -203,6 +225,8 @@ export default function PasswordForgottenScreen({ navigation }) {
                         height="50"
                         background="#A3FD01"
                         onPress={handlePassword}
+                        accessibilityLabel={"Valider le mot de passe"}
+                        accessibilityHint={"Vous avez changer de mot de passe"}
                     />
                 </View>
             )}
@@ -217,6 +241,8 @@ export default function PasswordForgottenScreen({ navigation }) {
                         height="50"
                         background="#A3FD01"
                         onPress={() => navigation.navigate("Signin")}
+                        accessibilityLabel={"Retourner à la connexion"}
+                        accessibilityHint={"Après avoir changer de mot de passe vous aller pouvoir vous connecter"}
                     />
                 </View>
             )}
@@ -258,8 +284,21 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
 
+    imageContainer: {
+        height: 350,
+        width: "100%",
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+        backgroundColor: "#0D0D36",
+        alignItems: "center",
+    },
+
     image: {
-        height: "40%",
+        width: 400,
+        height: 350,
+    },
+
+    arrowContainer: {
         width: "100%",
     },
 
@@ -283,12 +322,12 @@ const styles = StyleSheet.create({
     },
 
     error: {
-        color:" #FF4500",
+        color: " #FF4500",
         marginTop: 10,
-      },
-    
-    done : {
+    },
+
+    done: {
         color: "white",
         fontSize: 20
-    }  
+    }
 });

@@ -230,6 +230,8 @@ export default function TimerScreen({ navigation, route }) {
                 height={50}
                 background="#A3FD01"
                 onPress={timerClick}
+                accessibilityLabel={"Démarer le minuteur"}
+                accessibilityHint={"Le minuteur va se mettre en route"}
               />
             </View>
             {/* Modal permettant de changer son temps de repos */}

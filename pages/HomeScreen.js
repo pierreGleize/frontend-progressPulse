@@ -58,6 +58,7 @@ export default function HomeScreen({ navigation }) {
         time={time() + " min"}
         onPress={() => handleWorkoutNavigation(element._id)}
         accessibilityLabel={`Commencer la séance ${element.name}`}
+        accessibilityHint="On va être diriger vers le résumé de notre séance avant de la commencer"
         image={imageSource}
         textBtn="Start Workout"
       />
@@ -76,6 +77,7 @@ export default function HomeScreen({ navigation }) {
               size={30}
               color={"#A3FD01"}
               style={styles.infoIcon}
+              accessibilityLabel={`Donne une information si on a pas de séance enregistré`}
             />
             <Text style={styles.textInfo}>
               Crée ta séance et commence l'entrainement
@@ -95,7 +97,8 @@ export default function HomeScreen({ navigation }) {
             height={50}
             onPress={handleAddWorkout}
             isLinearGradiant={false}
-            accessibilityLabel="Ajouter une séance d'entrainement"
+            accessibilityLabel={"Ajouter une séance d'entrainement"}
+            accessibilityHint={"On va pouvoir rajouter une séance pré-défini ou personnalisé"}
           />
         </View>
         {workouts.length === 0 && (

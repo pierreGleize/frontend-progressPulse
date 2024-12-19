@@ -83,7 +83,7 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
         nbExercise={nbExercises}
         onPress={() => handleNavigateToSummary(data.exercices)}
         accessibilityLabel={`Choisir la séance ${data.name}`}
-        accessibilityHint="Vous serez redirigé vers le résumé de cette séance"
+        accessibilityHint={"Vous serez redirigé vers le résumé de cette séance"}
         image={imageSource}
         textBtn="Add Workout"
       />
@@ -110,6 +110,7 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
           size={30}
           color={"#A3FD01"}
           style={styles.infoIcon}
+          accessibilityLabel="Choisis ta séance"
         />
         <Text style={styles.textInfo}>Choisis ta séance !</Text>
       </View>

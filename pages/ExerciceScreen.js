@@ -174,6 +174,7 @@ export default function Exercice({ navigation, route }) {
             style={styles.btn}
             onPress={closeModal}
             accessibilityLabel="Permet de fermer la modale"
+            accessibilityHint="Ferme la modale"
           >
             <Text style={styles.textButton}>OK</Text>
           </TouchableOpacity>
@@ -292,7 +293,8 @@ export default function Exercice({ navigation, route }) {
           width={300}
           height={60}
           borderColor="none"
-          accessibilityLabel="Aller à la page du minuteur"
+          accessibilityLabel={"Aller à la page du minuteur"}
+          accessibilityHint={"Valider la série"}
           onPress={() =>
             navigation.navigate("timer", {
               exerciseID: exerciseID,

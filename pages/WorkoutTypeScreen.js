@@ -25,6 +25,7 @@ export default function WorkoutTypeScreen({ navigation }) {
             size={30}
             color={"#A3FD01"}
             style={styles.infoIcon}
+            accessibilityLabel="Donne une information pour choisir entre la séance personnalisé ou pré-définie"
           />
           <Text style={styles.textInfo}>
             Crée ta séance en choisissant tes exercices ou sélectionne-en une
@@ -35,6 +36,7 @@ export default function WorkoutTypeScreen({ navigation }) {
       <View style={styles.btnContainer}>
         <TouchableOpacity
           accessibilityLabel="Créer une séance personalisée"
+          accessibilityHint="Vous allez être redirigé vers la page des groupes musculaires"
           activeOpacity={0.7}
           style={styles.btn}
           onPress={() => {
@@ -60,6 +62,7 @@ export default function WorkoutTypeScreen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity
           accessibilityLabel="Créer une séance pré-définie"
+          accessibilityHint="Vous allez être redirigé vers la page des différents niveau de séance"
           activeOpacity={0.7}
           style={styles.btn}
           onPress={() => navigation.navigate("WorkoutDifficulty")}

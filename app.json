@@ -5,7 +5,7 @@
     "description": "Une application de suivi d'entraînement pour les sportifs.",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/illustrations/LogoV2.png",
+    "icon": "./assets/illustrations/Logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
