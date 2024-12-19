@@ -84,7 +84,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       workoutID: workoutID,
       exerciseID: exerciseID,
     };
-    setIsLoading(true)
+    setIsLoading(true);
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/deleteExercise`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
@@ -94,9 +94,9 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       .then((data) => {
         if (data.result === true) {
           dispatch(removeExercise(exerciseToRemove));
-          setIsLoading(false)
+          setIsLoading(false);
         }
-        setIsLoading(false)
+        setIsLoading(false);
       });
   };
 
@@ -138,7 +138,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
     if (workoutNameInput) {
       setEmptyFields(false);
       setModalTitleVisible(false);
-      setIsLoading(true)
+      setIsLoading(true);
       fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/updateName`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -163,16 +163,15 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
                 newName: workoutNameInput,
               })
             );
-            setIsLoading(false)
-            
+            setIsLoading(false);
           } else {
             setEmptyFields(true);
-            setIsLoading(false)
+            setIsLoading(false);
           }
         });
     } else {
       setEmptyFields(true);
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -199,7 +198,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       rest: restConverted,
     };
     closeModalCustomSets();
-    setIsLoading(true)
+    setIsLoading(true);
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/updateSets`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -209,9 +208,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       .then((data) => {
         if (data.result === true) {
           dispatch(updateWorkoutSets(updateExerciseSets));
-          
         }
-        setIsLoading(false)
+        setIsLoading(false);
       });
   };
 
@@ -231,7 +229,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       };
       dispatch(addWorkoutInformation(informationToAdd));
     } else {
-      navigation.navigate("workoutEnding");
+      console.log(workoutID);
+      navigation.navigate("workoutEnding", { workoutID: workoutID });
     }
   };
 
@@ -304,7 +303,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   }
 
   const handleDeleteWorkout = () => {
-    setIsLoading(true)
+    setIsLoading(true);
     fetch(
       `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/deleteWorkout/${workoutID}`,
       {
@@ -318,8 +317,27 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           dispatch(removeWorkout(workoutID));
           navigation.navigate("Home");
         }
-        setIsLoading(false)
+        setIsLoading(false);
       });
+  };
+
+  const openAlertDeleteWorkout = () => {
+    Alert.alert(
+      "Attention", // Titre
+      "Êtes-vous sûr de vouloir supprimer cette séance ? Notez que l'historique associé à cette séance restera accessible dans la section suivie de séance", // Message
+      [
+        {
+          text: "Annuler",
+          style: "cancel",
+        },
+        {
+          text: "Supprimer",
+          onPress: () => {
+            handleDeleteWorkout();
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -528,7 +546,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           name="trash"
           size={24}
           color={"#A3FD01"}
-          onPress={handleDeleteWorkout}
+          onPress={openAlertDeleteWorkout}
         />
       </View>
 
@@ -557,7 +575,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         />
         <FontAwesome
           name={"plus-circle"}
-          accessibilityLabel={`Permet de revenir sur la page précédente`}
+          accessibilityLabel={`Permet de rajouter un nouveau exercice`}
           size={45}
           color={"white"}
           style={{ marginRight: 15 }}
@@ -569,9 +587,11 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           }
         />
       </View>
-      {isLoading&& <View style={styles.backgroundLoading}>
-              <ActivityIndicator size="large" color="#A3FD01" animating={true}/>
-      </View>}
+      {isLoading && (
+        <View style={styles.backgroundLoading}>
+          <ActivityIndicator size="large" color="#A3FD01" animating={true} />
+        </View>
+      )}
     </View>
   );
 }

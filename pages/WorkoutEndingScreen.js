@@ -16,15 +16,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { addWorkout } from "../reducers/workoutsHistory";
 import { resetCurrentWorkout } from "../reducers/currentWorkout";
-import ConfettiCannon from 'react-native-confetti-cannon';
-import * as Haptics from 'expo-haptics';
+import ConfettiCannon from "react-native-confetti-cannon";
+import * as Haptics from "expo-haptics";
 
-export default function WorkoutEndingScreen({ navigation }) {
+export default function WorkoutEndingScreen({ navigation, route }) {
+  const { workoutID } = route.params;
   const dispatch = useDispatch();
+  console.log(workoutID);
 
   useEffect(() => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
-  },[])
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+  }, []);
 
   const [personnalNote, setPersonnalNote] = useState(0);
   const [ressenti, setRessenti] = useState("");
@@ -58,7 +60,7 @@ export default function WorkoutEndingScreen({ navigation }) {
     let currentWorkoutToAdd = { ...currentWorkout };
     currentWorkoutToAdd.note = personnalNote;
     currentWorkoutToAdd.ressenti = ressenti;
-    setIsLoading(true)
+    setIsLoading(true);
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/histories/addWorkout`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -69,7 +71,7 @@ export default function WorkoutEndingScreen({ navigation }) {
         dispatch(addWorkout(data.workoutAdded));
         dispatch(resetCurrentWorkout());
         navigation.navigate("Home");
-        setIsLoading(false)
+        setIsLoading(false);
       });
   };
 
@@ -77,6 +79,16 @@ export default function WorkoutEndingScreen({ navigation }) {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <View style={styles.topContainer}>
+          <FontAwesome
+            name={"chevron-left"}
+            size={24}
+            color={"#3BC95F"}
+            style={{ marginBottom: 15 }}
+            onPress={() =>
+              navigation.navigate("startWorkout", { workoutID: workoutID })
+            }
+            accessibilityLabel="Redirection vers la liste des exercices"
+          />
           <Text style={styles.title}>Séance terminée !</Text>
           <Underline width={80} />
         </View>
@@ -105,13 +117,18 @@ export default function WorkoutEndingScreen({ navigation }) {
           />
         </View>
         {isLoading && (
-        <View style={styles.backgroundLoading}>
-          <ActivityIndicator size="large" color="#A3FD01" animating={true}  />
-        </View>
-      )}
-      <ConfettiCannon count={50} origin={{x: 0, y: 0}} autoStart={true} fadeOut={true} fallSpeed={2000} />
+          <View style={styles.backgroundLoading}>
+            <ActivityIndicator size="large" color="#A3FD01" animating={true} />
+          </View>
+        )}
+        <ConfettiCannon
+          count={50}
+          origin={{ x: 0, y: 0 }}
+          autoStart={true}
+          fadeOut={true}
+          fallSpeed={2000}
+        />
       </View>
-
     </TouchableWithoutFeedback>
   );
 }
@@ -125,7 +142,7 @@ const styles = StyleSheet.create({
   topContainer: {
     marginTop: 50,
     marginLeft: 30,
-    marginBottom: 30,
+    marginBottom: 20,
   },
 
   title: {
@@ -137,8 +154,8 @@ const styles = StyleSheet.create({
   note: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 30,
-    marginBottom: 30,
+    marginTop: 20,
+    marginBottom: 20,
   },
 
   text: {

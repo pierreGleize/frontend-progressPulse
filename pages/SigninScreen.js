@@ -44,7 +44,7 @@ export default function SigninScreen({ navigation }) {
           email: email,
           password: password,
         };
-        setIsLoading(true)
+        setIsLoading(true);
         fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/signin`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -53,9 +53,8 @@ export default function SigninScreen({ navigation }) {
           .then((response) => response.json())
           .then((data) => {
             if (data.result === false) {
-              console.log(data.error);
               setSignupError(data.error);
-              setIsLoading(false)
+              setIsLoading(false);
             } else {
               const userToken = data.userInfos.token;
               dispatch(login(data.userInfos));
@@ -74,7 +73,7 @@ export default function SigninScreen({ navigation }) {
                     .then((data) => {
                       dispatch(addAllWorkoutsHistory(data.histories));
                       navigation.navigate("TabNavigator", { screen: "Home" });
-                      setIsLoading(false)
+                      setIsLoading(false);
                     });
                 });
             }
@@ -131,9 +130,11 @@ export default function SigninScreen({ navigation }) {
           <Text style={styles.signup}>Inscris-toi !</Text>
         </TouchableOpacity>
       </View>
-      {isLoading&& <View style={styles.backgroundLoading}>
-        <ActivityIndicator size="large" color="#A3FD01" animating={true}/>
-      </View>}
+      {isLoading && (
+        <View style={styles.backgroundLoading}>
+          <ActivityIndicator size="large" color="#A3FD01" animating={true} />
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 }
