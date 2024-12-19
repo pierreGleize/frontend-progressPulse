@@ -7,8 +7,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator
-
+  ActivityIndicator,
 } from "react-native";
 import Button from "../components/Button";
 import { useState } from "react";
@@ -47,7 +46,7 @@ export default function SignupScreen({ navigation }) {
           email: email,
           password: password,
         };
-        setIsLoading(true)
+        setIsLoading(true);
         fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -58,11 +57,11 @@ export default function SignupScreen({ navigation }) {
             if (data.result === false) {
               console.log(data.error);
               setSignupError(data.error);
-              setIsLoading(false)
+              setIsLoading(false);
             } else {
               dispatch(login(data.userInfos));
               navigation.navigate("TabNavigator", { screen: "Home" });
-              setIsLoading(false)
+              setIsLoading(false);
             }
           });
       }
@@ -111,19 +110,6 @@ export default function SignupScreen({ navigation }) {
         textButton="S'inscrire"
         textColor="black"
         width="50 %"
-        height="40"
-        background="#A3FD01"
-        onPress={handleSignup}
-      ></Button>
-      <View style={styles.orContainer}>
-        <View style={styles.line}></View>
-        <Text style={styles.or}>ou</Text>
-        <View style={styles.line}></View>
-      </View>
-      <Button
-        textButton="Signup with Google"
-        textColor="black"
-        width="80%"
         height="40"
         background="#A3FD01"
         onPress={handleSignup}

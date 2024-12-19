@@ -8,6 +8,7 @@ import imagesWorkout from "../utils/imagesWorkout";
 
 export default function HomeScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
+  console.log(user.target);
   const workouts = useSelector((state) => state.workouts.value);
   const handleAddWorkout = () => {
     navigation.navigate("WorkoutType");
