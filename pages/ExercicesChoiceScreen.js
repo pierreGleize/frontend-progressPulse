@@ -4,15 +4,14 @@ import {
   View,
   ScrollView,
   Modal,
-  Pressable,
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import ExerciseBtn from "../components/ExerciseBtn";
 import Button from "../components/Button";
-// import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Underline from "../components/Underline";
 import { useEffect, useState } from "react";
 import images from "../utils/images";
@@ -36,6 +35,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
   const [restSeconds, setRestSeconds] = useState("00");
   const [emptyFields, setEmptyFields] = useState(false);
   const [isCardio, setIsCardio] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (name === "Cardio") {
@@ -43,17 +43,19 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
     } else {
       setIsCardio(false);
     }
+    setIsLoading(true)
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/exercises/${name}`)
       .then((response) => response.json())
       .then((data) => {
         if (data) {
           setExercisesList(data.data);
+          setIsLoading(false)
         }
       });
   }, []);
 
   const handleFinish = () => {
-    navigation.navigate("muscleGroup", {workoutID, isWorkoutAlreadyCreated});
+    navigation.navigate("muscleGroup", { workoutID, isWorkoutAlreadyCreated });
   };
 
   const openModal = (textButton, exerciseID) => {
@@ -133,15 +135,26 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           rest: restConverted,
           customSets: customSets,
         };
-        fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addExercise`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({workoutID, exerciseToAdd}),
-        }).then(response => response.json())
-        .then(data => {
-          dispatch(updateExercises({workoutID: workoutID, exercisesToUpdate: data.updatedWorkout.exercises}))
-          closeModal();
-        })
+        closeModal();
+        setIsLoading(true)
+        fetch(
+          `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addExercise`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ workoutID, exerciseToAdd }),
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            dispatch(
+              updateExercises({
+                workoutID: workoutID,
+                exercisesToUpdate: data.updatedWorkout.exercises,
+              })
+            );
+            setIsLoading(false)
+          });
       }
     } else {
       if (!charge || !restMinutes || !restSeconds) {
@@ -156,18 +169,30 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           rest: restConverted,
           customSets: customSets,
         };
-        fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addExercise`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({workoutID, exerciseToAdd}),
-        }).then(response => response.json())
-        .then(data => {
-          dispatch(updateExercises({workoutID: workoutID, exercisesToUpdate: data.updatedWorkout.exercises}))
-          closeModal();
-        })
+        closeModal();
+        setIsLoading(true)
+        fetch(
+          `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addExercise`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ workoutID, exerciseToAdd }),
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            dispatch(
+              updateExercises({
+                workoutID: workoutID,
+                exercisesToUpdate: data.updatedWorkout.exercises,
+              })
+            );
+            setIsLoading(false)
+            
+          });
       }
     }
-  }
+  };
 
   const exercisesToShow = exercisesList
     .sort((a, b) => a.name.localeCompare(b.name))
@@ -185,7 +210,6 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           accessibilityHint="Une modale va s'ouvir permettant d'entrer des données personalisés pour l'exercice"
           workoutID={workoutID}
           isWorkoutAlreadyCreated={isWorkoutAlreadyCreated}
-
         />
       );
     });
@@ -225,7 +249,6 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
                 name={"info-circle"}
                 size={20}
                 color={"#A3FD01"}
-                // onPress={() => navigation.navigate("muscleGroup")}
                 style={styles.infoIcon}
               />
               <Text style={styles.textInfo}>
@@ -310,7 +333,9 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
               background="#272D34"
               borderWidth={1}
               borderColor="#A3FD01"
-              onPress={!isWorkoutAlreadyCreated ? addToWorkout : addToExistingWorkout}
+              onPress={
+                !isWorkoutAlreadyCreated ? addToWorkout : addToExistingWorkout
+              }
             ></Button>
           </View>
         </KeyboardAvoidingView>
@@ -320,7 +345,12 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           name={"chevron-left"}
           size={24}
           color={"#3BC95F"}
-          onPress={() => navigation.navigate("muscleGroup", {isWorkoutAlreadyCreated, workoutID})}
+          onPress={() =>
+            navigation.navigate("muscleGroup", {
+              isWorkoutAlreadyCreated,
+              workoutID,
+            })
+          }
           accessibilityLabel="Revenir sur la page pour choisir le groupe musculaire"
           style={{ marginLeft: 15, marginTop: 5 }}
         />
@@ -354,6 +384,11 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           accessibilityLabel="Revenir sur la page pour choisir le groupe musculaire"
         />
       </View>
+      {isLoading && (
+        <View style={styles.backgroundLoading}>
+          <ActivityIndicator size="large" color="#A3FD01" animating={true} />
+        </View>
+      )}
     </View>
   );
 }
@@ -458,5 +493,14 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: "red",
     textAlign: "center",
+  },
+  backgroundLoading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

@@ -15,7 +15,6 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 export default function StatsScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const history = useSelector((state) => state.workoutsHistory.value);
-  // console.log(history[0].performances);
 
   // Récupération des 8 dernières entrées de poids à partir de user.weight
   const lastHeightWeight =
@@ -43,21 +42,19 @@ export default function StatsScreen({ navigation }) {
     data.forEach((element) => {
       console.log(element.date);
       const month = moment(element.date).format("MMM YY");
-      // console.log(month);
+
       if (months[month]) {
         months[month] += 1;
       } else {
         months[month] = 1;
       }
     });
-    // console.log(months);
     return months;
   };
   const lastHeightMonth = [...history]
     .sort((a, b) => new Date(a.date) - new Date(b.date))
     .slice(0, 8);
   const trainingData = getWorkoutsByMonth(lastHeightMonth);
-  // console.log(trainingData);
   const labelsBarChart = Object.keys(trainingData);
   const dataBarChart = Object.values(trainingData);
 
@@ -89,7 +86,6 @@ export default function StatsScreen({ navigation }) {
                 <Text style={styles.text}>
                   Dernière séance faite :{" "}
                   <Text style={styles.span}>
-                    {/* {moment(lastWorkoutDate).format("DD MM YYYY")} */}
                     {moment(lastWorkoutDate).fromNow(true)}
                   </Text>
                 </Text>
@@ -174,7 +170,7 @@ export default function StatsScreen({ navigation }) {
           style={styles.infoIcon}
         />
         <Text style={styles.textInfo}>
-          Clique sur le graphique pour accéder au suivie de tes séances !
+          Clique sur le graphique pour accéder au suivi de tes séances !
         </Text>
       </View>
       <TouchableOpacity
@@ -302,7 +298,6 @@ const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: "row",
     alignItems: "center",
-    // marginVertical: 20,
     marginBottom: 10,
     marginRight: 10,
   },

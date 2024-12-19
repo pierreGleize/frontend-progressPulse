@@ -26,8 +26,7 @@ export const workoutsHistorySlice = createSlice({
         }
       }
     },
-
-    resetWorkoutsHistory: (state, action) => {
+    resetWorkoutsHistory: (state) => {
       state.value = [];
     },
   },

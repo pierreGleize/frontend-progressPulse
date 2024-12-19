@@ -7,6 +7,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import Button from "../components/Button";
 import { useState } from "react";
@@ -18,13 +19,12 @@ import { addAllWorkoutsHistory } from "../reducers/workoutsHistory";
 export default function SigninScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  const valeurDuReducer = useSelector((state) => state.user.value);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [wrongEmail, setWrongEmail] = useState(false);
   const [emptyFields, setEmptyFields] = useState(false);
   const [signupError, setSignupError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const EMAIL_REGEX =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -44,6 +44,7 @@ export default function SigninScreen({ navigation }) {
           email: email,
           password: password,
         };
+        setIsLoading(true)
         fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/signin`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -54,22 +55,28 @@ export default function SigninScreen({ navigation }) {
             if (data.result === false) {
               console.log(data.error);
               setSignupError(data.error);
+              setIsLoading(false)
             } else {
-              const userToken = data.userInfos.token
+              const userToken = data.userInfos.token;
               dispatch(login(data.userInfos));
-              fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/${data.userInfos.token}`)
-              .then(response => response.json())
-              .then(data => {
-                if(data.userWorkouts){
-                  dispatch(addAllUserWorkouts(data.userWorkouts))
-                }
-                fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/histories/${userToken}`)
-                .then(response => response.json())
-                .then(data => {
-                  dispatch(addAllWorkoutsHistory(data.histories))
-                  navigation.navigate("TabNavigator", { screen: "Home" });
-                })
-              })
+              fetch(
+                `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/${data.userInfos.token}`
+              )
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.userWorkouts) {
+                    dispatch(addAllUserWorkouts(data.userWorkouts));
+                  }
+                  fetch(
+                    `${process.env.EXPO_PUBLIC_SERVER_IP}/histories/${userToken}`
+                  )
+                    .then((response) => response.json())
+                    .then((data) => {
+                      dispatch(addAllWorkoutsHistory(data.histories));
+                      navigation.navigate("TabNavigator", { screen: "Home" });
+                      setIsLoading(false)
+                    });
+                });
             }
           });
       }
@@ -115,12 +122,18 @@ export default function SigninScreen({ navigation }) {
         background="#A3FD01"
         onPress={handleSignin}
       ></Button>
+      <TouchableOpacity onPress={() => navigation.navigate("passwordForgotten")}>
+          <Text style={styles.signup}>Mot de passe oublié ?</Text>
+      </TouchableOpacity>
       <View style={styles.alreadyAccountSection}>
         <Text style={styles.alreadyAccount}>Pas encore de compte ? </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
           <Text style={styles.signup}>Inscris-toi !</Text>
         </TouchableOpacity>
       </View>
+      {isLoading&& <View style={styles.backgroundLoading}>
+        <ActivityIndicator size="large" color="#A3FD01" animating={true}/>
+      </View>}
     </KeyboardAvoidingView>
   );
 }
@@ -193,5 +206,15 @@ const styles = StyleSheet.create({
   error: {
     color: "red",
     marginTop: 10,
+  },
+  backgroundLoading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

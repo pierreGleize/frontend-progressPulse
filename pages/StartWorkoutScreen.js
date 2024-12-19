@@ -8,6 +8,7 @@ import {
   Platform,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
@@ -42,6 +43,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   const [restSeconds, setRestSeconds] = useState("00");
   const [emptyFields, setEmptyFields] = useState(false);
   const [modalTitleVisible, setModalTitleVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -72,7 +74,6 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
 
   // Récupération de l'historique de la séance en cours
   const currentWorkout = useSelector((state) => state.currentWorkout.value);
-  // console.log(currentWorkout.performances[0].sets)
 
   // Récupération de l'utilisateur connecté
   const user = useSelector((state) => state.user.value);
@@ -83,6 +84,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       workoutID: workoutID,
       exerciseID: exerciseID,
     };
+    setIsLoading(true)
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/deleteExercise`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
@@ -92,7 +94,9 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       .then((data) => {
         if (data.result === true) {
           dispatch(removeExercise(exerciseToRemove));
+          setIsLoading(false)
         }
+        setIsLoading(false)
       });
   };
 
@@ -133,6 +137,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   const handleChangeName = () => {
     if (workoutNameInput) {
       setEmptyFields(false);
+      setModalTitleVisible(false);
+      setIsLoading(true)
       fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/updateName`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -144,9 +150,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           if (data.result) {
-            console.log("true");
             dispatch(
               updateWorkoutName({
                 workoutID: workoutID,
@@ -159,14 +163,16 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
                 newName: workoutNameInput,
               })
             );
-            setModalTitleVisible(false);
+            setIsLoading(false)
+            
           } else {
-            console.log("false");
             setEmptyFields(true);
+            setIsLoading(false)
           }
         });
     } else {
       setEmptyFields(true);
+      setIsLoading(false)
     }
   };
 
@@ -192,7 +198,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       customSets: customSets,
       rest: restConverted,
     };
-
+    closeModalCustomSets();
+    setIsLoading(true)
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/updateSets`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -202,8 +209,9 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
       .then((data) => {
         if (data.result === true) {
           dispatch(updateWorkoutSets(updateExerciseSets));
-          closeModalCustomSets();
+          
         }
+        setIsLoading(false)
       });
   };
 
@@ -296,6 +304,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   }
 
   const handleDeleteWorkout = () => {
+    setIsLoading(true)
     fetch(
       `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/deleteWorkout/${workoutID}`,
       {
@@ -309,6 +318,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           dispatch(removeWorkout(workoutID));
           navigation.navigate("Home");
         }
+        setIsLoading(false)
       });
   };
 
@@ -559,6 +569,9 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           }
         />
       </View>
+      {isLoading&& <View style={styles.backgroundLoading}>
+              <ActivityIndicator size="large" color="#A3FD01" animating={true}/>
+      </View>}
     </View>
   );
 }
@@ -699,5 +712,15 @@ const styles = StyleSheet.create({
   },
   pencilLogo: {
     marginLeft: 10,
+  },
+  backgroundLoading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

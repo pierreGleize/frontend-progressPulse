@@ -70,7 +70,7 @@ export const workoutsSlice = createSlice({
       }
     },
 
-    removeAllWorkout: (state, action) => {
+    removeAllWorkout: (state) => {
       state.value = [];
     },
   },

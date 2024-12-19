@@ -9,6 +9,7 @@ import {
   Platform,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState, useEffect } from "react";
@@ -31,6 +32,7 @@ export default function WeightScreen({ navigation, route }) {
   const [progressValuePourcent, setProgressValuePourcent] = useState(0);
   const [isCheckedLoss, setIsCheckedLoss] = useState(false);
   const [isCheckedGain, setIsCheckedGain] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -41,16 +43,18 @@ export default function WeightScreen({ navigation, route }) {
     if (currentWeight && targetWeight && user.target.objectif === "Gain") {
       // Calcul en pourcentage l'objectif de l'utilisateur si il veut prendre du poids
       let newProgressValuePourcent = Math.floor(
-        ((user.weight[0].weight - currentWeight) * 100) / (user.weight[0].weight - targetWeight)
+        ((user.weight[0].weight - currentWeight) * 100) /
+          (user.weight[0].weight - targetWeight)
       );
-      console.log(newProgressValuePourcent)
-      if (newProgressValuePourcent < 0){
-        newProgressValuePourcent= 0
-      } else if (newProgressValuePourcent > 100){
-        newProgressValuePourcent=100
+      if (newProgressValuePourcent < 0) {
+        newProgressValuePourcent = 0;
+      } else if (newProgressValuePourcent > 100) {
+        newProgressValuePourcent = 100;
       }
       // Même chose pour passer la valeur à Progress.Bar, Proggres.Circle qui accepte une valeure sur une  échelle de 0 à 1
-      const newProgressValue = (user.weight[0].weight - currentWeight) / (user.weight[0].weight - targetWeight);
+      const newProgressValue =
+        (user.weight[0].weight - currentWeight) /
+        (user.weight[0].weight - targetWeight);
 
       setProgressValue(newProgressValue);
       setProgressValuePourcent(newProgressValuePourcent);
@@ -64,15 +68,18 @@ export default function WeightScreen({ navigation, route }) {
       user.target.objectif === "Loss"
     ) {
       // Calcul inversé pour objectif de perte de poids
-      const newProgressValue = (user.weight[0].weight - currentWeight) / (user.weight[0].weight - targetWeight)
-      console.log(currentWeight, targetWeight, user.weight[0].weight)
+      const newProgressValue =
+        (user.weight[0].weight - currentWeight) /
+        (user.weight[0].weight - targetWeight);
+
       let newProgressValuePourcent = Math.floor(
-        ((user.weight[0].weight - currentWeight) * 100) / (user.weight[0].weight - targetWeight)
+        ((user.weight[0].weight - currentWeight) * 100) /
+          (user.weight[0].weight - targetWeight)
       );
-      if (newProgressValuePourcent<0){
-        newProgressValuePourcent = 0
-      } else if (newProgressValuePourcent > 100){
-        newProgressValuePourcent=100
+      if (newProgressValuePourcent < 0) {
+        newProgressValuePourcent = 0;
+      } else if (newProgressValuePourcent > 100) {
+        newProgressValuePourcent = 100;
       }
       setProgressValue(newProgressValue);
       setProgressValuePourcent(newProgressValuePourcent);
@@ -103,6 +110,8 @@ export default function WeightScreen({ navigation, route }) {
       setErrorMessage("Veuillez remplir correctement le champ de saisie");
       return;
     }
+    closeModalWeight();
+    setIsLoading(true)
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/addWeight`, {
       method: "POST",
       headers: { "Content-type": "application/json" },
@@ -113,9 +122,11 @@ export default function WeightScreen({ navigation, route }) {
         if (data.result === false) {
           setError(true);
           setErrorMessage(data.error);
+          setIsLoading(false)
+          setModalVisibleWeight(true)
         } else {
           dispatch(addWeight(data.newWeight));
-          closeModalWeight();
+          setIsLoading(false)
         }
       });
   };
@@ -132,7 +143,8 @@ export default function WeightScreen({ navigation, route }) {
       return;
     }
     const objectif = isCheckedGain ? "Gain" : "Loss";
-
+    closeModalTarget();
+    setIsLoading(true)
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/weightTarget`, {
       method: "POST",
       headers: { "Content-type": "application/json" },
@@ -147,10 +159,12 @@ export default function WeightScreen({ navigation, route }) {
       .then((data) => {
         if (data.result === true) {
           dispatch(updateTarget(data.weightTarget));
-          closeModalTarget();
+          setIsLoading(false)
         } else {
           setError(true);
           setErrorMessage(data.error);
+          setModalVisibleTarget(true)
+          setIsLoading(false)
         }
       });
   };
@@ -280,7 +294,7 @@ export default function WeightScreen({ navigation, route }) {
           </View>
         </KeyboardAvoidingView>
       </Modal>
-      {/*  */}
+
       <Modal
         animationType="fade"
         transparent={true}
@@ -384,7 +398,6 @@ export default function WeightScreen({ navigation, route }) {
                 </View>
               </View>
 
-              {/*  */}
               {error && <Text style={styles.errorText}>{errorMessage}</Text>}
               <Button
                 textButton="Valider"
@@ -400,7 +413,7 @@ export default function WeightScreen({ navigation, route }) {
           </View>
         </KeyboardAvoidingView>
       </Modal>
-      {/*  */}
+
       <View style={styles.topContainer}>
         <TouchableOpacity
           style={styles.backToContainer}
@@ -422,7 +435,7 @@ export default function WeightScreen({ navigation, route }) {
             </View>
             <View style={styles.colunm}>
               <Text style={styles.startTitle}>Actuelle</Text>
-              {/*  */}
+
               <Progress.Circle
                 progress={progressValue}
                 animated={true}
@@ -433,7 +446,7 @@ export default function WeightScreen({ navigation, route }) {
                 showsText={false}
                 strokeCap="round"
               />
-              {/*  */}
+
               <View style={styles.textAbsolute}>
                 <Text style={styles.textWeight}>{currentWeight} kg</Text>
               </View>
@@ -479,6 +492,11 @@ export default function WeightScreen({ navigation, route }) {
           {weights}
         </View>
       </ScrollView>
+      {isLoading && (
+        <View style={styles.backgroundLoading}>
+          <ActivityIndicator size="large" color="#A3FD01" animating={true} />
+        </View>
+      )}
     </View>
   );
 }
@@ -681,5 +699,15 @@ const styles = StyleSheet.create({
     height: 12,
     backgroundColor: "#272D34",
     borderRadius: 2,
+  },
+  backgroundLoading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

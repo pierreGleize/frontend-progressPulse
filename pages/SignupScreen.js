@@ -7,6 +7,8 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator
+
 } from "react-native";
 import Button from "../components/Button";
 import { useState } from "react";
@@ -24,6 +26,7 @@ export default function SignupScreen({ navigation }) {
   const [wrongEmail, setWrongEmail] = useState(false);
   const [emptyFields, setEmptyFields] = useState(false);
   const [signupError, setSignupError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const EMAIL_REGEX =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -44,6 +47,7 @@ export default function SignupScreen({ navigation }) {
           email: email,
           password: password,
         };
+        setIsLoading(true)
         fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -54,9 +58,11 @@ export default function SignupScreen({ navigation }) {
             if (data.result === false) {
               console.log(data.error);
               setSignupError(data.error);
+              setIsLoading(false)
             } else {
               dispatch(login(data.userInfos));
               navigation.navigate("TabNavigator", { screen: "Home" });
+              setIsLoading(false)
             }
           });
       }
@@ -115,6 +121,11 @@ export default function SignupScreen({ navigation }) {
           <Text style={styles.connect}>Connecte-toi !</Text>
         </TouchableOpacity>
       </View>
+      {isLoading && (
+        <View style={styles.backgroundLoading}>
+          <ActivityIndicator size="large" color="#A3FD01" animating={true} />
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 }
@@ -186,5 +197,15 @@ const styles = StyleSheet.create({
   error: {
     color: "red",
     marginTop: 10,
+  },
+  backgroundLoading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
