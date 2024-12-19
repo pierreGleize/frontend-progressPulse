@@ -57,11 +57,9 @@ export default function PasswordForgottenScreen({ navigation }) {
                         if (data.result === false) {
                             setSignupError(data.error);
                         } else {
-                            const userToken = data.userInfos.token;
                             dispatch(login(data.userInfos));
-                            setValidEmail(false),
-                                setCodeMail(true)
-
+                            setValidEmail(false);
+                            setCodeMail(true)
                         }
                     });
             }
@@ -84,16 +82,15 @@ export default function PasswordForgottenScreen({ navigation }) {
     const handlePassword = () => {
         fetch(
             `${process.env.EXPO_PUBLIC_SERVER_IP}/users/changeForgottenPassword`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(user),
-            }
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user),
+        }
         )
             .then((response) => response.json())
             .then((data) => {
                 dispatch(addAllWorkoutsHistory(data.histories));
                 navigation.navigate('Signin')
-                setIsLoading(false)
             });
     };
 
@@ -243,7 +240,7 @@ const styles = StyleSheet.create({
     },
 
     error: {
-        color: "red",
+        color:" #FF4500",
         marginTop: 10,
-      },
+    },
 });

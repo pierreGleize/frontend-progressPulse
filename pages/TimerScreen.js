@@ -507,7 +507,7 @@ const styles = StyleSheet.create({
   },
 
   errorMessage: {
-    color: "red",
+    color: "#FF4500",
     textAlign: "center",
   },
 
@@ -551,16 +551,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
   timerContainer: {
     height: "30%",
   },
+
   timerContainerStarted: {
     height: "32%",
   },
+
   inputSection: {
     height: "45%",
     marginTop: 5,
   },
+  
   test: {
     height: 200,
   },

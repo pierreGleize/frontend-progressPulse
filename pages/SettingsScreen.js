@@ -532,7 +532,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   errorText: {
-    color: "red",
+    color: "#FF4500",
   },
   settingWrapper: {
     alignItems: "center",

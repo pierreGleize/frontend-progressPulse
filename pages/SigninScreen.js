@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
   },
   error: {
-    color: "red",
+    color: "#FF4500",
     marginTop: 10,
   },
   backgroundLoading: {
