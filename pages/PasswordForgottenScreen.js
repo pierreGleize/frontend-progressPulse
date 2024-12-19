@@ -29,6 +29,10 @@ export default function PasswordForgottenScreen({ navigation }) {
     const [isLoading, setIsLoading] = useState(false);
     const [codeMail, setCodeMail] = useState(false);
     const [newPassword, setNewPassword] = useState(false);
+    const [errorToken, setErrorToken] = useState(false);
+    const [noMatchPassword, setNoMatchPassword] = useState(false)
+    const [isDoneVisible, setIsDoneVisible] = useState(false)
+    
 
     const EMAIL_REGEX =
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -47,6 +51,7 @@ export default function PasswordForgottenScreen({ navigation }) {
                 const user = {
                     email: email,
                 };
+                setIsLoading(true)
                 fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/forgotPassword`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -54,13 +59,15 @@ export default function PasswordForgottenScreen({ navigation }) {
                 })
                     .then((response) => response.json())
                     .then((data) => {
+                        console.log(data)
                         if (data.result === false) {
                             setSignupError(data.error);
+                            setIsLoading(false)
                         } else {
-                            const userToken = data.userInfos.token;
-                            dispatch(login(data.userInfos));
+                            console.log("c'est bon")
                             setValidEmail(false),
-                                setCodeMail(true)
+                            setCodeMail(true)
+                            setIsLoading(false)
 
                         }
                     });
@@ -69,32 +76,54 @@ export default function PasswordForgottenScreen({ navigation }) {
     }
 
     const handleCode = () => {
-        fetch(
-            `${process.env.EXPO_PUBLIC_SERVER_IP}/users/verifyResetToken`
-        )
+        setIsLoading(true)
+        fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/verifyResetToken`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({email: email, token: code}),
+        })
             .then((response) => response.json())
             .then((data) => {
-                if (data) {
+                if (data.result === true) {
+                    setErrorToken(false)
                     setCodeMail(false)
                     setNewPassword(true)
+                    setIsLoading(false)
+                } else {
+                    setErrorToken(true)
+                    setIsLoading(false)
                 }
             });
     };
 
     const handlePassword = () => {
-        fetch(
-            `${process.env.EXPO_PUBLIC_SERVER_IP}/users/changeForgottenPassword`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(user),
+
+        if(password === confirmPassword){
+            setNoMatchPassword(false)
+            const obj = {
+                email : email,
+                token : code,
+                newPassword : password
             }
-        )
-            .then((response) => response.json())
-            .then((data) => {
-                dispatch(addAllWorkoutsHistory(data.histories));
-                navigation.navigate('Signin')
-                setIsLoading(false)
-            });
+            setIsLoading(true)
+            fetch(
+                `${process.env.EXPO_PUBLIC_SERVER_IP}/users/changeForgottenPassword`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(obj),
+                }
+            )
+                .then((response) => response.json())
+                .then((data) => {
+                    setNewPassword(false)
+                    setIsDoneVisible(true)
+                    setIsLoading(false)
+                });
+        } else {
+            setNoMatchPassword(true)
+            setIsLoading(false)
+        }
+        
     };
 
     return (
@@ -106,7 +135,6 @@ export default function PasswordForgottenScreen({ navigation }) {
                 source={require("../assets/illustrations/imageSigninSignup.webp")}
                 style={styles.image}
             />
-            <Text style={styles.subTitle}>Progress Pulse</Text>
             <Text style={styles.mainTitle}>Réinitialise ton mot de passe</Text>
             {validEmail && (
                 <View style={styles.modifyPassword}>
@@ -143,6 +171,7 @@ export default function PasswordForgottenScreen({ navigation }) {
                         value={code}
                         autoCapitalize="none"
                     />
+                    {errorToken && <Text style={styles.error}>Token invalide</Text>}
                     <Button
                         textButton="Valider le code"
                         textColor="black"
@@ -171,6 +200,7 @@ export default function PasswordForgottenScreen({ navigation }) {
                         value={confirmPassword}
                         autoCapitalize="none"
                     />
+                    {noMatchPassword && <Text style={styles.error}>Les mots de passe ne correspondent pas</Text>}
                     <Button
                         textButton="Valider le mot de passe"
                         textColor="black"
@@ -178,6 +208,20 @@ export default function PasswordForgottenScreen({ navigation }) {
                         height="50"
                         background="#A3FD01"
                         onPress={handlePassword}
+                    />
+                </View>
+            )}
+            {isDoneVisible && (
+                <View style={styles.modifyPassword}>
+
+                    <Text style={styles.done}>Le mot de passe a bien été modifié 🎉</Text>
+                    <Button
+                        textButton="Retourner à la connexion"
+                        textColor="black"
+                        width="60%"
+                        height="50"
+                        background="#A3FD01"
+                        onPress={() => navigation.navigate("Signin")}
                     />
                 </View>
             )}
@@ -201,6 +245,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         color: "white",
         fontWeight: "600",
+        marginTop: 20
     },
     subTitle: {
         fontSize: 35,
@@ -246,4 +291,8 @@ const styles = StyleSheet.create({
         color: "red",
         marginTop: 10,
       },
+    done : {
+        color: "white",
+        fontSize: 20
+    }  
 });
