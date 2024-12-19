@@ -10,13 +10,12 @@ export const workoutsHistorySlice = createSlice({
   reducers: {
     addWorkout: (state, action) => {
       state.value.push(action.payload);
-      console.log(state.value);
     },
+
     addAllWorkoutsHistory: (state, action) => {
       if (action.payload) {
         state.value = action.payload;
       }
-      console.log(state.value);
     },
 
     updateNameWorkoutHistory: (state, action) => {
@@ -27,6 +26,7 @@ export const workoutsHistorySlice = createSlice({
         }
       }
     },
+
     resetWorkoutsHistory: (state, action) => {
       state.value = [];
     },

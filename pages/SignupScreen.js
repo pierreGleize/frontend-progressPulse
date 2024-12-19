@@ -109,19 +109,6 @@ export default function SignupScreen({ navigation }) {
         background="#A3FD01"
         onPress={handleSignup}
       ></Button>
-      <View style={styles.orContainer}>
-        <View style={styles.line}></View>
-        <Text style={styles.or}>ou</Text>
-        <View style={styles.line}></View>
-      </View>
-      <Button
-        textButton="Signup with Google"
-        textColor="black"
-        width="80%"
-        height="40"
-        background="#A3FD01"
-        onPress={handleSignup}
-      ></Button>
       <View style={styles.alreadyAccountSection}>
         <Text style={styles.alreadyAccount}>Déjà un compte ? </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Signin")}>
@@ -174,30 +161,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
   },
-  button: {
-    margin: 20,
-  },
   image: {
     height: "35%",
     width: "100%",
   },
-  orContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  line: {
-    width: "35%",
-    height: 1,
-    backgroundColor: "white",
-  },
-  or: {
-    color: "white",
-    marginHorizontal: 10,
-    fontSize: 20,
-    fontWeight: "700",
-  },
+
   alreadyAccountSection: {
+    margin :'auto',
     flexDirection: "row",
   },
   alreadyAccount: {

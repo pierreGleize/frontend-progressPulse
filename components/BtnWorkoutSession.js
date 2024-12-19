@@ -3,7 +3,6 @@ import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { FontAwesome5 } from "@expo/vector-icons";
-import imagesWorkout from "../utils/imagesWorkout";
 
 export default function WorkoutSessionButton({
   name,
@@ -14,10 +13,7 @@ export default function WorkoutSessionButton({
   accessibilityHint,
   image,
 }) {
-  // console.log("je suis dans btn", image[0].source);
-  // const imageToShow = image
-  //   ? image[0].source
-  //   : require("../assets/imagesWorkout/Coaches-amico.png");
+
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -38,8 +34,6 @@ export default function WorkoutSessionButton({
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}
-            // source={imageToShow}
-            // source={image[0].source}
             source={
               !image
                 ? require("../assets/imagesWorkout/Coaches-amico.png")
