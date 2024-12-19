@@ -26,6 +26,7 @@ export const workoutsSlice = createSlice({
         (seance) => seance._id !== action.payload
       );
     },
+
     removeExercise: (state, action) => {
       for (let workout of state.value) {
         if (workout._id === action.payload.workoutID) {
@@ -50,7 +51,6 @@ export const workoutsSlice = createSlice({
       for (let workout of state.value) {
         if (workout._id === action.payload.workoutID) {
           for (let exercise of workout.exercises) {
-            console.log(exercise.exercise._id);
             if (exercise.exercise._id == action.payload.exerciseID) {
               exercise.customSets = action.payload.customSets;
               exercise.rest = action.payload.rest;
@@ -59,6 +59,7 @@ export const workoutsSlice = createSlice({
         }
       }
     },
+
     updateWorkoutName: (state, action) => {
       // Exemple de l'action payload !
       // {workoutName: "nomSeanceAModifier", exerciseName: "nomExerciceAmodifier", customSets: [{weight:70, reps:8}, ...]}
