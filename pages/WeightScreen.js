@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addWeight, updateTarget } from "../reducers/user";
@@ -19,6 +20,8 @@ import moment from "moment";
 import Button from "../components/Button";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Progress from "react-native-progress";
+import ConfettiCannon from "react-native-confetti-cannon";
+import * as Haptics from "expo-haptics";
 
 export default function WeightScreen({ navigation, route }) {
   const [modalVisibleWeight, setModalVisibleWeight] = useState(false);
@@ -33,18 +36,22 @@ export default function WeightScreen({ navigation, route }) {
   const [isCheckedLoss, setIsCheckedLoss] = useState(false);
   const [isCheckedGain, setIsCheckedGain] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [initialWeightInput, setInitialWeighInput] = useState(null);
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
+  console.log(user.target);
+  console.log(initialWeightInput);
 
   useEffect(() => {
     if (currentWeight && targetWeight && user.target.objectif === "Gain") {
       // Calcul en pourcentage l'objectif de l'utilisateur si il veut prendre du poids
       let newProgressValuePourcent = Math.floor(
-        ((user.weight[0].weight - currentWeight) * 100) /
-          (user.weight[0].weight - targetWeight)
+        ((user.target.initialWeight - currentWeight) * 100) /
+          (user.target.initialWeight - targetWeight)
       );
       if (newProgressValuePourcent < 0) {
         newProgressValuePourcent = 0;
@@ -53,14 +60,15 @@ export default function WeightScreen({ navigation, route }) {
       }
       // Même chose pour passer la valeur à Progress.Bar, Proggres.Circle qui accepte une valeure sur une  échelle de 0 à 1
       const newProgressValue =
-        (user.weight[0].weight - currentWeight) /
-        (user.weight[0].weight - targetWeight);
+        (user.target.initialWeight - currentWeight) /
+        (user.target.initialWeight - targetWeight);
 
       setProgressValue(newProgressValue);
       setProgressValuePourcent(newProgressValuePourcent);
 
       if (newProgressValue === 1) {
-        Alert.alert("Félicitation vous avez atteint votre objectif !");
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        setShowConfetti(true);
       }
     } else if (
       currentWeight &&
@@ -69,12 +77,12 @@ export default function WeightScreen({ navigation, route }) {
     ) {
       // Calcul inversé pour objectif de perte de poids
       const newProgressValue =
-        (user.weight[0].weight - currentWeight) /
-        (user.weight[0].weight - targetWeight);
+        (user.target.initialWeight - currentWeight) /
+        (user.target.initialWeight - targetWeight);
 
       let newProgressValuePourcent = Math.floor(
-        ((user.weight[0].weight - currentWeight) * 100) /
-          (user.weight[0].weight - targetWeight)
+        ((user.target.initialWeight - currentWeight) * 100) /
+          (user.target.initialWeight - targetWeight)
       );
       if (newProgressValuePourcent < 0) {
         newProgressValuePourcent = 0;
@@ -84,7 +92,8 @@ export default function WeightScreen({ navigation, route }) {
       setProgressValue(newProgressValue);
       setProgressValuePourcent(newProgressValuePourcent);
       if (newProgressValue === 1) {
-        Alert.alert("Félicitation vous avez atteint votre objectif !");
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        setShowConfetti(true);
       }
     }
   }, [user.weight, user.target]);
@@ -111,7 +120,7 @@ export default function WeightScreen({ navigation, route }) {
       return;
     }
     closeModalWeight();
-    setIsLoading(true)
+    setIsLoading(true);
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/addWeight`, {
       method: "POST",
       headers: { "Content-type": "application/json" },
@@ -122,17 +131,17 @@ export default function WeightScreen({ navigation, route }) {
         if (data.result === false) {
           setError(true);
           setErrorMessage(data.error);
-          setIsLoading(false)
-          setModalVisibleWeight(true)
+          setIsLoading(false);
+          setModalVisibleWeight(true);
         } else {
           dispatch(addWeight(data.newWeight));
-          setIsLoading(false)
+          setIsLoading(false);
         }
       });
   };
   // Enregistrer son objectif de poids dans la BDD puis dans le reducer
   const addTargetWeight = () => {
-    if (!weightTarget || !date) {
+    if (!weightTarget || !date || !initialWeightInput) {
       setError(true);
       setErrorMessage("Veuillez remplir correctement les champs de saisies");
       return;
@@ -144,7 +153,7 @@ export default function WeightScreen({ navigation, route }) {
     }
     const objectif = isCheckedGain ? "Gain" : "Loss";
     closeModalTarget();
-    setIsLoading(true)
+    setIsLoading(true);
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/weightTarget`, {
       method: "POST",
       headers: { "Content-type": "application/json" },
@@ -153,18 +162,20 @@ export default function WeightScreen({ navigation, route }) {
         token: user.token,
         date,
         objectif,
+        initialWeight: initialWeightInput,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         if (data.result === true) {
           dispatch(updateTarget(data.weightTarget));
-          setIsLoading(false)
+          setIsLoading(false);
         } else {
           setError(true);
           setErrorMessage(data.error);
-          setModalVisibleTarget(true)
-          setIsLoading(false)
+          setModalVisibleTarget(true);
+          setIsLoading(false);
         }
       });
   };
@@ -183,6 +194,7 @@ export default function WeightScreen({ navigation, route }) {
     setDate(new Date());
     setIsCheckedGain(false);
     setIsCheckedLoss(false);
+    setInitialWeighInput(null);
   };
   // Récupération de son poids de départ et la date correspondante, premier élément du tableau user.weight
   const startWeight = user.weight?.length === 0 ? 0 : user.weight[0].weight;
@@ -332,6 +344,13 @@ export default function WeightScreen({ navigation, route }) {
             <View style={styles.bottomModal}>
               <TextInput
                 style={styles.input}
+                placeholder={`Ton poids de départ`}
+                keyboardType="numeric"
+                onChangeText={(value) => setInitialWeighInput(value)}
+                value={initialWeightInput}
+              />
+              <TextInput
+                style={styles.input}
                 placeholder="Ton objectif de poids"
                 keyboardType="numeric"
                 onChangeText={(value) => setWeightTarget(value)}
@@ -454,7 +473,23 @@ export default function WeightScreen({ navigation, route }) {
               <Text style={styles.text}>{currentDate}</Text>
             </View>
             <View style={styles.colunm}>
-              <Text style={styles.startTitle}>Objectif</Text>
+              <Text style={styles.startTitle}>
+                Objectif{" "}
+                {user.target.objectif && user.target.objectif === "Gain" ? (
+                  <FontAwesome6
+                    name={"arrow-trend-up"}
+                    size={15}
+                    color={"#3BC95F"}
+                  />
+                ) : (
+                  <FontAwesome6
+                    name={"arrow-trend-down"}
+                    size={15}
+                    color={"#3BC95F"}
+                  />
+                )}
+              </Text>
+
               <Text style={styles.textWeight}>{targetWeight} kg</Text>
               <Text style={styles.text}>{targetDate}</Text>
             </View>
@@ -492,6 +527,16 @@ export default function WeightScreen({ navigation, route }) {
           {weights}
         </View>
       </ScrollView>
+      {showConfetti && (
+        <ConfettiCannon
+          count={50}
+          origin={{ x: 0, y: 0 }}
+          // autoStart={true}
+          fadeOut={true}
+          fallSpeed={2000}
+        />
+      )}
+
       {isLoading && (
         <View style={styles.backgroundLoading}>
           <ActivityIndicator size="large" color="#A3FD01" animating={true} />
@@ -517,7 +562,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: "85%",
-    height: 420,
+    height: 470,
     backgroundColor: "#272D34",
     borderRadius: 20,
     padding: 15,

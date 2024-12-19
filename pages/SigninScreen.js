@@ -19,8 +19,8 @@ import { addAllWorkoutsHistory } from "../reducers/workoutsHistory";
 export default function SigninScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("weight2@gmail.com");
+  const [password, setPassword] = useState("aaa");
   const [wrongEmail, setWrongEmail] = useState(false);
   const [emptyFields, setEmptyFields] = useState(false);
   const [signupError, setSignupError] = useState(null);
@@ -44,7 +44,7 @@ export default function SigninScreen({ navigation }) {
           email: email,
           password: password,
         };
-        setIsLoading(true)
+        setIsLoading(true);
         fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/signin`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -53,9 +53,8 @@ export default function SigninScreen({ navigation }) {
           .then((response) => response.json())
           .then((data) => {
             if (data.result === false) {
-              console.log(data.error);
               setSignupError(data.error);
-              setIsLoading(false)
+              setIsLoading(false);
             } else {
               const userToken = data.userInfos.token;
               dispatch(login(data.userInfos));
@@ -74,7 +73,7 @@ export default function SigninScreen({ navigation }) {
                     .then((data) => {
                       dispatch(addAllWorkoutsHistory(data.histories));
                       navigation.navigate("TabNavigator", { screen: "Home" });
-                      setIsLoading(false)
+                      setIsLoading(false);
                     });
                 });
             }
@@ -122,8 +121,10 @@ export default function SigninScreen({ navigation }) {
         background="#A3FD01"
         onPress={handleSignin}
       ></Button>
-      <TouchableOpacity onPress={() => navigation.navigate("passwordForgotten")}>
-          <Text style={styles.signup}>Mot de passe oublié ?</Text>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("passwordForgotten")}
+      >
+        <Text style={styles.signup}>Mot de passe oublié ?</Text>
       </TouchableOpacity>
       <View style={styles.alreadyAccountSection}>
         <Text style={styles.alreadyAccount}>Pas encore de compte ? </Text>
@@ -131,9 +132,11 @@ export default function SigninScreen({ navigation }) {
           <Text style={styles.signup}>Inscris-toi !</Text>
         </TouchableOpacity>
       </View>
-      {isLoading&& <View style={styles.backgroundLoading}>
-        <ActivityIndicator size="large" color="#A3FD01" animating={true}/>
-      </View>}
+      {isLoading && (
+        <View style={styles.backgroundLoading}>
+          <ActivityIndicator size="large" color="#A3FD01" animating={true} />
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 }
@@ -187,7 +190,7 @@ const styles = StyleSheet.create({
   },
 
   alreadyAccountSection: {
-    margin: 'auto',
+    margin: "auto",
     flexDirection: "row",
   },
   alreadyAccount: {
