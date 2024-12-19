@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView,ActivityIndicator, } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Underline from "../components/Underline";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import imagesWorkout from "../utils/imagesWorkout";
 export default function WorkoutChoiceScreen({ navigation, route }) {
   const { name } = route.params;
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNavigateToSummary = (data) => {
     dispatch(resetWorkoutCreation());
@@ -46,10 +47,12 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
   const [addWorkout, setAddWorkout] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true)
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/workouts/byDifficulty/${name}`)
       .then((response) => response.json())
       .then((data) => {
         setAddWorkout(data.data);
+        setIsLoading(false)
       });
   }, []);
 
@@ -83,6 +86,7 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
         accessibilityLabel={`Choisir la séance ${data.name}`}
         accessibilityHint="Vous serez redirigé vers le résumé de cette séance"
         image={imageSource}
+        textBtn="Add Workout"
       />
     );
   });
@@ -115,6 +119,11 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
           {nameWorkout}
         </ScrollView>
       </View>
+      {isLoading && (
+              <View style={styles.backgroundLoading}>
+                <ActivityIndicator size="large" color="#A3FD01" animating={true} />
+              </View>
+            )}
     </View>
   );
 }
@@ -203,5 +212,14 @@ const styles = StyleSheet.create({
     gap: 20,
     alignItems: "center",
     marginTop: 10,
+  },
+  backgroundLoading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

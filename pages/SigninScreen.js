@@ -7,6 +7,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import Button from "../components/Button";
 import { useState } from "react";
@@ -18,11 +19,13 @@ import { addAllWorkoutsHistory } from "../reducers/workoutsHistory";
 export default function SigninScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("thomas@gmail.com");
+  const [password, setPassword] = useState("thomas");
   const [wrongEmail, setWrongEmail] = useState(false);
   const [emptyFields, setEmptyFields] = useState(false);
   const [signupError, setSignupError] = useState(null);
+  const [clicked, setClicked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const EMAIL_REGEX =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -42,6 +45,7 @@ export default function SigninScreen({ navigation }) {
           email: email,
           password: password,
         };
+        setIsLoading(true)
         fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/signin`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -51,6 +55,7 @@ export default function SigninScreen({ navigation }) {
           .then((data) => {
             if (data.result === false) {
               setSignupError(data.error);
+              setIsLoading(false)
             } else {
               const userToken = data.userInfos.token;
               dispatch(login(data.userInfos));
@@ -69,6 +74,7 @@ export default function SigninScreen({ navigation }) {
                     .then((data) => {
                       dispatch(addAllWorkoutsHistory(data.histories));
                       navigation.navigate("TabNavigator", { screen: "Home" });
+                      setIsLoading(false)
                     });
                 });
             }
@@ -116,25 +122,15 @@ export default function SigninScreen({ navigation }) {
         background="#A3FD01"
         onPress={handleSignin}
       ></Button>
-      <View style={styles.orContainer}>
-        <View style={styles.line}></View>
-        <Text style={styles.or}>ou</Text>
-        <View style={styles.line}></View>
-      </View>
-      <Button
-        textButton="Signin with Google"
-        textColor="black"
-        width="80%"
-        height="40"
-        background="#A3FD01"
-        onPress={handleSignin}
-      ></Button>
       <View style={styles.alreadyAccountSection}>
         <Text style={styles.alreadyAccount}>Pas encore de compte ? </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
           <Text style={styles.signup}>Inscris-toi !</Text>
         </TouchableOpacity>
       </View>
+      {isLoading&& <View style={styles.backgroundLoading}>
+        <ActivityIndicator size="large" color="#A3FD01" animating={true}/>
+      </View>}
     </KeyboardAvoidingView>
   );
 }
@@ -223,5 +219,15 @@ const styles = StyleSheet.create({
   error: {
     color: "red",
     marginTop: 10,
+  },
+  backgroundLoading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

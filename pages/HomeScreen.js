@@ -55,6 +55,7 @@ export default function HomeScreen({ navigation }) {
         onPress={() => handleWorkoutNavigation(element._id)}
         accessibilityLabel={`Commencer la séance ${element.name}`}
         image={imageSource}
+        textBtn="Start Workout"
       />
     );
   });
@@ -107,7 +108,7 @@ export default function HomeScreen({ navigation }) {
             <Underline width={50} />
           </View>
         ) : (
-          workouts.length > 1 && (
+          workouts.lenght > 1 && (
             <View style={styles.seances}>
               <Text style={styles.text}>Mes séances :</Text>
               <Underline width={50} />

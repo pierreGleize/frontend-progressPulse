@@ -7,6 +7,7 @@ import {
   Platform,
   TextInput,
   Text,
+  ActivityIndicator,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
@@ -39,6 +40,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
   const [workoutName, setWorkoutName] = useState("");
   const [muscleGroup, setMuscleGroup] = useState("");
   const [postError, setPostError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
@@ -180,6 +182,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         exercices: exercices,
         image: imagesWorkout[randomImage].name,
       };
+      setModalTitleVisible(false)
+      setIsLoading(true)
       fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addWorkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -199,8 +203,10 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             setModalTitleVisible(false);
             dispatch(resetWorkoutCreation());
             navigation.navigate("Home");
+            setIsLoading(false)
           } else {
             setPostError(true);
+            setIsLoading(false)
           }
         });
     }
@@ -437,6 +443,9 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           onPress={() => navigation.navigate("muscleGroup")}
         />
       </View>
+      {isLoading&& <View style={styles.backgroundLoading}>
+              <ActivityIndicator size="large" color="#A3FD01" animating={true}/>
+      </View>}
     </View>
   );
 }
@@ -557,5 +566,15 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: "red",
     textAlign: "center",
+  },
+  backgroundLoading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

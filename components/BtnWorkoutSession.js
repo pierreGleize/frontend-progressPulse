@@ -12,6 +12,7 @@ export default function WorkoutSessionButton({
   accessibilityLabel,
   accessibilityHint,
   image,
+  textBtn
 }) {
   return (
     <TouchableOpacity
@@ -64,7 +65,7 @@ export default function WorkoutSessionButton({
             </View>
           </View>
           <View style={styles.btnContainer}>
-            <Text style={styles.btnText}>Start workout</Text>
+            <Text style={styles.btnText}>{textBtn}</Text>
             <FontAwesome
               name={"long-arrow-right"}
               size={20}
