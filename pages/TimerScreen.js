@@ -230,6 +230,8 @@ export default function TimerScreen({ navigation, route }) {
                 height={50}
                 background="#A3FD01"
                 onPress={timerClick}
+                accessibilityLabel={"Démarer le minuteur"}
+                accessibilityHint={"Le minuteur va se mettre en route"}
               />
             </View>
             {/* Modal permettant de changer son temps de repos */}
@@ -507,7 +509,7 @@ const styles = StyleSheet.create({
   },
 
   errorMessage: {
-    color: "red",
+    color: "#FF4500",
     textAlign: "center",
   },
 
@@ -551,16 +553,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
   timerContainer: {
     height: "30%",
   },
+
   timerContainerStarted: {
     height: "32%",
   },
+
   inputSection: {
     height: "45%",
     marginTop: 5,
   },
+  
   test: {
     height: 200,
   },

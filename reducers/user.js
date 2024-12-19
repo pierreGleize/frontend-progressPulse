@@ -47,6 +47,7 @@ export const userSlice = createSlice({
       state.value.username = action.payload;
     },
     updateTarget: (state, action) => {
+      console.log(action);
       state.value.target = action.payload;
     },
   },

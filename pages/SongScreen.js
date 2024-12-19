@@ -74,6 +74,8 @@ export default function SongScreen({ navigation, route }) {
         <TouchableOpacity
           style={styles.backToContainer}
           onPress={validateSoundAndNavigate}
+          accessibilityLabel="Permet de retourner sur la page Réglages"
+          accessibilityHint="Vous allez être redirigé vers la page Réglages"
         >
           <FontAwesome name={"chevron-left"} size={24} color={"#3BC95F"} />
           <Text style={styles.backToText}>Réglages</Text>
@@ -88,6 +90,8 @@ export default function SongScreen({ navigation, route }) {
               style={styles.songContainer}
               activeOpacity={0.7}
               onPress={() => handleChangeSound("Alarm")}
+              accessibilityLabel="Sonnerie Alarm"
+              accessibilityHint="Vous avez choisi Alarm comme sonnerie"
             >
               <Text style={styles.text}>Alarm</Text>
               {soundChoice === "Alarm" && (
@@ -103,6 +107,8 @@ export default function SongScreen({ navigation, route }) {
               style={styles.songContainer}
               activeOpacity={0.7}
               onPress={() => handleChangeSound("Ring")}
+              accessibilityLabel="Sonnerie Ring"
+              accessibilityHint="Vous avez choisi Ring comme sonnerie"
             >
               <Text style={styles.text}>Ring</Text>
               {soundChoice === "Ring" && (
@@ -118,6 +124,8 @@ export default function SongScreen({ navigation, route }) {
               style={styles.songContainer}
               activeOpacity={0.7}
               onPress={() => handleChangeSound("Notification")}
+              accessibilityLabel="Sonnerie Notification"
+              accessibilityHint="Vous avez choisi Notification comme sonnerie"
             >
               <Text style={styles.text}>Notification</Text>
               {soundChoice === "Notification" && (
@@ -133,6 +141,8 @@ export default function SongScreen({ navigation, route }) {
               style={styles.songContainer}
               activeOpacity={0.7}
               onPress={() => handleChangeSound("Ring de boxe")}
+              accessibilityLabel="Sonnerie Ring de Boxe"
+              accessibilityHint="Vous avez choisi Ring de Boxe comme sonnerie"
             >
               <Text style={styles.text}>Ring de boxe</Text>
               {soundChoice === "Ring de boxe" && (
@@ -148,6 +158,8 @@ export default function SongScreen({ navigation, route }) {
               style={styles.songContainer}
               activeOpacity={0.7}
               onPress={() => handleChangeSound("Féerique")}
+              accessibilityLabel="Sonnerie Féerique"
+              accessibilityHint="Vous avez choisi Féerique comme sonnerie"
             >
               <Text style={styles.text}>Féerique</Text>
               {soundChoice === "Féerique" && (
@@ -163,6 +175,8 @@ export default function SongScreen({ navigation, route }) {
               style={styles.songContainer}
               activeOpacity={0.7}
               onPress={() => handleChangeSound("Silencieux")}
+              accessibilityLabel="Sonnerie Silencieux"
+              accessibilityHint="Vous avez choisi Silencieux comme sonnerie"
             >
               <Text style={styles.text}>Silencieux</Text>
               {soundChoice === "Silencieux" && (
@@ -183,6 +197,7 @@ export default function SongScreen({ navigation, route }) {
           size={30}
           color={"#A3FD01"}
           style={styles.infoIcon}
+          accessibilityLabel="Affiche une information pour choisir la sonnerie de minuteur"
         />
         <Text style={styles.textInfo}>
           Choisis la sonnerie que tu souhaites entendre à la fin de chaque

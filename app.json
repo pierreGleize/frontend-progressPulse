@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "ProgressPulse",
-    "slug": "progresspule",
+    "slug": "progresspulse",
     "description": "Une application de suivi d'entraînement pour les sportifs.",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/illustrations/LogoV2.png",
+    "icon": "./assets/illustrations/Logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -24,6 +24,12 @@
     },
     "web": {
       "favicon": "./assets/illustrations/LogoV2.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "802c39f9-4fd6-44af-aa9f-3b5b57edfbc6"
+      }
+    },
+    "owner": "pierregleize"
   }
 }

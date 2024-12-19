@@ -155,6 +155,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             exerciseID={exercise.exercise}
             openModalCustomSets={openModalCustomSets}
             handleDelete={handleDelete}
+            accessibilityLabel={`Donnée de l'exercice ${exercise.exerciseName}`}
           />
         );
       }
@@ -278,9 +279,9 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               borderWidth={1}
               borderColor="#A3FD01"
               onPress={handleSubmit}
-              accessibilityLabel="Valider le nom donné à la séance"
-              accessibilityHint="Vous serez redirigé vers la d'accueil après la validation. Votre séance crée s'affichera sur cette page"
-            ></Button>
+              accessibilityLabel={"Valider le nom donné à la séance"}
+              accessibilityHint={"Vous serez redirigé vers la d'accueil après la validation. Votre séance crée s'affichera sur cette page"}
+            />
           </View>
         </KeyboardAvoidingView>
       </Modal>
@@ -400,8 +401,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               borderWidth={1}
               borderColor="#A3FD01"
               onPress={updateExercise}
-              accessibilityLabel="Valider les changements apportés à l'exercice"
-              eccessibilityHint="Permet également de fermer la modale, on reste toujours sur la même page après cette action"
+              accessibilityLabel={"Valider les changements apportés à l'exercice"}
+              accessibilityHint={"Permet également de fermer la modale, on reste toujours sur la même page après cette action"}
             ></Button>
           </View>
         </KeyboardAvoidingView>
@@ -425,14 +426,14 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         <Button
           background="#A3FD01"
           borderColor="none"
-          textButton={"Valider ma séance"}
+          textButton="Valider ma séance"
           textColor="black"
           width={300}
           height={50}
           onPress={() => setModalTitleVisible(true)}
           isLinearGradiant={false}
-          accessibilityLabel="Valider la et accepter si des changements ont été apporté sur la séance"
-          accessibilityHint="Redirection sur la page d'accueil, votre séance si affichera"
+          accessibilityLabel={"Valider la et accepter si des changements ont été apporté sur la séance"}
+          accessibilityHint={"Redirection sur la page d'accueil, votre séance si affichera"}
         />
         <FontAwesome
           name={"plus-circle"}

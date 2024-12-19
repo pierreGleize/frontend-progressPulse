@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ActivityIndicator,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Underline from "../components/Underline";
@@ -44,13 +44,19 @@ export default function WorkoutEndingScreen({ navigation, route }) {
       name = "star";
     }
     note.push(
-      <TouchableOpacity key={star} onPress={() => setPersonnalNote(star + 1)} activeOpacity={1}>
-      <FontAwesome
-        name={name}
-        color={color}
-        size={50}
-        style={{ marginRight: 25 }}
-      />
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={() => setPersonnalNote(star + 1)}
+        key={star}
+        accessibilityLabel="Etoiles pour la note"
+        accessibilityHint="Les étoiles correspondent à la note que vous voulez donner a la séance"
+      >
+        <FontAwesome
+          name={name}
+          color={color}
+          size={50}
+          style={{ marginRight: 25 }}
+        />
       </TouchableOpacity>
     );
   }
@@ -106,6 +112,7 @@ export default function WorkoutEndingScreen({ navigation, route }) {
             style={styles.input}
             onChangeText={(value) => setRessenti(value)}
             value={ressenti}
+            accessibilityLabel="Saisie ton ressenti sur la séance"
           />
           <Button
             textButton="Enregistrer ma séance"
@@ -114,6 +121,8 @@ export default function WorkoutEndingScreen({ navigation, route }) {
             height={50}
             background="#A3FD01"
             onPress={handlePress}
+            accessibilityLabel={"Enregistrer ma séance"}
+            accessibilityHint={"Vous allez être redirigé vers la page d'acceuil, vous pouvez retrouver votre séance dans l'historique"}
           />
         </View>
         {isLoading && (
