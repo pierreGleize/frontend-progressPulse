@@ -7,6 +7,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import ExerciseBtn from "../components/ExerciseBtn";
@@ -34,6 +35,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
   const [restSeconds, setRestSeconds] = useState("00");
   const [emptyFields, setEmptyFields] = useState(false);
   const [isCardio, setIsCardio] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (name === "Cardio") {
@@ -41,11 +43,13 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
     } else {
       setIsCardio(false);
     }
+    setIsLoading(true)
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/exercises/${name}`)
       .then((response) => response.json())
       .then((data) => {
         if (data) {
           setExercisesList(data.data);
+          setIsLoading(false)
         }
       });
   }, []);
@@ -131,6 +135,8 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           rest: restConverted,
           customSets: customSets,
         };
+        closeModal();
+        setIsLoading(true)
         fetch(
           `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addExercise`,
           {
@@ -147,7 +153,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
                 exercisesToUpdate: data.updatedWorkout.exercises,
               })
             );
-            closeModal();
+            setIsLoading(false)
           });
       }
     } else {
@@ -163,6 +169,8 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           rest: restConverted,
           customSets: customSets,
         };
+        closeModal();
+        setIsLoading(true)
         fetch(
           `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addExercise`,
           {
@@ -179,7 +187,8 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
                 exercisesToUpdate: data.updatedWorkout.exercises,
               })
             );
-            closeModal();
+            setIsLoading(false)
+            
           });
       }
     }
@@ -375,6 +384,11 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           accessibilityLabel="Revenir sur la page pour choisir le groupe musculaire"
         />
       </View>
+      {isLoading && (
+        <View style={styles.backgroundLoading}>
+          <ActivityIndicator size="large" color="#A3FD01" animating={true} />
+        </View>
+      )}
     </View>
   );
 }
@@ -479,5 +493,14 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: "red",
     textAlign: "center",
+  },
+  backgroundLoading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

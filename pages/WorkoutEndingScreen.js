@@ -5,20 +5,29 @@ import {
   View,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Underline from "../components/Underline";
 import Button from "../components/Button";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { addWorkout } from "../reducers/workoutsHistory";
 import { resetCurrentWorkout } from "../reducers/currentWorkout";
+import ConfettiCannon from 'react-native-confetti-cannon';
+import * as Haptics from 'expo-haptics';
 
 export default function WorkoutEndingScreen({ navigation }) {
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+  },[])
+
   const [personnalNote, setPersonnalNote] = useState(0);
   const [ressenti, setRessenti] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // Récupération de la séance en cours d'enregistrement
   const currentWorkout = useSelector((state) => state.currentWorkout.value);
@@ -48,6 +57,7 @@ export default function WorkoutEndingScreen({ navigation }) {
     let currentWorkoutToAdd = { ...currentWorkout };
     currentWorkoutToAdd.note = personnalNote;
     currentWorkoutToAdd.ressenti = ressenti;
+    setIsLoading(true)
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/histories/addWorkout`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -58,6 +68,7 @@ export default function WorkoutEndingScreen({ navigation }) {
         dispatch(addWorkout(data.workoutAdded));
         dispatch(resetCurrentWorkout());
         navigation.navigate("Home");
+        setIsLoading(false)
       });
   };
 
@@ -92,7 +103,14 @@ export default function WorkoutEndingScreen({ navigation }) {
             onPress={handlePress}
           />
         </View>
+        {isLoading && (
+        <View style={styles.backgroundLoading}>
+          <ActivityIndicator size="large" color="#A3FD01" animating={true}  />
+        </View>
+      )}
+      <ConfettiCannon count={50} origin={{x: 0, y: 0}} autoStart={true} fadeOut={true} fallSpeed={2000} />
       </View>
+
     </TouchableWithoutFeedback>
   );
 }
@@ -144,6 +162,16 @@ const styles = StyleSheet.create({
   },
 
   bottomContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  backgroundLoading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
     justifyContent: "center",
     alignItems: "center",
   },

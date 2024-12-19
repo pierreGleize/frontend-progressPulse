@@ -9,6 +9,7 @@ import {
   Platform,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useState, useEffect } from "react";
@@ -31,6 +32,7 @@ export default function WeightScreen({ navigation, route }) {
   const [progressValuePourcent, setProgressValuePourcent] = useState(0);
   const [isCheckedLoss, setIsCheckedLoss] = useState(false);
   const [isCheckedGain, setIsCheckedGain] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -108,6 +110,8 @@ export default function WeightScreen({ navigation, route }) {
       setErrorMessage("Veuillez remplir correctement le champ de saisie");
       return;
     }
+    closeModalWeight();
+    setIsLoading(true)
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/addWeight`, {
       method: "POST",
       headers: { "Content-type": "application/json" },
@@ -118,9 +122,11 @@ export default function WeightScreen({ navigation, route }) {
         if (data.result === false) {
           setError(true);
           setErrorMessage(data.error);
+          setIsLoading(false)
+          setModalVisibleWeight(true)
         } else {
           dispatch(addWeight(data.newWeight));
-          closeModalWeight();
+          setIsLoading(false)
         }
       });
   };
@@ -137,7 +143,8 @@ export default function WeightScreen({ navigation, route }) {
       return;
     }
     const objectif = isCheckedGain ? "Gain" : "Loss";
-
+    closeModalTarget();
+    setIsLoading(true)
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/weightTarget`, {
       method: "POST",
       headers: { "Content-type": "application/json" },
@@ -152,10 +159,12 @@ export default function WeightScreen({ navigation, route }) {
       .then((data) => {
         if (data.result === true) {
           dispatch(updateTarget(data.weightTarget));
-          closeModalTarget();
+          setIsLoading(false)
         } else {
           setError(true);
           setErrorMessage(data.error);
+          setModalVisibleTarget(true)
+          setIsLoading(false)
         }
       });
   };
@@ -483,6 +492,11 @@ export default function WeightScreen({ navigation, route }) {
           {weights}
         </View>
       </ScrollView>
+      {isLoading && (
+        <View style={styles.backgroundLoading}>
+          <ActivityIndicator size="large" color="#A3FD01" animating={true} />
+        </View>
+      )}
     </View>
   );
 }
@@ -685,5 +699,15 @@ const styles = StyleSheet.create({
     height: 12,
     backgroundColor: "#272D34",
     borderRadius: 2,
+  },
+  backgroundLoading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

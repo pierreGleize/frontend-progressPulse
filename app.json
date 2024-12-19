@@ -4,9 +4,6 @@
     "slug": "progresspule",
     "description": "Une application de suivi d'entraînement pour les sportifs.",
     "version": "1.0.0",
-    "extra": {
-      "SERVER_IP": "http://192.168.1.18:3000"
-    },
     "orientation": "portrait",
     "icon": "./assets/illustrations/Logo.png",
     "userInterfaceStyle": "light",
@@ -14,7 +11,7 @@
     "splash": {
       "image": "./assets/illustrations/Logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0D0D36"
     },
     "ios": {
       "supportsTablet": true
@@ -26,7 +23,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/illustrations/Logo.png"
+      "favicon": "./assets/illustrations/LogoV2.png"
     }
   }
 }
