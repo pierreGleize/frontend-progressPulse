@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import Button from "../components/Button";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import { addAllUserWorkouts } from "../reducers/workouts";
 import { addAllWorkoutsHistory } from "../reducers/workoutsHistory";
@@ -19,7 +19,7 @@ import { addAllWorkoutsHistory } from "../reducers/workoutsHistory";
 export default function SigninScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState("weight2@gmail.com");
+  const [email, setEmail] = useState("pierre38@gmail.com");
   const [password, setPassword] = useState("aaa");
   const [wrongEmail, setWrongEmail] = useState(false);
   const [emptyFields, setEmptyFields] = useState(false);
