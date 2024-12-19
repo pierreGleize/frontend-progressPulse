@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import Button from "../components/Button";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import { addAllUserWorkouts } from "../reducers/workouts";
 import { addAllWorkoutsHistory } from "../reducers/workoutsHistory";

@@ -57,7 +57,6 @@ const Button = ({
         activeOpacity={0.8}
         onPress={onPress}
         accessibilityLabel={accessibilityLabel}
-        accessibilityHint={accessibilityHint}
         style={{
           backgroundColor: background,
           width: width,

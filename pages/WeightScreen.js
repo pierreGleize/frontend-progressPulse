@@ -8,7 +8,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   TextInput,
-  Alert,
   ActivityIndicator,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -43,12 +42,10 @@ export default function WeightScreen({ navigation, route }) {
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
-  console.log(user.target);
-  console.log(initialWeightInput);
 
   useEffect(() => {
-    if (currentWeight && targetWeight && user.target.objectif === "Gain") {
-      // Calcul en pourcentage l'objectif de l'utilisateur si il veut prendre du poids
+    if (currentWeight && targetWeight && user.target.objectif) {
+      // Calcul en pourcentage l'objectif de l'utilisateur si il veut prendre ou perdre du poids
       let newProgressValuePourcent = Math.floor(
         ((user.target.initialWeight - currentWeight) * 100) /
           (user.target.initialWeight - targetWeight)
@@ -66,31 +63,6 @@ export default function WeightScreen({ navigation, route }) {
       setProgressValue(newProgressValue);
       setProgressValuePourcent(newProgressValuePourcent);
 
-      if (newProgressValue === 1) {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-        setShowConfetti(true);
-      }
-    } else if (
-      currentWeight &&
-      targetWeight &&
-      user.target.objectif === "Loss"
-    ) {
-      // Calcul inversé pour objectif de perte de poids
-      const newProgressValue =
-        (user.target.initialWeight - currentWeight) /
-        (user.target.initialWeight - targetWeight);
-
-      let newProgressValuePourcent = Math.floor(
-        ((user.target.initialWeight - currentWeight) * 100) /
-          (user.target.initialWeight - targetWeight)
-      );
-      if (newProgressValuePourcent < 0) {
-        newProgressValuePourcent = 0;
-      } else if (newProgressValuePourcent > 100) {
-        newProgressValuePourcent = 100;
-      }
-      setProgressValue(newProgressValue);
-      setProgressValuePourcent(newProgressValuePourcent);
       if (newProgressValue === 1) {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         setShowConfetti(true);
@@ -119,7 +91,7 @@ export default function WeightScreen({ navigation, route }) {
       setErrorMessage("Veuillez remplir correctement le champ de saisie");
       return;
     }
-    closeModalWeight();
+    // closeModalWeight();
     setIsLoading(true);
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/addWeight`, {
       method: "POST",
@@ -133,9 +105,11 @@ export default function WeightScreen({ navigation, route }) {
           setErrorMessage(data.error);
           setIsLoading(false);
           setModalVisibleWeight(true);
+          // closeModalWeight();
         } else {
           dispatch(addWeight(data.newWeight));
           setIsLoading(false);
+          closeModalWeight();
         }
       });
   };
@@ -152,7 +126,7 @@ export default function WeightScreen({ navigation, route }) {
       return;
     }
     const objectif = isCheckedGain ? "Gain" : "Loss";
-    closeModalTarget();
+    // closeModalTarget();
     setIsLoading(true);
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/weightTarget`, {
       method: "POST",
@@ -167,10 +141,10 @@ export default function WeightScreen({ navigation, route }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.result === true) {
           dispatch(updateTarget(data.weightTarget));
           setIsLoading(false);
+          closeModalTarget();
         } else {
           setError(true);
           setErrorMessage(data.error);
@@ -482,11 +456,14 @@ export default function WeightScreen({ navigation, route }) {
                     color={"#3BC95F"}
                   />
                 ) : (
-                  <FontAwesome6
-                    name={"arrow-trend-down"}
-                    size={15}
-                    color={"#3BC95F"}
-                  />
+                  user.target.objectif &&
+                  user.target.objectif === "Loss" && (
+                    <FontAwesome6
+                      name={"arrow-trend-down"}
+                      size={15}
+                      color={"#3BC95F"}
+                    />
+                  )
                 )}
               </Text>
 

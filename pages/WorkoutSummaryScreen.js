@@ -281,7 +281,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               onPress={handleSubmit}
               accessibilityLabel={"Valider le nom donné à la séance"}
               accessibilityHint={"Vous serez redirigé vers la d'accueil après la validation. Votre séance crée s'affichera sur cette page"}
-            ></Button>
+            />
           </View>
         </KeyboardAvoidingView>
       </Modal>
@@ -402,7 +402,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
               borderColor="#A3FD01"
               onPress={updateExercise}
               accessibilityLabel={"Valider les changements apportés à l'exercice"}
-              eccessibilityHint={"Permet également de fermer la modale, on reste toujours sur la même page après cette action"}
+              accessibilityHint={"Permet également de fermer la modale, on reste toujours sur la même page après cette action"}
             ></Button>
           </View>
         </KeyboardAvoidingView>
@@ -426,7 +426,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         <Button
           background="#A3FD01"
           borderColor="none"
-          textButton={"Valider ma séance"}
+          textButton="Valider ma séance"
           textColor="black"
           width={300}
           height={50}

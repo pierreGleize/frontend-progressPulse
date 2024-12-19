@@ -8,7 +8,7 @@ import imagesWorkout from "../utils/imagesWorkout";
 
 export default function HomeScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
-  console.log(user.target);
+
   const workouts = useSelector((state) => state.workouts.value);
   const handleAddWorkout = () => {
     navigation.navigate("WorkoutType");
@@ -20,14 +20,13 @@ export default function HomeScreen({ navigation }) {
   };
 
   const workoutsToShow = workouts.map((element, index) => {
-
     const imageSource = imagesWorkout.filter((imageWorkout) => {
       if (imageWorkout.name === element.image) {
         return imageWorkout.source;
       }
     });
 
-    //nombre d'exercices dans le workout 
+    //nombre d'exercices dans le workout
     let nbExercises = "";
     if (element.exercises.length === 1) {
       nbExercises = element.exercises.length + " exercice";
@@ -49,7 +48,7 @@ export default function HomeScreen({ navigation }) {
         return Math.round(times);
       }
     };
-    
+
     return (
       <BtnWorkoutSession
         key={index}

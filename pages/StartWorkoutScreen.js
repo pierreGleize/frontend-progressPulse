@@ -295,7 +295,6 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             isEditable={isEditable}
             startExercise={startExercise}
             accessibilityLabel={`Commencer l'exercice ${exercise.exercise.name}`}
-            accessibilityHint={`Vous allez commencer l'exercice ${exercise.exercise.name}`}
           />
         );
       }
