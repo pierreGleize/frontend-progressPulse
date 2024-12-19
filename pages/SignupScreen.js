@@ -115,19 +115,6 @@ export default function SignupScreen({ navigation }) {
         background="#A3FD01"
         onPress={handleSignup}
       ></Button>
-      <View style={styles.orContainer}>
-        <View style={styles.line}></View>
-        <Text style={styles.or}>ou</Text>
-        <View style={styles.line}></View>
-      </View>
-      <Button
-        textButton="Signup with Google"
-        textColor="black"
-        width="80%"
-        height="40"
-        background="#A3FD01"
-        onPress={handleSignup}
-      ></Button>
       <View style={styles.alreadyAccountSection}>
         <Text style={styles.alreadyAccount}>Déjà un compte ? </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Signin")}>

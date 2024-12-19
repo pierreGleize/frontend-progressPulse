@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ActivityIndicator,
+  TouchableOpacity
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Underline from "../components/Underline";
@@ -41,14 +42,14 @@ export default function WorkoutEndingScreen({ navigation }) {
       name = "star";
     }
     note.push(
+      <TouchableOpacity key={star} onPress={() => setPersonnalNote(star + 1)} activeOpacity={1}>
       <FontAwesome
-        key={star}
         name={name}
         color={color}
-        onPress={() => setPersonnalNote(star + 1)}
         size={50}
         style={{ marginRight: 25 }}
       />
+      </TouchableOpacity>
     );
   }
 
