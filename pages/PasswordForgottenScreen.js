@@ -25,15 +25,15 @@ export default function PasswordForgottenScreen({ navigation }) {
     const [wrongEmail, setWrongEmail] = useState(false);
     const [emptyFields, setEmptyFields] = useState(false);
     const [signupError, setSignupError] = useState(null);
+    const [validEmail, setValidEmail] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [codeMail, setCodeMail] = useState(false);
     const [newPassword, setNewPassword] = useState(false);
-    const [validEmail, setValidEmail] = useState(true);
 
     const EMAIL_REGEX =
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    function handleSignin() {
+    function handleEmail() {
         if (!email) {
             setWrongEmail(false);
             setEmptyFields(true);
@@ -46,10 +46,8 @@ export default function PasswordForgottenScreen({ navigation }) {
                 setEmptyFields(false);
                 const user = {
                     email: email,
-                    password: password,
                 };
-                setIsLoading(true)
-                fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/signin`, {
+                fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/forgotPassword`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(user),
@@ -57,44 +55,47 @@ export default function PasswordForgottenScreen({ navigation }) {
                     .then((response) => response.json())
                     .then((data) => {
                         if (data.result === false) {
-                            console.log(data.error);
                             setSignupError(data.error);
-                            setIsLoading(false)
                         } else {
                             const userToken = data.userInfos.token;
                             dispatch(login(data.userInfos));
-                            fetch(
-                                `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/${data.userInfos.token}`
-                            )
-                                .then((response) => response.json())
-                                .then((data) => {
-                                    if (data.userWorkouts) {
-                                        dispatch(addAllUserWorkouts(data.userWorkouts));
-                                    }
-                                    fetch(
-                                        `${process.env.EXPO_PUBLIC_SERVER_IP}/histories/${userToken}`
-                                    )
-                                        .then((response) => response.json())
-                                        .then((data) => {
-                                            dispatch(addAllWorkoutsHistory(data.histories));
-                                            navigation.navigate("TabNavigator", { screen: "Home" });
-                                            setIsLoading(false)
-                                        });
-                                });
+                            setValidEmail(false),
+                                setCodeMail(true)
+
                         }
                     });
             }
         }
     }
 
-    const handleEmail = () => {
-        setValidEmail(false),
-            setCodeMail(true)
-    }
+    const handleCode = () => {
+        fetch(
+            `${process.env.EXPO_PUBLIC_SERVER_IP}/users/verifyResetToken`
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                if (data) {
+                    setCodeMail(false)
+                    setNewPassword(true)
+                }
+            });
+    };
+
     const handlePassword = () => {
-        setCodeMail(false),
-            setNewPassword(true)
-    }
+        fetch(
+            `${process.env.EXPO_PUBLIC_SERVER_IP}/users/changeForgottenPassword`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(user),
+            }
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                dispatch(addAllWorkoutsHistory(data.histories));
+                navigation.navigate('Signin')
+                setIsLoading(false)
+            });
+    };
 
     return (
         <KeyboardAvoidingView
@@ -148,7 +149,7 @@ export default function PasswordForgottenScreen({ navigation }) {
                         width="50%"
                         height="40"
                         background="#A3FD01"
-                        onPress={handlePassword}
+                        onPress={handleCode}
                     />
                 </View>
             )}
@@ -176,7 +177,7 @@ export default function PasswordForgottenScreen({ navigation }) {
                         width="60%"
                         height="50"
                         background="#A3FD01"
-                        onPress={() => navigation.navigate('Signin')}
+                        onPress={handlePassword}
                     />
                 </View>
             )}
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
         fontWeight: "800",
     },
     input: {
-        width: "80%",
+        width: "60%",
         height: 40,
         borderRadius: 10,
         backgroundColor: "white",
@@ -239,5 +240,10 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         paddingTop: 40,
         width: '100%'
-    }
+    },
+
+    error: {
+        color: "red",
+        marginTop: 10,
+      },
 });
