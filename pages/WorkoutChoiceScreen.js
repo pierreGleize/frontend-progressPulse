@@ -19,7 +19,6 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
     dispatch(resetWorkoutCreation());
 
     let exercisesToAdd = [];
-
     for (let exercise of data) {
       let customSets = [];
 

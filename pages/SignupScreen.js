@@ -171,30 +171,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
   },
-  button: {
-    margin: 20,
-  },
   image: {
     height: "35%",
     width: "100%",
   },
-  orContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  line: {
-    width: "35%",
-    height: 1,
-    backgroundColor: "white",
-  },
-  or: {
-    color: "white",
-    marginHorizontal: 10,
-    fontSize: 20,
-    fontWeight: "700",
-  },
+
   alreadyAccountSection: {
+    margin :'auto',
     flexDirection: "row",
   },
   alreadyAccount: {

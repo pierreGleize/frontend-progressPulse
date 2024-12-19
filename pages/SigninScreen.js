@@ -24,7 +24,6 @@ export default function SigninScreen({ navigation }) {
   const [wrongEmail, setWrongEmail] = useState(false);
   const [emptyFields, setEmptyFields] = useState(false);
   const [signupError, setSignupError] = useState(null);
-  const [clicked, setClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const EMAIL_REGEX =
@@ -122,6 +121,11 @@ export default function SigninScreen({ navigation }) {
         background="#A3FD01"
         onPress={handleSignin}
       ></Button>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("passwordForgotten")}
+      >
+        <Text style={styles.signup}>Mot de passe oublié ?</Text>
+      </TouchableOpacity>
       <View style={styles.alreadyAccountSection}>
         <Text style={styles.alreadyAccount}>Pas encore de compte ? </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
@@ -179,30 +183,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
   },
-  button: {
-    margin: 20,
-  },
+
   image: {
     height: "40%",
     width: "100%",
   },
-  orContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  line: {
-    width: "35%",
-    height: 1,
-    backgroundColor: "white",
-  },
-  or: {
-    color: "white",
-    marginHorizontal: 10,
-    fontSize: 20,
-    fontWeight: "700",
-  },
+
   alreadyAccountSection: {
+    margin: "auto",
     flexDirection: "row",
   },
   alreadyAccount: {

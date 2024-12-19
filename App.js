@@ -32,6 +32,7 @@ import SongScreen from "./pages/SongScreen";
 import WeightScreen from "./pages/WeightScreen";
 import HystoryWorkoutScreen from "./pages/HistoryWorkoutsScreen";
 import HistoryScreen from "./pages/HistoryScreen";
+import PasswordForgottenScreen from './pages/PasswordForgottenScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -94,6 +95,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Signin" component={SigninScreen} />
+          <Stack.Screen name="passwordForgotten" component={PasswordForgottenScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="song" component={SongScreen} />

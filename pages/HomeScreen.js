@@ -20,13 +20,14 @@ export default function HomeScreen({ navigation }) {
   };
 
   const workoutsToShow = workouts.map((element, index) => {
+
     const imageSource = imagesWorkout.filter((imageWorkout) => {
-      console.log(imageWorkout.name, element.image);
       if (imageWorkout.name === element.image) {
         return imageWorkout.source;
       }
     });
 
+    //nombre d'exercices dans le workout 
     let nbExercises = "";
     if (element.exercises.length === 1) {
       nbExercises = element.exercises.length + " exercice";
@@ -34,6 +35,7 @@ export default function HomeScreen({ navigation }) {
       nbExercises = element.exercises.length + " exercices";
     }
 
+    //durée du workout
     let time = () => {
       for (let i = 0; i < element.exercises.length; i++) {
         let times = 0;
@@ -47,6 +49,7 @@ export default function HomeScreen({ navigation }) {
         return Math.round(times);
       }
     };
+    
     return (
       <BtnWorkoutSession
         key={index}

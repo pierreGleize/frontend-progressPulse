@@ -5,11 +5,11 @@
     "description": "Une application de suivi d'entraînement pour les sportifs.",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/illustrations/Logo.png",
+    "icon": "./assets/illustrations/LogoV2.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/illustrations/Logo.png",
+      "image": "./assets/illustrations/LogoV2.png",
       "resizeMode": "contain",
       "backgroundColor": "#0D0D36"
     },
@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/illustrations/Logo.png",
+        "foregroundImage": "./assets/illustrations/LogoV2.png",
         "backgroundColor": "#ffffff"
       }
     },

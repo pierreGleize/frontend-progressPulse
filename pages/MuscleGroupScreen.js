@@ -22,7 +22,6 @@ export default function MuscleGroupScreen({ navigation, route }) {
   }
   
 
-  console.log(exercisesLength);
   const handleFinish = () => {
     if(!isWorkoutAlreadyCreated){
       navigation.navigate("workoutSummary", { backTo: "muscleGroup" });
@@ -33,9 +32,11 @@ export default function MuscleGroupScreen({ navigation, route }) {
     }
     
   };
+
   const handleNavigateToExercice = (name) => {
     navigation.navigate("exercicesChoices", { name: name, isWorkoutAlreadyCreated, workoutID });
   };
+  
   return (
     <View style={styles.container}>
       {!isWorkoutAlreadyCreated && <View style={styles.topContainer}>
