@@ -1,35 +1,29 @@
 {
   "expo": {
-    "name": "ProgressPulse",
-    "slug": "progresspulse",
-    "description": "Une application de suivi d'entraînement pour les sportifs.",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/illustrations/Logo.png",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/illustrations/LogoV2.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#0D0D36"
-    },
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/illustrations/LogoV2.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    "web": {
-      "favicon": "./assets/illustrations/LogoV2.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "802c39f9-4fd6-44af-aa9f-3b5b57edfbc6"
-      }
-    },
-    "owner": "pierregleize"
+  "name": "ProgressPulse",
+  "slug": "progresspule",
+  "description": "Une application de suivi d'entraînement pour les sportifs.",
+  "version": "1.0.0",
+  "orientation": "portrait",
+  "icon": "./assets/illustrations/LogoV2.png",
+  "userInterfaceStyle": "light",
+  "newArchEnabled": true,
+  "splash": {
+  "image": "./assets/illustrations/LogoV2.png",
+  "resizeMode": "contain",
+  "backgroundColor": "#0D0D36"
+  },
+  "ios": {
+  "supportsTablet": true
+  },
+  "android": {
+  "adaptiveIcon": {
+  "foregroundImage": "./assets/illustrations/LogoV2.png",
+  "backgroundColor": "#ffffff"
   }
-}
+  },
+  "web": {
+  "favicon": "./assets/illustrations/LogoV2.png"
+  }
+  }
+  }
