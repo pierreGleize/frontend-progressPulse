@@ -50,7 +50,6 @@ export default function SigninScreen({ navigation }) {
           .then((response) => response.json())
           .then((data) => {
             if (data.result === false) {
-              console.log(data.error);
               setSignupError(data.error);
             } else {
               const userToken = data.userInfos.token;

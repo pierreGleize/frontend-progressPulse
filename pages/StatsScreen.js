@@ -129,7 +129,7 @@ export default function StatsScreen({ navigation }) {
           width={Dimensions.get("window").width}
           withInnerLines={true}
           segments={6}
-          fromZero={true}
+          fromZero={false}
           height={220}
           yAxisSuffix="kg"
           yAxisInterval={1}

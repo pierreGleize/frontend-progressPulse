@@ -107,10 +107,12 @@ export default function HomeScreen({ navigation }) {
             <Underline width={50} />
           </View>
         ) : (
-          <View style={styles.seances}>
-            <Text style={styles.text}>Mes séances :</Text>
-            <Underline width={50} />
-          </View>
+          workouts.length > 1 && (
+            <View style={styles.seances}>
+              <Text style={styles.text}>Mes séances :</Text>
+              <Underline width={50} />
+            </View>
+          )
         )}
         <View style={styles.btn}>
           <ScrollView contentContainerStyle={{ paddingBottom: 85 }}>
