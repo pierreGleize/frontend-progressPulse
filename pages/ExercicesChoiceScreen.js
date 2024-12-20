@@ -21,6 +21,7 @@ import { addExercise } from "../reducers/workoutCreation";
 import { updateExercises } from "../reducers/workouts";
 
 export default function ExercicesChoicesScreen({ navigation, route }) {
+
   const { name, isWorkoutAlreadyCreated, workoutID } = route.params;
   const dispatch = useDispatch();
   const value = useSelector((state) => state.workoutCreation.value);
@@ -207,7 +208,6 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           image={imagePath}
           openModal={openModal}
           accessibilityLabel={`Sélectionné l'exercice ${exercise.name}`}
-          accessibilityHint="Une modale va s'ouvir permettant d'entrer des données personalisés pour l'exercice"
           workoutID={workoutID}
           isWorkoutAlreadyCreated={isWorkoutAlreadyCreated}
         />
@@ -332,8 +332,8 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
               textColor="#A3FD01"
               width="260"
               height="40"
-              accessibilityLabel="Ajouter l'exercice avec les modifications faites à la séance"
-              accessibilityHint="Ferme la modale"
+              accessibilityLabel={"Ajouter l'exercice avec les modifications faites à la séance"}
+              accessibilityHint={"Ferme la modale"}
               background="#272D34"
               borderWidth={1}
               borderColor="#A3FD01"
@@ -385,7 +385,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           height={50}
           onPress={handleFinish}
           isLinearGradiant={false}
-          accessibilityLabel="Revenir sur la page pour choisir le groupe musculaire"
+          accessibilityLabel={"Revenir sur la page pour choisir le groupe musculaire"}
         />
       </View>
       {isLoading && (

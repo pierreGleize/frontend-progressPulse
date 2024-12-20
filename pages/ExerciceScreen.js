@@ -6,6 +6,7 @@ import {
   Modal,
   ScrollView,
   Dimensions,
+  Platform
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
@@ -288,7 +289,7 @@ export default function Exercice({ navigation, route }) {
         </View>
       </View>
 
-      <View style={styles.button}>
+      <View style={[styles.button, Platform.OS === "ios" ? { bottom: 10 } : { bottom: -5 }]}>
         <Button
           textButton={
             muscleGroup != "Cardio"
@@ -426,7 +427,6 @@ const styles = StyleSheet.create({
 
   button: {
     position: "absolute",
-    bottom: -5,
     alignItems: "center",
     width: "100%",
     marginHorizontal: 10,

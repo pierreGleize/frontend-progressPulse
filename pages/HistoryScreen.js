@@ -25,6 +25,7 @@ export default function HistoryScreen({ navigation }) {
         navigation.navigate("historyWorkout", { workoutName: element })
       }
       activeOpacity={0.7}
+      accessibilityLabel={`Permet de voir l'historique de ${element}`}
     >
       <Text style={styles.text}>{element}</Text>
       <FontAwesome
@@ -32,15 +33,19 @@ export default function HistoryScreen({ navigation }) {
         size={15}
         color={"#3BC95F"}
         style={{ position: "absolute", right: 15, top: 10 }}
+        accessibilityLabel={`Permet de voir l'historique de ${element}`}
       />
     </TouchableOpacity>
   ));
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <TouchableOpacity
           style={styles.backToContainer}
           onPress={() => navigation.navigate("Stats")}
+          accessibilityLabel={`Permet de revenir a la page Statistiques`}
+          accessibilityHint="On va se diriger vers la page Statistiques"
         >
           <FontAwesome name={"chevron-left"} size={24} color={"#3BC95F"} />
           <Text style={styles.backToText}>Statisques</Text>
@@ -55,6 +60,7 @@ export default function HistoryScreen({ navigation }) {
               size={30}
               color={"#A3FD01"}
               style={styles.infoIcon}
+              accessibilityLabel={`Donne une information pour avoir l'historique des séances`}
             />
             <Text style={styles.textInfo}>
               Lancez une séance pour commencer votre suivi personnalisé !
@@ -63,7 +69,6 @@ export default function HistoryScreen({ navigation }) {
         ) : (
           <View>
             <TouchableOpacity
-              //   key={i}
               style={styles.card}
               onPress={() =>
                 navigation.navigate("historyWorkout", {
@@ -71,6 +76,8 @@ export default function HistoryScreen({ navigation }) {
                 })
               }
               activeOpacity={0.7}
+              accessibilityLabel={`Permet de voir l'historique de toutes les séances`}
+              accessibilityHint="On va arriver sur la page de l'historique de toutes les séances"
             >
               <Text style={styles.text}>Toutes les séances</Text>
               <FontAwesome
@@ -78,6 +85,7 @@ export default function HistoryScreen({ navigation }) {
                 size={15}
                 color={"#3BC95F"}
                 style={{ position: "absolute", right: 15, top: 10 }}
+                accessibilityLabel={`Permet de voir l'historique de toute les séances`}
               />
             </TouchableOpacity>
             {workoutsByName}

@@ -557,7 +557,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           </TouchableOpacity>
         </View>
         <FontAwesome
-          name="trash"
+          name={isEditable ? "trash" : ""}
           size={24}
           color={"#A3FD01"}
           onPress={openAlertDeleteWorkout}

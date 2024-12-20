@@ -19,8 +19,8 @@ import { addAllWorkoutsHistory } from "../reducers/workoutsHistory";
 export default function SigninScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState("pierre38@gmail.com");
-  const [password, setPassword] = useState("aaa");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [wrongEmail, setWrongEmail] = useState(false);
   const [emptyFields, setEmptyFields] = useState(false);
   const [signupError, setSignupError] = useState(null);
@@ -98,6 +98,7 @@ export default function SigninScreen({ navigation }) {
         onChangeText={(value) => setEmail(value)}
         value={email}
         autoCapitalize="none"
+        accessibilityLabel="Entrez votre email"
       ></TextInput>
       <TextInput
         style={styles.input}
@@ -105,6 +106,7 @@ export default function SigninScreen({ navigation }) {
         placeholder="Mot de passe"
         onChangeText={(value) => setPassword(value)}
         value={password}
+        accessibilityLabel="Entrez votre mot de passe"
       ></TextInput>
       {emptyFields && (
         <Text style={styles.error}>Veuillez remplir tous les champs</Text>
@@ -120,15 +122,23 @@ export default function SigninScreen({ navigation }) {
         height="40"
         background="#A3FD01"
         onPress={handleSignin}
+        accessibilityLabel={"Permet de se connecter"}
+        accessibilityHint={"Si vous avez rempli tous les champs, vous allez être redirigé sur la page d'acceuil"}
       ></Button>
       <TouchableOpacity
         onPress={() => navigation.navigate("passwordForgotten")}
+        accessibilityLabel="Mot de passe oublié"
+        accessibilityHint="Vous allez être redirigé vers la page pour réinitialiser votre mot de passe"
       >
         <Text style={styles.signup}>Mot de passe oublié ?</Text>
       </TouchableOpacity>
       <View style={styles.alreadyAccountSection}>
         <Text style={styles.alreadyAccount}>Pas encore de compte ? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Signup")}
+          accessibilityLabel="Inscris-toi"
+          accessibilityHint="Vousa allez être redirigé vers la page d'inscription"
+        >
           <Text style={styles.signup}>Inscris-toi !</Text>
         </TouchableOpacity>
       </View>
@@ -207,7 +217,7 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
   },
   error: {
-    color: "red",
+    color: "#FF4500",
     marginTop: 10,
   },
   backgroundLoading: {

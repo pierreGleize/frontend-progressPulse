@@ -106,7 +106,7 @@ export default function StatsScreen({ navigation }) {
           style={styles.infoIcon}
         />
         <Text style={styles.textInfo}>
-          Clique sur le graphique pour ajouter ton poids !
+          Clique sur le graphique pour ajouter ton poids et ton objectif !
         </Text>
       </View>
       <TouchableOpacity

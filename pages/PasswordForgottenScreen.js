@@ -11,15 +11,8 @@ import {
 } from "react-native";
 import Button from "../components/Button";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { login } from "../reducers/user";
-import { addAllUserWorkouts } from "../reducers/workouts";
-import { addAllWorkoutsHistory } from "../reducers/workoutsHistory";
-
 export default function PasswordForgottenScreen({ navigation }) {
-  const dispatch = useDispatch();
-
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");

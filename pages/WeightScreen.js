@@ -441,7 +441,7 @@ export default function WeightScreen({ navigation, route }) {
               <Text style={styles.text}>{startDate}</Text>
             </View>
             <View style={styles.colunm}>
-              <Text style={styles.startTitle}>Actuelle</Text>
+              <Text style={styles.startTitle}>Actuel</Text>
 
               <Progress.Circle
                 progress={progressValue}
@@ -599,7 +599,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   errorText: {
-    color: "red",
+    color: "#FF4500",
   },
   textInfo: {
     color: "white",

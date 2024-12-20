@@ -84,6 +84,7 @@ export default function SignupScreen({ navigation }) {
         placeholder="Nom d'utilisateur"
         onChangeText={(value) => setUsername(value)}
         value={username}
+        accessibilityLabel="Entrez votre nom d'utilisateur"
       ></TextInput>
       <TextInput
         style={styles.input}
@@ -91,11 +92,13 @@ export default function SignupScreen({ navigation }) {
         onChangeText={(value) => setEmail(value)}
         value={email}
         autoCapitalize="none"
+        accessibilityLabel="Entrez votre email"
       ></TextInput>
       <TextInput
         style={styles.input}
         secureTextEntry={true}
         placeholder="Mot de passe"
+        accessibilityLabel="Entrez votre mot de passe"
         onChangeText={(value) => setPassword(value)}
         value={password}
       ></TextInput>
@@ -113,10 +116,16 @@ export default function SignupScreen({ navigation }) {
         height="40"
         background="#A3FD01"
         onPress={handleSignup}
+        accessibilityLabel={"S'inscrire"}
+        accessibilityHint={"Vous allez être redirigé vers la page d'acceuil de l'application"}
       ></Button>
       <View style={styles.alreadyAccountSection}>
         <Text style={styles.alreadyAccount}>Déjà un compte ? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Signin")}>
+        <TouchableOpacity 
+        onPress={() => navigation.navigate("Signin")}
+        accessibilityLabel="Connecte-toi"
+        accessibilityHint="Vous allez être redirigé vers la page de connection"
+        >
           <Text style={styles.connect}>Connecte-toi !</Text>
         </TouchableOpacity>
       </View>
@@ -194,7 +203,7 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
   },
   error: {
-    color: "red",
+    color: "#FF4500",
     marginTop: 10,
   },
   backgroundLoading: {

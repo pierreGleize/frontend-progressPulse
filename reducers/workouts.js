@@ -9,6 +9,7 @@ export const workoutsSlice = createSlice({
   initialState,
   reducers: {
     addAllUserWorkouts: (state, action) => {
+      state.value=[]
       // Exemple de l'action payload reçu [{séance1}, {séance2}]
       for (let seance of action.payload) {
         state.value.push(seance);

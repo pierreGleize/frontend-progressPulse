@@ -33,20 +33,20 @@ export default function HomeScreen({ navigation }) {
     } else {
       nbExercises = element.exercises.length + " exercices";
     }
-
+    
     //durée du workout
-    let time = () => {
+    const time = () => {
+      let times = 0;
       for (let i = 0; i < element.exercises.length; i++) {
-        let times = 0;
         //Pour chaque exercice : (nombre de série * temps de repos + nombre de série * 45s) / 60 pour l'avoir en minutes
         //Pour le temps complet : ((nombre de série * temps de repos + nombre de série * 45s) / 60) * nombre d'exercices dans le workout
-        times =
+        times +=
           ((element.exercises[i].customSets.length * element.exercises[i].rest +
-            element.exercises[i].customSets.length * 45) /
-            60) *
-          element.exercises.length;
-        return Math.round(times);
+            element.exercises[i].customSets.length * 30) /
+            60)
+        
       }
+      return Math.round(times);
     };
 
     return (
@@ -57,6 +57,7 @@ export default function HomeScreen({ navigation }) {
         time={time() + " min"}
         onPress={() => handleWorkoutNavigation(element._id)}
         accessibilityLabel={`Commencer la séance ${element.name}`}
+        accessibilityHint="On va être diriger vers le résumé de notre séance avant de la commencer"
         image={imageSource}
         textBtn="Start Workout"
       />
@@ -75,6 +76,7 @@ export default function HomeScreen({ navigation }) {
               size={30}
               color={"#A3FD01"}
               style={styles.infoIcon}
+              accessibilityLabel={`Donne une information si on a pas de séance enregistré`}
             />
             <Text style={styles.textInfo}>
               Crée ta séance et commence l'entrainement
@@ -94,7 +96,8 @@ export default function HomeScreen({ navigation }) {
             height={50}
             onPress={handleAddWorkout}
             isLinearGradiant={false}
-            accessibilityLabel="Ajouter une séance d'entrainement"
+            accessibilityLabel={"Ajouter une séance d'entrainement"}
+            accessibilityHint={"On va pouvoir rajouter une séance pré-défini ou personnalisé"}
           />
         </View>
         {workouts.length === 0 && (
@@ -145,6 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: 600,
     color: "white",
+    paddingTop: 10
   },
 
   infoContainer: {

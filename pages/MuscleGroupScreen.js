@@ -73,6 +73,7 @@ export default function MuscleGroupScreen({ navigation, route }) {
               source={item.source}
               onPress={() => handleNavigateToExercice(item.name)}
               accessibilityLabel={`Choisir le groupe ${item.name}`}
+              accessibilityHint={"On va être rediriger vers la liste des exercices correspondant au groupe musculaire choisi"}
             />
           )}
         />
@@ -92,8 +93,8 @@ export default function MuscleGroupScreen({ navigation, route }) {
             height={50}
             onPress={handleFinish}
             isLinearGradiant={false}
-            accessibilityLabel="Voir le récapitulatif des exercices"
-            accessibilityHint="Cette action vous redirigera vers la page affichant tous les exercices sélectionnés et vous permettra de valider la séance."
+            accessibilityLabel={"Voir le récapitulatif des exercices"}
+            accessibilityHint={"Cette action vous redirigera vers la page affichant tous les exercices sélectionnés et vous permettra de valider la séance."}
           />
         </View>
       </View>

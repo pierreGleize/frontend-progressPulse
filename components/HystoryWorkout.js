@@ -14,6 +14,7 @@ export default function HystoryWorkout({
   stars,
   ressenti,
   workouts,
+  accessibilityLabel
 }) {
   const [expanded, setExpanded] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -50,6 +51,7 @@ export default function HystoryWorkout({
       onPress={toggleCard}
       style={{ width: "100%" }}
       activeOpacity={1}
+      accessibilityLabel={accessibilityLabel}
     >
       <Animated.View style={[styles.card, { height: cardHeight }]}>
         <View>

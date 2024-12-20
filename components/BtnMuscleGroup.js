@@ -2,11 +2,12 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-const BtnMuscleGroup = ({ name, source, onPress, accessibilityLabel }) => {
+const BtnMuscleGroup = ({ name, source, onPress, accessibilityLabel, accessibilityHint }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
       style={styles.btn}
       onPress={() => onPress(name)}
     >

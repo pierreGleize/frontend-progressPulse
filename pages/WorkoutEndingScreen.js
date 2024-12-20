@@ -48,6 +48,8 @@ export default function WorkoutEndingScreen({ navigation, route }) {
         activeOpacity={1}
         onPress={() => setPersonnalNote(star + 1)}
         key={star}
+        accessibilityLabel="Etoiles pour la note"
+        accessibilityHint="Les étoiles correspondent à la note que vous voulez donner a la séance"
       >
         <FontAwesome
           name={name}
@@ -110,6 +112,7 @@ export default function WorkoutEndingScreen({ navigation, route }) {
             style={styles.input}
             onChangeText={(value) => setRessenti(value)}
             value={ressenti}
+            accessibilityLabel="Saisie ton ressenti sur la séance"
           />
           <Button
             textButton="Enregistrer ma séance"
@@ -118,6 +121,8 @@ export default function WorkoutEndingScreen({ navigation, route }) {
             height={50}
             background="#A3FD01"
             onPress={handlePress}
+            accessibilityLabel={"Enregistrer ma séance"}
+            accessibilityHint={"Vous allez être redirigé vers la page d'acceuil, vous pouvez retrouver votre séance dans l'historique"}
           />
         </View>
         {isLoading && (

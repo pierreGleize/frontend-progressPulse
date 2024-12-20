@@ -62,18 +62,18 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
       }
     });
     const nbExercises = data.exercices.length + " exercices";
-    let time = () => {
+    const time = () => {
+      let times = 0;
       for (let i = 0; i < data.exercices.length; i++) {
-        let times = 0;
         //Pour chaque exercice : (nombre de série * temps de repos + nombre de série * 45s) / 60 pour l'avoir en minutes
         //Pour le temps complet : ((nombre de série * temps de repos + nombre de série * 45s) / 60) * nombre d'exercices dans le workout
-        times =
+        times +=
           ((data.exercices[i].sets.length * data.exercices[i].rest +
-            data.exercices[i].sets.length * 45) /
-            60) *
-          data.exercices.length;
-        return Math.round(times);
+            data.exercices[i].sets.length * 30) /
+            60)
+        
       }
+      return Math.round(times);
     };
     return (
       <BtnWorkoutSession
@@ -83,7 +83,7 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
         nbExercise={nbExercises}
         onPress={() => handleNavigateToSummary(data.exercices)}
         accessibilityLabel={`Choisir la séance ${data.name}`}
-        accessibilityHint="Vous serez redirigé vers le résumé de cette séance"
+        accessibilityHint={"Vous serez redirigé vers le résumé de cette séance"}
         image={imageSource}
         textBtn="Add Workout"
       />
@@ -110,6 +110,7 @@ export default function WorkoutChoiceScreen({ navigation, route }) {
           size={30}
           color={"#A3FD01"}
           style={styles.infoIcon}
+          accessibilityLabel="Choisis ta séance"
         />
         <Text style={styles.textInfo}>Choisis ta séance !</Text>
       </View>
