@@ -40,11 +40,10 @@ export default function HomeScreen({ navigation }) {
         let times = 0;
         //Pour chaque exercice : (nombre de série * temps de repos + nombre de série * 45s) / 60 pour l'avoir en minutes
         //Pour le temps complet : ((nombre de série * temps de repos + nombre de série * 45s) / 60) * nombre d'exercices dans le workout
-        times =
+        times +=
           ((element.exercises[i].customSets.length * element.exercises[i].rest +
             element.exercises[i].customSets.length * 45) /
-            60) *
-          element.exercises.length;
+            60)
         return Math.round(times);
       }
     };

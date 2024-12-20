@@ -206,6 +206,7 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             navigation.navigate("Home");
             setIsLoading(false)
           } else {
+            setModalTitleVisible(true);
             setPostError(true);
             setIsLoading(false)
           }
