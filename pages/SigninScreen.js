@@ -19,8 +19,8 @@ import { addAllWorkoutsHistory } from "../reducers/workoutsHistory";
 export default function SigninScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState("thomas.lebel38@gmail.com");
-  const [password, setPassword] = useState("thomas");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [wrongEmail, setWrongEmail] = useState(false);
   const [emptyFields, setEmptyFields] = useState(false);
   const [signupError, setSignupError] = useState(null);
