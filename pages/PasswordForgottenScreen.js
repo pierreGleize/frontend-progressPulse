@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     },
 
     error: {
-        color: " #FF4500",
+        color: "#FF4500",
         marginTop: 10,
     },
 
