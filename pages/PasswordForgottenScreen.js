@@ -227,9 +227,11 @@ export default function PasswordForgottenScreen({ navigation }) {
       )}
       <View style={styles.alreadyAccountSection}>
         {/* <Text style={styles.alreadyAccount}>Déjà un compte ? </Text> */}
-        <TouchableOpacity onPress={() => navigation.navigate("Signin")}>
-          <Text style={styles.signup}>Revenir à la connexion</Text>
-        </TouchableOpacity>
+        {!isDoneVisible && (
+          <TouchableOpacity onPress={() => navigation.navigate("Signin")}>
+            <Text style={styles.signup}>Revenir à la connexion</Text>
+          </TouchableOpacity>
+        )}
       </View>
       {isLoading && (
         <View style={styles.backgroundLoading}>
