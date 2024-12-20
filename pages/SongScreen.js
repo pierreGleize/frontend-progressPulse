@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity,ActivityIndicator, } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Audio } from "expo-av";
 import sounds from "../utils/sounds";
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 export default function SongScreen({ navigation, route }) {
   const [soundChoice, setSoundChoice] = useState("");
   const [currentSound, setCurrentSound] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ export default function SongScreen({ navigation, route }) {
     if (currentSound) {
       stopSound();
     }
+    setIsLoading(true)
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/changeSound`, {
       method: "PUT",
       headers: { "Content-type": "application/json" },
@@ -32,10 +34,12 @@ export default function SongScreen({ navigation, route }) {
         if (data.result === false) {
           setSoundChoice("");
           navigation.navigate("Settings");
+          setIsLoading(false)
         } else {
           dispatch(changeSound(data.soundUpdated));
           setSoundChoice("");
           navigation.navigate("Settings");
+          setIsLoading(false)
         }
       });
   };
@@ -204,6 +208,11 @@ export default function SongScreen({ navigation, route }) {
           exercice
         </Text>
       </View>
+      {isLoading && (
+              <View style={styles.backgroundLoading}>
+                <ActivityIndicator size="large" color="#A3FD01" animating={true} />
+              </View>
+            )}
     </View>
   );
 }
@@ -283,5 +292,15 @@ const styles = StyleSheet.create({
   },
   textInfo: {
     color: "white",
+  },
+  backgroundLoading: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
