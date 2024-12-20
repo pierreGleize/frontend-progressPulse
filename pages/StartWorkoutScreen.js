@@ -534,16 +534,16 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         />
         <View style={styles.workoutNameSection}>
           <Text style={styles.topTitle}>{workoutSelected.name}</Text>
-          <FontAwesome
+          {isEditable && <FontAwesome
             style={styles.pencilLogo}
             name="pencil"
             size={18}
             color={"white"}
             onPress={() => setModalTitleVisible(!modalTitleVisible)}
-          />
+          />}
         </View>
         <FontAwesome
-          name="trash"
+          name={isEditable ? "trash" : ""}
           size={24}
           color={"#A3FD01"}
           onPress={openAlertDeleteWorkout}

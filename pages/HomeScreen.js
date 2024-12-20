@@ -33,20 +33,20 @@ export default function HomeScreen({ navigation }) {
     } else {
       nbExercises = element.exercises.length + " exercices";
     }
-
+    
     //durée du workout
-    let time = () => {
+    const time = () => {
+      let times = 0;
       for (let i = 0; i < element.exercises.length; i++) {
-        let times = 0;
         //Pour chaque exercice : (nombre de série * temps de repos + nombre de série * 45s) / 60 pour l'avoir en minutes
         //Pour le temps complet : ((nombre de série * temps de repos + nombre de série * 45s) / 60) * nombre d'exercices dans le workout
-        times =
+        times +=
           ((element.exercises[i].customSets.length * element.exercises[i].rest +
-            element.exercises[i].customSets.length * 45) /
-            60) *
-          element.exercises.length;
-        return Math.round(times);
+            element.exercises[i].customSets.length * 30) /
+            60)
+        
       }
+      return Math.round(times);
     };
 
     return (
@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: 600,
     color: "white",
+    paddingTop: 10
   },
 
   infoContainer: {
