@@ -8,6 +8,7 @@ import {
   TextInput,
   Text,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
@@ -182,8 +183,8 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         exercices: exercices,
         image: imagesWorkout[randomImage].name,
       };
-      setModalTitleVisible(false)
-      setIsLoading(true)
+      setModalTitleVisible(false);
+      setIsLoading(true);
       fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addWorkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -203,10 +204,11 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
             setModalTitleVisible(false);
             dispatch(resetWorkoutCreation());
             navigation.navigate("Home");
-            setIsLoading(false)
+            setIsLoading(false);
           } else {
+            setModalTitleVisible(true);
             setPostError(true);
-            setIsLoading(false)
+            setIsLoading(false);
           }
         });
     }
@@ -230,14 +232,18 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         >
           <View style={styles.modalTitleView}>
             <View style={styles.crossContainer}>
-              <FontAwesome
-                name={"times"}
-                size={30}
-                color={"white"}
+              <TouchableOpacity
+                activeOpacity={0.7}
                 onPress={() => setModalTitleVisible(false)}
-                style={styles.infoIcon}
                 accessibilityLabel="Fermer la modale"
-              />
+              >
+                <FontAwesome
+                  name={"times"}
+                  size={30}
+                  color={"white"}
+                  style={styles.infoIcon}
+                />
+              </TouchableOpacity>
             </View>
             <View style={styles.infoContainer}>
               <FontAwesome
@@ -296,14 +302,18 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         >
           <View style={styles.modalView}>
             <View style={styles.crossContainer}>
-              <FontAwesome
-                name={"times"}
-                size={30}
-                color={"white"}
+              <TouchableOpacity
+                activeOpacity={0.7}
                 onPress={closeModalCustomSets}
                 accessibilityLabel="Fermer la modale"
-                style={styles.infoIcon}
-              />
+              >
+                <FontAwesome
+                  name={"times"}
+                  size={30}
+                  color={"white"}
+                  style={styles.infoIcon}
+                />
+              </TouchableOpacity>
             </View>
             <View style={styles.modalTitleContainer}>
               <Text style={styles.modalTitle}>{exerciseName}</Text>
@@ -443,9 +453,11 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           onPress={() => navigation.navigate("muscleGroup")}
         />
       </View>
-      {isLoading&& <View style={styles.backgroundLoading}>
-              <ActivityIndicator size="large" color="#A3FD01" animating={true}/>
-      </View>}
+      {isLoading && (
+        <View style={styles.backgroundLoading}>
+          <ActivityIndicator size="large" color="#A3FD01" animating={true} />
+        </View>
+      )}
     </View>
   );
 }

@@ -171,13 +171,17 @@ export default function SettingsScreen({ navigation }) {
                   />
                   <Text style={styles.span}>ATTENTION</Text>
                 </View>
-                <FontAwesome
-                  name={"times"}
-                  size={30}
-                  color={"white"}
+                <TouchableOpacity
                   onPress={() => closeModal("email")}
-                  style={styles.infoIcon}
-                />
+                  activeOpacity={0.7}
+                >
+                  <FontAwesome
+                    name={"times"}
+                    size={30}
+                    color={"white"}
+                    style={styles.infoIcon}
+                  />
+                </TouchableOpacity>
               </View>
 
               <Text style={styles.textInfo}>
@@ -240,13 +244,17 @@ export default function SettingsScreen({ navigation }) {
                   />
                   <Text style={styles.span}>ATTENTION</Text>
                 </View>
-                <FontAwesome
-                  name={"times"}
-                  size={30}
-                  color={"white"}
+                <TouchableOpacity
                   onPress={() => closeModal("password")}
-                  style={styles.infoIcon}
-                />
+                  activeOpacity={0.7}
+                >
+                  <FontAwesome
+                    name={"times"}
+                    size={30}
+                    color={"white"}
+                    style={styles.infoIcon}
+                  />
+                </TouchableOpacity>
               </View>
               <Text style={styles.textInfo}>
                 Vous êtes sur le point de modifier votre mot de passe.
@@ -315,13 +323,17 @@ export default function SettingsScreen({ navigation }) {
                   />
                   <Text style={styles.span}>ATTENTION</Text>
                 </View>
-                <FontAwesome
-                  name={"times"}
-                  size={30}
-                  color={"white"}
+                <TouchableOpacity
+                  activeOpacity={0.7}
                   onPress={() => closeModal("username")}
-                  style={styles.infoIcon}
-                />
+                >
+                  <FontAwesome
+                    name={"times"}
+                    size={30}
+                    color={"white"}
+                    style={styles.infoIcon}
+                  />
+                </TouchableOpacity>
               </View>
 
               <Text style={styles.textInfo}>

@@ -153,14 +153,18 @@ export default function Exercice({ navigation, route }) {
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <View style={styles.modalContainer}>
           <View style={styles.iconModal}>
-            <FontAwesome
-              name={"times"}
-              size={30}
-              color={"white"}
+            <TouchableOpacity
+              activeOpacity={0.7}
               onPress={closeModal}
-              style={styles.infoIcon}
               accessibilityLabel="Permet de fermer la modale"
-            />
+            >
+              <FontAwesome
+                name={"times"}
+                size={30}
+                color={"white"}
+                style={styles.infoIcon}
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.titleModal}>
             <Text style={styles.text}>{exerciseSelected.exercise.name}</Text>
@@ -182,16 +186,20 @@ export default function Exercice({ navigation, route }) {
       <View>
         <View style={styles.imageContainer}>
           <View style={styles.arrowContainer}>
-            <FontAwesome
-              name={"chevron-left"}
-              size={24}
-              color={"#3BC95F"}
+            <TouchableOpacity
+              activeOpacity={0.7}
               accessibilityLabel="Redirection vers la page pour choisir un exercice"
               onPress={() =>
                 navigation.navigate("startWorkout", { workoutID: workoutID })
               }
-              style={{ marginLeft: 15, marginTop: 40 }}
-            />
+            >
+              <FontAwesome
+                name={"chevron-left"}
+                size={24}
+                color={"#3BC95F"}
+                style={{ marginLeft: 15, marginTop: 40 }}
+              />
+            </TouchableOpacity>
           </View>
 
           <Image style={styles.image} source={imagePath}></Image>
@@ -342,14 +350,15 @@ const styles = StyleSheet.create({
   btn: {
     width: "40%",
     height: 35,
-    marginLeft: "auto",
-    marginRight: "auto",
+    margin: "auto",
     marginBottom: 10,
-    paddingTop: 6,
+    padding: 6,
     backgroundColor: "transparent",
     borderRadius: 10,
     borderColor: "#A3FD01",
     borderWidth: 1,
+    alignItmes: "center",
+    justifyContent: "center",
   },
 
   textButton: {

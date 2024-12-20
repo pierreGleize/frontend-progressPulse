@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import ExerciseBtn from "../components/ExerciseBtn";
@@ -43,13 +44,13 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
     } else {
       setIsCardio(false);
     }
-    setIsLoading(true)
+    setIsLoading(true);
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/exercises/${name}`)
       .then((response) => response.json())
       .then((data) => {
         if (data) {
           setExercisesList(data.data);
-          setIsLoading(false)
+          setIsLoading(false);
         }
       });
   }, []);
@@ -136,7 +137,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           customSets: customSets,
         };
         closeModal();
-        setIsLoading(true)
+        setIsLoading(true);
         fetch(
           `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addExercise`,
           {
@@ -153,7 +154,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
                 exercisesToUpdate: data.updatedWorkout.exercises,
               })
             );
-            setIsLoading(false)
+            setIsLoading(false);
           });
       }
     } else {
@@ -170,7 +171,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
           customSets: customSets,
         };
         closeModal();
-        setIsLoading(true)
+        setIsLoading(true);
         fetch(
           `${process.env.EXPO_PUBLIC_SERVER_IP}/usersWorkouts/addExercise`,
           {
@@ -187,8 +188,7 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
                 exercisesToUpdate: data.updatedWorkout.exercises,
               })
             );
-            setIsLoading(false)
-            
+            setIsLoading(false);
           });
       }
     }
@@ -231,14 +231,18 @@ export default function ExercicesChoicesScreen({ navigation, route }) {
         >
           <View style={styles.modalView}>
             <View style={styles.crossContainer}>
-              <FontAwesome
-                name={"times"}
-                size={30}
-                color={"white"}
+              <TouchableOpacity
+                activeOpacity={0.7}
                 onPress={closeModal}
-                style={styles.infoIcon}
                 accessibilityLabel="Fermer la modale"
-              />
+              >
+                <FontAwesome
+                  name={"times"}
+                  size={30}
+                  color={"white"}
+                  style={styles.infoIcon}
+                />
+              </TouchableOpacity>
             </View>
             <View style={styles.modalTitleContainer}>
               <Text style={styles.modalTitle}>{exerciseName}</Text>

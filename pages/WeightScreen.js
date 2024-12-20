@@ -236,13 +236,18 @@ export default function WeightScreen({ navigation, route }) {
           <View style={[styles.modalView, { height: 300 }]}>
             <View style={styles.topModal}>
               <View style={styles.crossContainer}>
-                <FontAwesome
-                  name={"times"}
-                  size={30}
-                  color={"white"}
+                <TouchableOpacity
+                  activeOpacity={0.7}
                   onPress={closeModalWeight}
-                  style={styles.infoIcon}
-                />
+                  accessibilityLabel="Fermer la modale"
+                >
+                  <FontAwesome
+                    name={"times"}
+                    size={30}
+                    color={"white"}
+                    style={styles.infoIcon}
+                  />
+                </TouchableOpacity>
               </View>
               <View style={styles.infoContainer}>
                 <FontAwesome
@@ -294,13 +299,18 @@ export default function WeightScreen({ navigation, route }) {
           <View style={styles.modalView}>
             <View style={styles.topModal}>
               <View style={styles.crossContainer}>
-                <FontAwesome
-                  name={"times"}
-                  size={30}
-                  color={"white"}
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  accessibilityLabel="Fermer la modale"
                   onPress={closeModalTarget}
-                  style={styles.infoIcon}
-                />
+                >
+                  <FontAwesome
+                    name={"times"}
+                    size={30}
+                    color={"white"}
+                    style={styles.infoIcon}
+                  />
+                </TouchableOpacity>
               </View>
               <View style={styles.infoContainer}>
                 <FontAwesome
@@ -331,6 +341,7 @@ export default function WeightScreen({ navigation, route }) {
                 value={weightTarget}
               />
               <TouchableOpacity
+                activeOpacity={0.7}
                 style={{
                   marginBottom: 15,
                   alignItems: "center",
@@ -370,6 +381,7 @@ export default function WeightScreen({ navigation, route }) {
                       },
                     ]}
                     onPress={() => handleCheckbox("Loss")}
+                    activeOpacity={0.7}
                   >
                     {isCheckedLoss && <View style={styles.checkmark} />}
                   </TouchableOpacity>
@@ -384,6 +396,7 @@ export default function WeightScreen({ navigation, route }) {
                       },
                     ]}
                     onPress={() => handleCheckbox("Gain")}
+                    activeOpacity={0.7}
                   >
                     {isCheckedGain && <View style={styles.checkmark} />}
                   </TouchableOpacity>
@@ -411,6 +424,7 @@ export default function WeightScreen({ navigation, route }) {
         <TouchableOpacity
           style={styles.backToContainer}
           onPress={() => navigation.navigate("Stats")}
+          activeOpacity={0.7}
         >
           <FontAwesome name={"chevron-left"} size={24} color={"#3BC95F"} />
           <Text style={styles.backToText}>Statistiques</Text>
@@ -486,14 +500,14 @@ export default function WeightScreen({ navigation, route }) {
         <View style={styles.buttonWrapper}>
           <TouchableOpacity
             style={styles.buttonContainer}
-            activeOpacity={0.8}
+            activeOpacity={0.7}
             onPress={() => setModalVisibleWeight(!modalVisibleWeight)}
           >
             <Text style={styles.buttonText}>Ajouter mon poids</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonContainer}
-            activeOpacity={0.8}
+            activeOpacity={0.7}
             onPress={() => setModalVisibleTarget(!modalVisibleTarget)}
           >
             <Text style={styles.buttonText}>Ajouter un objectif de poids</Text>

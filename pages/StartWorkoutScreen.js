@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
@@ -358,13 +359,17 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         >
           <View style={styles.modalTitleView}>
             <View style={styles.crossContainer}>
-              <FontAwesome
-                name={"times"}
-                size={30}
-                color={"white"}
+              <TouchableOpacity
+                activeOpacity={0.7}
                 onPress={() => setModalTitleVisible(false)}
-                style={styles.infoIcon}
-              />
+              >
+                <FontAwesome
+                  name={"times"}
+                  size={30}
+                  color={"white"}
+                  style={styles.infoIcon}
+                />
+              </TouchableOpacity>
             </View>
             <View style={styles.infoContainer}>
               <FontAwesome
@@ -414,14 +419,18 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
         >
           <View style={styles.modalView}>
             <View style={styles.crossContainer}>
-              <FontAwesome
-                name={"times"}
-                size={30}
-                color={"white"}
-                accessibilityLabel="Fermer la modale"
+              <TouchableOpacity
+                activeOpacity={0.7}
                 onPress={closeModalCustomSets}
-                style={styles.infoIcon}
-              />
+              >
+                <FontAwesome
+                  name={"times"}
+                  size={30}
+                  color={"white"}
+                  accessibilityLabel="Fermer la modale"
+                  style={styles.infoIcon}
+                />
+              </TouchableOpacity>
             </View>
             <View style={styles.modalTitleContainer}>
               <Text style={styles.modalTitle}>{exerciseName}</Text>
@@ -532,15 +541,20 @@ export default function WorkoutSummaryScreen({ navigation, route }) {
           onPress={handleGoToHome}
           accessibilityLabel="Redirection vers la page d'accueil"
         />
-        <View style={styles.workoutNameSection}>
-          <Text style={styles.topTitle}>{workoutSelected.name}</Text>
-          <FontAwesome
-            style={styles.pencilLogo}
-            name="pencil"
-            size={18}
-            color={"white"}
+        <View>
+          <TouchableOpacity
+            activeOpacity={0.7}
             onPress={() => setModalTitleVisible(!modalTitleVisible)}
-          />
+            style={styles.workoutNameSection}
+          >
+            <Text style={styles.topTitle}>{workoutSelected.name}</Text>
+            <FontAwesome
+              style={styles.pencilLogo}
+              name="pencil"
+              size={18}
+              color={"white"}
+            />
+          </TouchableOpacity>
         </View>
         <FontAwesome
           name="trash"

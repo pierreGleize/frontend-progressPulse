@@ -115,21 +115,21 @@ const ExerciseCard = ({
             </View>
             {isEditable ? (
               <View style={styles.iconContainer}>
-                <FontAwesome
-                  name={"pencil"}
-                  size={20}
-                  color={"#3BC95F"}
+                <TouchableOpacity
+                  activeOpacity={0.7}
                   onPress={handleUpdate}
                   accessibilityLabel="Modifier les données de l'exercice"
                   accessibilityHint="Permet d'ouvrir une modale"
-                />
-                <FontAwesome
-                  name={"trash"}
-                  size={20}
-                  color={"#3BC95F"}
+                >
+                  <FontAwesome name={"pencil"} size={20} color={"#3BC95F"} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.7}
                   onPress={() => handleDelete(exerciseID)}
                   accessibilityLabel="Supprimer l'exercice de la séance"
-                />
+                >
+                  <FontAwesome name={"trash"} size={20} color={"#3BC95F"} />
+                </TouchableOpacity>
               </View>
             ) : (
               <FontAwesome
