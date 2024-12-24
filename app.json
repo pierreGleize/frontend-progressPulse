@@ -1,29 +1,40 @@
 {
   "expo": {
-  "name": "ProgressPulse",
-  "slug": "progresspule",
-  "description": "Une application de suivi d'entraînement pour les sportifs.",
-  "version": "1.0.0",
-  "orientation": "portrait",
-  "icon": "./assets/illustrations/LogoV2.png",
-  "userInterfaceStyle": "light",
-  "newArchEnabled": true,
-  "splash": {
-  "image": "./assets/illustrations/LogoV2.png",
-  "resizeMode": "contain",
-  "backgroundColor": "#0D0D36"
-  },
-  "ios": {
-  "supportsTablet": true
-  },
-  "android": {
-  "adaptiveIcon": {
-  "foregroundImage": "./assets/illustrations/LogoV2.png",
-  "backgroundColor": "#ffffff"
+    "name": "ProgressPulse",
+    "slug": "progresspule",
+    "description": "Une application de suivi d'entraînement pour les sportifs.",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/illustrations/LogoV2.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/illustrations/LogoV2.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0D0D36"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/illustrations/LogoV2.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/illustrations/LogoV2.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b5e2976f-750e-4999-a82c-486c70bb1516"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/b5e2976f-750e-4999-a82c-486c70bb1516"
+    }
   }
-  },
-  "web": {
-  "favicon": "./assets/illustrations/LogoV2.png"
-  }
-  }
-  }
+}

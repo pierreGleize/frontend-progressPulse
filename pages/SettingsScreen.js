@@ -108,7 +108,7 @@ export default function SettingsScreen({ navigation }) {
       return;
     }
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/changeUsername`, {
-      method: "POST",
+      method: "PUT",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({ email, password, token: user.token, username }),
     })
