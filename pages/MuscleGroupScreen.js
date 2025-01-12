@@ -7,52 +7,56 @@ import BtnMuscleGroup from "../components/BtnMuscleGroup";
 import muscleGroupIcons from "../utils/muscleGroupIcons";
 
 export default function MuscleGroupScreen({ navigation, route }) {
+  const { isWorkoutAlreadyCreated = false, workoutID = null } =
+    route.params || {};
 
-  const { isWorkoutAlreadyCreated = false, workoutID = null } = route.params || {};
-
-  let exercisesLength = 0
-  if (!isWorkoutAlreadyCreated){
+  let exercisesLength = 0;
+  if (!isWorkoutAlreadyCreated) {
     exercisesLength = useSelector(
       (state) => state.workoutCreation.value.exercises.length
-    );  
+    );
   } else {
-    const workouts = useSelector((state) => state.workouts.value)
-    const workoutSelected = workouts.find(e => e._id === workoutID)
-    exercisesLength = workoutSelected.exercises.length
+    const workouts = useSelector((state) => state.workouts.value);
+    const workoutSelected = workouts.find((e) => e._id === workoutID);
+    exercisesLength = workoutSelected.exercises.length;
   }
-  
 
   const handleFinish = () => {
-    if(!isWorkoutAlreadyCreated){
+    if (!isWorkoutAlreadyCreated) {
       navigation.navigate("workoutSummary", { backTo: "muscleGroup" });
     } else {
       navigation.navigate("startWorkout", {
         workoutID: workoutID,
       });
     }
-    
   };
 
   const handleNavigateToExercice = (name) => {
-    navigation.navigate("exercicesChoices", { name: name, isWorkoutAlreadyCreated, workoutID });
+    navigation.navigate("exercicesChoices", {
+      name: name,
+      isWorkoutAlreadyCreated,
+      workoutID,
+    });
   };
-  
+
   return (
     <View style={styles.container}>
-      {!isWorkoutAlreadyCreated && <View style={styles.topContainer}>
-        <FontAwesome
-          name={"chevron-left"}
-          size={24}
-          color={"#3BC95F"}
-          accessibilityLabel="Redirection pour choisir le type de séance"
-          onPress={() => navigation.navigate("WorkoutType")}
-          style={{ marginLeft: 15, marginTop: 5 }}
-        />
-        <View>
-          <Text style={styles.title}>Exercices </Text>
-          <Underline width={60} />
+      {!isWorkoutAlreadyCreated && (
+        <View style={styles.topContainer}>
+          <FontAwesome
+            name={"chevron-left"}
+            size={24}
+            color={"#3BC95F"}
+            accessibilityLabel="Redirection pour choisir le type de séance"
+            onPress={() => navigation.navigate("WorkoutType")}
+            style={{ marginLeft: 15, marginTop: 5 }}
+          />
+          <View>
+            <Text style={styles.title}>Exercices </Text>
+            <Underline width={60} />
+          </View>
         </View>
-      </View>}
+      )}
 
       <View style={styles.btnContainer}>
         <FlatList
@@ -73,7 +77,9 @@ export default function MuscleGroupScreen({ navigation, route }) {
               source={item.source}
               onPress={() => handleNavigateToExercice(item.name)}
               accessibilityLabel={`Choisir le groupe ${item.name}`}
-              accessibilityHint={"On va être rediriger vers la liste des exercices correspondant au groupe musculaire choisi"}
+              accessibilityHint={
+                "On va être rediriger vers la liste des exercices correspondant au groupe musculaire choisi"
+              }
             />
           )}
         />
@@ -87,14 +93,20 @@ export default function MuscleGroupScreen({ navigation, route }) {
           <Button
             background="#A3FD01"
             borderColor="none"
-            textButton={isWorkoutAlreadyCreated ? "Retourner à ma séance":"Voir le récap"}
+            textButton={
+              isWorkoutAlreadyCreated
+                ? "Retourner à ma séance"
+                : "Voir le récap"
+            }
             textColor="black"
             width={isWorkoutAlreadyCreated ? 280 : 150}
             height={50}
             onPress={handleFinish}
             isLinearGradiant={false}
             accessibilityLabel={"Voir le récapitulatif des exercices"}
-            accessibilityHint={"Cette action vous redirigera vers la page affichant tous les exercices sélectionnés et vous permettra de valider la séance."}
+            accessibilityHint={
+              "Cette action vous redirigera vers la page affichant tous les exercices sélectionnés et vous permettra de valider la séance."
+            }
           />
         </View>
       </View>

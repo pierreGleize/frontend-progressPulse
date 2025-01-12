@@ -45,7 +45,7 @@ export default function HistoryScreen({ navigation }) {
           style={styles.backToContainer}
           onPress={() => navigation.navigate("Stats")}
           accessibilityLabel={`Permet de revenir a la page Statistiques`}
-          accessibilityHint="On va se diriger vers la page Statistiques"
+          // accessibilityHint="On va se diriger vers la page Statistiques"
         >
           <FontAwesome name={"chevron-left"} size={24} color={"#3BC95F"} />
           <Text style={styles.backToText}>Statisques</Text>
@@ -60,7 +60,7 @@ export default function HistoryScreen({ navigation }) {
               size={30}
               color={"#A3FD01"}
               style={styles.infoIcon}
-              accessibilityLabel={`Donne une information pour avoir l'historique des séances`}
+              // accessibilityLabel={`Donne une information pour avoir l'historique des séances`}
             />
             <Text style={styles.textInfo}>
               Lancez une séance pour commencer votre suivi personnalisé !

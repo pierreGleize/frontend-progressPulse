@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity,ActivityIndicator, } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Audio } from "expo-av";
 import sounds from "../utils/sounds";
@@ -23,7 +29,7 @@ export default function SongScreen({ navigation, route }) {
     if (currentSound) {
       stopSound();
     }
-    setIsLoading(true)
+    setIsLoading(true);
     fetch(`${process.env.EXPO_PUBLIC_SERVER_IP}/users/changeSound`, {
       method: "PUT",
       headers: { "Content-type": "application/json" },
@@ -34,12 +40,12 @@ export default function SongScreen({ navigation, route }) {
         if (data.result === false) {
           setSoundChoice("");
           navigation.navigate("Settings");
-          setIsLoading(false)
+          setIsLoading(false);
         } else {
           dispatch(changeSound(data.soundUpdated));
           setSoundChoice("");
           navigation.navigate("Settings");
-          setIsLoading(false)
+          setIsLoading(false);
         }
       });
   };
@@ -79,7 +85,7 @@ export default function SongScreen({ navigation, route }) {
           style={styles.backToContainer}
           onPress={validateSoundAndNavigate}
           accessibilityLabel="Permet de retourner sur la page Réglages"
-          accessibilityHint="Vous allez être redirigé vers la page Réglages"
+          // accessibilityHint="Vous allez être redirigé vers la page Réglages"
         >
           <FontAwesome name={"chevron-left"} size={24} color={"#3BC95F"} />
           <Text style={styles.backToText}>Réglages</Text>
@@ -209,10 +215,10 @@ export default function SongScreen({ navigation, route }) {
         </Text>
       </View>
       {isLoading && (
-              <View style={styles.backgroundLoading}>
-                <ActivityIndicator size="large" color="#A3FD01" animating={true} />
-              </View>
-            )}
+        <View style={styles.backgroundLoading}>
+          <ActivityIndicator size="large" color="#A3FD01" animating={true} />
+        </View>
+      )}
     </View>
   );
 }

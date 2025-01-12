@@ -12,6 +12,7 @@ import {
 import Button from "../components/Button";
 import { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+
 export default function PasswordForgottenScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");

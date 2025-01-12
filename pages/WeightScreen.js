@@ -448,7 +448,7 @@ export default function WeightScreen({ navigation, route }) {
                 animated={true}
                 color="#A3FD01"
                 unfilledColor="#0D0D36"
-                borderWidth={0.2}
+                borderWidth={0}
                 size={100}
                 showsText={false}
                 strokeCap="round"
@@ -494,6 +494,7 @@ export default function WeightScreen({ navigation, route }) {
             animated={true}
             color="#A3FD01"
             unfilledColor="#0D0D36"
+            borderWidth={0}
           />
           <Text style={styles.text}>{progressValuePourcent} %</Text>
         </View>

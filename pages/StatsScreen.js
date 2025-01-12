@@ -40,23 +40,25 @@ export default function StatsScreen({ navigation }) {
   const getWorkoutsByMonth = (data) => {
     const months = {};
     data.forEach((element) => {
-      console.log(element.date);
       const month = moment(element.date).format("MMM YY");
-
+      // EXEMPLE = {'Dec 24' : 7, 'Jan 25': 4}
+      // Crée un nouveau champ dans l'objet si il n'existe pas et l'incrémente si il existe
       if (months[month]) {
         months[month] += 1;
       } else {
         months[month] = 1;
       }
     });
+    console.log(months);
     return months;
   };
-  const lastHeightMonth = [...history]
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .slice(0, 8);
+  const lastHeightMonth = [...history].sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
+
   const trainingData = getWorkoutsByMonth(lastHeightMonth);
-  const labelsBarChart = Object.keys(trainingData);
-  const dataBarChart = Object.values(trainingData);
+  const labelsBarChart = Object.keys(trainingData); // Récupére la clef de l'objet donc le mois et l'année : 'Dec 24'
+  const dataBarChart = Object.values(trainingData); //Récupére la valeur de l'objet donc le nombre de séance réalisé : 7
 
   return (
     <ScrollView style={styles.container}>

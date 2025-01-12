@@ -33,7 +33,13 @@ export default function HistoryWorkoutsScreen({ navigation, route }) {
       let stars = [];
       for (let i = 0; i < element.note; i++) {
         stars.push(
-          <FontAwesome key={i} name={"star"} size={15} color={"#3BC95F"} accessibilityLabel="Affiche des étoiles correspondant à la note de notre séance" />
+          <FontAwesome
+            key={i}
+            name={"star"}
+            size={15}
+            color={"#3BC95F"}
+            //  accessibilityLabel="Affiche des étoiles correspondant à la note de notre séance"
+          />
         );
       }
 
@@ -124,7 +130,7 @@ export default function HistoryWorkoutsScreen({ navigation, route }) {
         <TouchableOpacity
           style={styles.backToContainer}
           onPress={() => navigation.navigate("history")}
-          accessibilityLabel="Retourn sur la page history"
+          accessibilityLabel="Retour sur la page history"
           accessibilityHint="On va retourner sur la page suivie de séance"
         >
           <FontAwesome name={"chevron-left"} size={24} color={"#3BC95F"} />
