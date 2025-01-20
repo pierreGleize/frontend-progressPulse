@@ -1,4 +1,4 @@
-# Progress Pulse
+# 💪 Progress Pulse
 
 Progress Pulse est une application mobile de musculation conçue pour permettre aux utilisateurs de suivre leurs performances séance après séance, de réaliser leurs séances en direct avec un timer pour le temps de repos, et de suivre leur progression à travers des statistiques détaillées.
 
@@ -11,7 +11,7 @@ Ce projet a été développé en deux semaines par une équipe de trois personne
 - Contributeurs
 - Remerciements
 
-## Fonctionnalités
+## 🌟 Fonctionnalités
 - Gestion des séances de musculation :
   - Suivi des performances séance après séance.
   - Ajout et gestion d’exercices personnalisés.
@@ -30,7 +30,7 @@ Ce projet a été développé en deux semaines par une équipe de trois personne
   - Création de compte et connexion sécurisée.
   - Gestion des données personnelles.
  
-## Technologies utilisées
+## 💻 Technologies utilisées
 - Frontend
   - React Native : Framework pour le développement mobile multiplateforme.
   - Expo : Plateforme pour faciliter le développement et le déploiement d’applications React Native.
@@ -40,13 +40,19 @@ Ce projet a été développé en deux semaines par une équipe de trois personne
   - Express : Framework web rapide et minimaliste pour Node.js.
   - MongoDB : Base de données NoSQL pour stocker les données utilisateur et les séances.
 
-## Captures d'écran
+## 📸 Captures d'écran
 [![home.png](https://i.postimg.cc/gkkmpfZf/home.png)](https://postimg.cc/qgY9XDQL)  [![select-workout-type.png](https://i.postimg.cc/NMjvtXyR/select-workout-type.png)](https://postimg.cc/hJ65bf1G) [![select-category.png](https://i.postimg.cc/VkK3R6Z6/select-category.png)](https://postimg.cc/21BcjzDR)
 [![select-exercise.png](https://i.postimg.cc/PxY3Bry1/select-exercise.png)](https://postimg.cc/R6CLtmj0) [![wokout-creation.png](https://i.postimg.cc/PqZQqVDj/wokout-creation.png)](https://postimg.cc/KKGMqNQq) [![exercises.png](https://i.postimg.cc/gkQh6qmk/exercises.png)](https://postimg.cc/HV0nqMrf)
 [![timer.png](https://i.postimg.cc/wBH7hwPH/timer.png)](https://postimg.cc/rDnVTNMY) [![end-workout.png](https://i.postimg.cc/vT94rCQY/end-workout.png)](https://postimg.cc/sGjfy6Qq) [![graphiques.png](https://i.postimg.cc/kXmGr1JS/graphiques.png)](https://postimg.cc/K40xB5gc)
 [![tracked-weight.png](https://i.postimg.cc/D0796XhS/tracked-weight.png)](https://postimg.cc/HcPvsjVm)  [![workout-follow-up.png](https://i.postimg.cc/SRKZj7qf/workout-follow-up.png)](https://postimg.cc/k6kNpS22)  [![reglages.png](https://i.postimg.cc/0NdZfHyC/reglages.png)](https://postimg.cc/2qy4jGvq)
 
-## Contributeurs
+## 👨‍💻 Contributeurs
+- Thomas Lebel
+- Alexandre Lassaigne
+- Pierre Gleize
+
+## 🙏 Remerciements
+Un grand merci à nos formateurs et au jury de développeurs pour leurs retours constructifs. Ce projet nous a permis de mettre en pratique les compétences acquises tout au long de la formation.
  - Thomas Lebel
  - Alexandre Lassaigne
  - Pierre Gleize
