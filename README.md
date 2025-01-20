@@ -53,9 +53,3 @@ Ce projet a été développé en deux semaines par une équipe de trois personne
 
 ## 🙏 Remerciements
 Un grand merci à nos formateurs et au jury de développeurs pour leurs retours constructifs. Ce projet nous a permis de mettre en pratique les compétences acquises tout au long de la formation.
- - Thomas Lebel
- - Alexandre Lassaigne
- - Pierre Gleize
-
-## Remerciements
-Un grand merci à nos formateurs et au jury de développeurs pour leurs retours constructifs. Ce projet nous a permis de mettre en pratique les compétences acquises tout au long de la formation.
